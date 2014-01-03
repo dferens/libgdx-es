@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
-import com.dferens.core.GameRenderer;
-import com.dferens.core.IEntity;
-import com.dferens.core.PhysicsBody;
-import com.dferens.core.UIManager;
+import com.dferens.core.*;
 
 public class RocketEntity implements IEntity {
     private static final float JUMP_IMPULSE = 10f;
@@ -37,8 +34,9 @@ public class RocketEntity implements IEntity {
     }
 
     @Override
-    public void update(float deltaTime, PhysicsBody body, UIManager input) {
+    public void update(float deltaTime, GameContext context, UIManager input) {
         OnScreenUIManager screenInput = (OnScreenUIManager) input;
+        PhysicsBody body = context.getBody();
         float deltaSpeed = 0;
 
         if (screenInput.isMovingLeft()) {
@@ -55,7 +53,7 @@ public class RocketEntity implements IEntity {
     }
 
     @Override
-    public void render(float deltaTime,PhysicsBody body,  GameRenderer renderer) {
-        renderer.draw(rocketTexture, body);
+    public void render(float deltaTime, GameContext context, GameRenderer renderer) {
+        renderer.draw(rocketTexture, context.getBody());
     }
 }

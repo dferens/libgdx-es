@@ -4,6 +4,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public interface IEntity {
     PhysicsBody createBody(World world);
-    void update(float deltaTime, PhysicsBody body, UIManager input);
-    void render(float deltaTime, PhysicsBody body, GameRenderer renderer);
+    void update(float deltaTime, GameContext context, UIManager input);
+    void render(float deltaTime, GameContext context, GameRenderer renderer);
 }
