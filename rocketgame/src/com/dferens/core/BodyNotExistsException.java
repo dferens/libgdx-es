@@ -2,12 +2,12 @@ package com.dferens.core;
 
 
 public class BodyNotExistsException extends Exception {
-    private IEntity entity;
+    private IUpdatable entity;
 
-    public BodyNotExistsException(IEntity entity) {
+    public BodyNotExistsException(IUpdatable entity) {
         super();
         this.entity = entity;
     }
 
-    public IEntity getEntity() { return this.entity; }
+    public IUpdatable getEntity() { return this.entity; }
 }

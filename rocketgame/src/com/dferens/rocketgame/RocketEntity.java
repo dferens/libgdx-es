@@ -3,10 +3,12 @@ package com.dferens.rocketgame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.dferens.core.*;
 
-public class RocketEntity implements IEntity {
+public class RocketEntity implements IPhysicsBody, IUpdatable, IRenderable {
     private static final float JUMP_IMPULSE = 10f;
     private static final float MOVE_SPEED = 5f;
 

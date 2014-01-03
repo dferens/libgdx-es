@@ -1,6 +1,24 @@
 package com.dferens.core;
 
+import java.util.Comparator;
+
 public class GameContext {
+    public static Comparator<GameContext> constructUpdateComparator() {
+        return new Comparator<GameContext>() {
+            @Override
+            public int compare(GameContext o1, GameContext o2) {
+                return Integer.compare(o1.updatePriority, o2.updatePriority);
+            }
+        };
+    }
+    public static Comparator<GameContext> constructRenderComparator() {
+        return new Comparator<GameContext>() {
+            @Override
+            public int compare(GameContext o1, GameContext o2) {
+                return Integer.compare(o1.renderPriority, o2.renderPriority);
+            }
+        };
+    }
 
     private IEntity entity;
     private PhysicsBody boxBody;
@@ -19,6 +37,4 @@ public class GameContext {
 
     public IEntity getEntity() { return this.entity; }
     public PhysicsBody getBody() { return this.boxBody; }
-    public int getUpdatePriority() { return this.updatePriority; }
-    public int getRenderPriority() { return this.renderPriority; }
 }
