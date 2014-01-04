@@ -9,13 +9,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 
-public class GameRenderer implements Disposable {
+public class RenderScope implements Disposable {
     private SpriteBatch batch;
     private OrthographicCamera camera;
 
     public SpriteBatch getBatch() { return this.batch; }
 
-    public GameRenderer(float visibleUnits) {
+    public RenderScope(float visibleUnits) {
         this.batch = new SpriteBatch();
         this.camera = this.setupCamera(visibleUnits);
     }

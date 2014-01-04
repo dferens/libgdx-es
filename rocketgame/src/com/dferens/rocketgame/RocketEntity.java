@@ -3,8 +3,6 @@ package com.dferens.rocketgame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.dferens.core.*;
 
@@ -36,7 +34,7 @@ public class RocketEntity implements IPhysicsBody, IUpdatable, IRenderable {
     }
 
     @Override
-    public void update(float deltaTime, GameContext context, UIManager input) {
+    public void update(float deltaTime, Context context, UIManager input) {
         OnScreenUIManager screenInput = (OnScreenUIManager) input;
         PhysicsBody body = context.getBody();
         float deltaSpeed = 0;
@@ -55,7 +53,7 @@ public class RocketEntity implements IPhysicsBody, IUpdatable, IRenderable {
     }
 
     @Override
-    public void render(float deltaTime, GameContext context, GameRenderer renderer) {
+    public void render(float deltaTime, Context context, RenderScope renderer) {
         renderer.draw(rocketTexture, context.getBody());
     }
 }

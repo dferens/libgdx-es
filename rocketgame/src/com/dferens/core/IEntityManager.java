@@ -9,13 +9,13 @@ public interface IEntityManager {
      *
      * @return entities in order they should be updated.
      */
-    Iterable<Map.Entry<IEntity,GameContext>> iterateUpdatables();
+    Iterable<Map.Entry<IEntity,Context>> iterateUpdatables();
 
     /**
      *
      * @return entities in order they should be rendered.
      */
-    Iterable<Map.Entry<IEntity,GameContext>> iterateRenderables();
+    Iterable<Map.Entry<IEntity,Context>> iterateRenderables();
 
     void updateWorld(float deltaTime);
 }

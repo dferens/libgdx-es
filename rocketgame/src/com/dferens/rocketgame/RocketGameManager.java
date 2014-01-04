@@ -1,15 +1,20 @@
 package com.dferens.rocketgame;
 
-import com.dferens.core.GameManager;
-import com.dferens.core.UIManager;
+import com.dferens.core.*;
 
 public class RocketGameManager extends GameManager {
-    public RocketGameManager(float visibleUnits) {
-        super(visibleUnits);
+
+    public RocketGameManager(GameConfig config) {
+        super(config);
     }
 
     @Override
     public UIManager createUIManager() {
         return new OnScreenUIManager();
+    }
+
+    @Override
+    public IEntityManager createEntityManager(IGameConfigProvider configProvider) {
+        return new RocketGameEntityManager(new RocketGameEntityPriorityResolver(), this);
     }
 }

@@ -1,51 +1,47 @@
 package com.dferens.core;
 
-import com.badlogic.gdx.physics.box2d.World;
-
 import java.util.*;
 
-public class EntityManager implements IEntityManager {
-    private TreeMap<IEntity, GameContext> updateEntities;
-    private TreeMap<IEntity, GameContext> renderEntities;
-    private IEntityPriorityResolver priorityResolver;
-    private World world;
-    private GameConfig gameConfig;
+public abstract class EntityManager implements IEntityManager {
+    private final TreeMap<IEntity, Context> updateEntities;
+    private final TreeMap<IEntity, Context> renderEntities;
+    private final IEntityPriorityResolver priorityResolver;
+    private final GameWorld world;
+    private final IGameConfigProvider configProvider;
 
-    public GameConfig getGameConfig() { return this.gameConfig; }
-
-    public EntityManager(IEntityPriorityResolver priorityResolver, GameConfig gameConfig) {
-        HashMap<IEntity, GameContext> updateHashMap = new HashMap<IEntity, GameContext>();
-        HashMap<IEntity, GameContext> renderHashMap = new HashMap<IEntity, GameContext>();
-        Comparator<IEntity> updateComparator = new GameContext.UpdateComparator(updateHashMap);
-        Comparator<IEntity> renderComparator = new GameContext.RenderComparator(renderHashMap);
-        this.updateEntities = new TreeMap<IEntity, GameContext>(updateComparator);
-        this.renderEntities = new TreeMap<IEntity, GameContext>(renderComparator);
+    public EntityManager(IEntityPriorityResolver priorityResolver, IGameConfigProvider configProvider) {
+        HashMap<IEntity, Context> updateHashMap = new HashMap<IEntity, Context>();
+        HashMap<IEntity, Context> renderHashMap = new HashMap<IEntity, Context>();
+        Comparator<IEntity> updateComparator = new Context.UpdatePriorityComparator(updateHashMap);
+        Comparator<IEntity> renderComparator = new Context.RenderPriorityComparator(renderHashMap);
+        this.updateEntities = new TreeMap<IEntity, Context>(updateComparator);
+        this.renderEntities = new TreeMap<IEntity, Context>(renderComparator);
         this.priorityResolver = priorityResolver;
-        this.gameConfig = gameConfig;
-        this.world = new World(gameConfig.worldGravity, true);
+        this.configProvider = configProvider;
+        this.world = new GameWorld(this.configProvider);
     }
 
     @Override
     public void createEntity(IEntity entity) {
         PhysicsBody body = null;
         if (entity instanceof IPhysicsBody) {
-            body = ((IPhysicsBody) entity).createBody(this.world);
+            body = this.world.createBody((IPhysicsBody) entity);
         }
-        int updatePriority = priorityResolver.getUpdatePriority(entity);
-        int renderPriority = priorityResolver.getRenderPriority(entity);
-        GameContext context = new GameContext(body, updatePriority, renderPriority);
+        Context context = new Context(world, body);
 
         if (entity instanceof IUpdatable) {
+            context.setUpdatePriority(priorityResolver.getUpdatePriority(entity));
             this.updateEntities.put(entity, context);
         }
         if (entity instanceof IRenderable) {
+            context.setRenderPriority(priorityResolver.getRenderPriority(entity));
             this.renderEntities.put(entity, context);
         }
     }
 
     @Override
     public void destroyEntity(IEntity entity) {
-        GameContext context = null;
+        Context context = null;
         if (this.updateEntities.containsKey(entity)) {
             context = this.updateEntities.remove(entity);
         }
@@ -55,21 +51,21 @@ public class EntityManager implements IEntityManager {
 
         PhysicsBody body = context.getBody();
         if (body != null) {
-            body.destroy(world);
+            world.destroyBody(body);
         }
     }
 
     @Override
-    public Iterable<Map.Entry<IEntity,GameContext>> iterateUpdatables() {
+    public Iterable<Map.Entry<IEntity,Context>> iterateUpdatables() {
         return this.updateEntities.entrySet();
     }
     @Override
-    public Iterable<Map.Entry<IEntity,GameContext>> iterateRenderables() {
+    public Iterable<Map.Entry<IEntity,Context>> iterateRenderables() {
         return this.renderEntities.entrySet();
     }
 
     @Override
     public void updateWorld(float deltaTime) {
-       this.world.step(deltaTime, gameConfig.worldVelocityIterations, gameConfig.worldPositionIterations);
+       this.world.step(deltaTime);
     }
 }

@@ -3,19 +3,20 @@ package com.dferens.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 
-import java.util.Iterator;
 import java.util.Map;
 
-public abstract class GameManager {
-    private final IEntityPriorityResolver priorityResolver;
-    private final IEntityManager entityManager;
-    private final GameRenderer gameRenderer;
-    private final UIManager uiManager;
+public abstract class GameManager implements IGameConfigProvider {
+    protected final IEntityManager entityManager;
+    protected final RenderScope renderScope;
+    protected final UIManager uiManager;
+    protected final GameConfig config;
+
+    public GameConfig getGameConfig() { return this.config; }
 
     public GameManager(GameConfig config) {
-        this.priorityResolver = this.createPriorityResolver();
-        this.entityManager = new EntityManager(this.priorityResolver, config);
-        this.gameRenderer = new GameRenderer(config.renderVisibleUnits);
+        this.config = config;
+        this.entityManager = this.createEntityManager(this);
+        this.renderScope = new RenderScope(config.renderVisibleUnits);
         this.uiManager = this.createUIManager();
     }
 
@@ -24,9 +25,8 @@ public abstract class GameManager {
         this.render(deltaTime);
     }
 
-    public abstract UIManager createUIManager();
-    public abstract IEntityPriorityResolver createPriorityResolver();
-    public abstract GameConfig createGameConfig();
+    protected abstract UIManager createUIManager();
+    protected abstract IEntityManager createEntityManager(IGameConfigProvider configProvider);
 
     protected void render(float deltaTime) {
         clearScreen();
@@ -43,16 +43,16 @@ public abstract class GameManager {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     }
     protected void renderEntities(float deltaTime) {
-        for (Map.Entry<IEntity, GameContext> keyValue : entityManager.iterateRenderables()) {
+        for (Map.Entry<IEntity, Context> keyValue : entityManager.iterateRenderables()) {
             IRenderable entity = (IRenderable) keyValue.getKey();
-            entity.render(deltaTime, keyValue.getValue(), gameRenderer);
+            entity.render(deltaTime, keyValue.getValue(), renderScope);
         }
     }
     protected void renderUI(float deltaTime) {
         this.uiManager.render(deltaTime);
     }
     protected void updateEntities(float deltaTime) {
-        for (Map.Entry<IEntity, GameContext> keyValue : entityManager.iterateUpdatables()) {
+        for (Map.Entry<IEntity, Context> keyValue : entityManager.iterateUpdatables()) {
             IUpdatable entity = (IUpdatable) keyValue.getKey();
             entity.update(deltaTime, keyValue.getValue(), uiManager);
         }
