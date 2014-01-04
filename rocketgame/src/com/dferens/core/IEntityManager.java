@@ -1,6 +1,6 @@
 package com.dferens.core;
 
-import java.util.Iterator;
+import java.util.Map;
 
 public interface IEntityManager {
     void createEntity(IEntity entity);
@@ -9,13 +9,13 @@ public interface IEntityManager {
      *
      * @return entities in order they should be updated.
      */
-    Iterator<GameContext> iterateUpdatables();
+    Iterable<Map.Entry<IEntity,GameContext>> iterateUpdatables();
 
     /**
      *
      * @return entities in order they should be rendered.
      */
-    Iterator<GameContext> iterateRenderables();
+    Iterable<Map.Entry<IEntity,GameContext>> iterateRenderables();
 
     void updateWorld(float deltaTime);
 }

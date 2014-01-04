@@ -1,27 +1,28 @@
 package com.dferens.core;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.util.Iterator;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 public class EntityManager implements IEntityManager {
-    private SortedSet<GameContext> updateEntities;
-    private SortedSet<GameContext> renderEntities;
+    private TreeMap<IEntity, GameContext> updateEntities;
+    private TreeMap<IEntity, GameContext> renderEntities;
     private IEntityPriorityResolver priorityResolver;
     private World world;
-    private WorldConfig worldConfig;
+    private GameConfig gameConfig;
 
-    public WorldConfig getWorldConfig() { return this.worldConfig; }
+    public GameConfig getGameConfig() { return this.gameConfig; }
 
-    public EntityManager(IEntityPriorityResolver priorityResolver, WorldConfig worldConfig) {
-        this.updateEntities = new TreeSet<GameContext>(GameContext.constructUpdateComparator());
-        this.renderEntities = new TreeSet<GameContext>(GameContext.constructRenderComparator());
+    public EntityManager(IEntityPriorityResolver priorityResolver, GameConfig gameConfig) {
+        HashMap<IEntity, GameContext> updateHashMap = new HashMap<IEntity, GameContext>();
+        HashMap<IEntity, GameContext> renderHashMap = new HashMap<IEntity, GameContext>();
+        Comparator<IEntity> updateComparator = new GameContext.UpdateComparator(updateHashMap);
+        Comparator<IEntity> renderComparator = new GameContext.RenderComparator(renderHashMap);
+        this.updateEntities = new TreeMap<IEntity, GameContext>(updateComparator);
+        this.renderEntities = new TreeMap<IEntity, GameContext>(renderComparator);
         this.priorityResolver = priorityResolver;
-        this.worldConfig = worldConfig;
-        this.world = new World(worldConfig.gravity, true);
+        this.gameConfig = gameConfig;
+        this.world = new World(gameConfig.worldGravity, true);
     }
 
     @Override
@@ -32,29 +33,43 @@ public class EntityManager implements IEntityManager {
         }
         int updatePriority = priorityResolver.getUpdatePriority(entity);
         int renderPriority = priorityResolver.getRenderPriority(entity);
-        GameContext context = new GameContext(entity, body, updatePriority, renderPriority);
+        GameContext context = new GameContext(body, updatePriority, renderPriority);
 
         if (entity instanceof IUpdatable) {
-            this.updateEntities.add(context);
+            this.updateEntities.put(entity, context);
         }
         if (entity instanceof IRenderable) {
-            this.renderEntities.add(context);
+            this.renderEntities.put(entity, context);
         }
     }
 
     @Override
     public void destroyEntity(IEntity entity) {
-        this.updateEntities.remove(entity);
-        this.renderEntities.remove(entity);
+        GameContext context = null;
+        if (this.updateEntities.containsKey(entity)) {
+            context = this.updateEntities.remove(entity);
+        }
+        if (this.renderEntities.containsKey(entity)) {
+            context = this.renderEntities.remove(entity);
+        }
+
+        PhysicsBody body = context.getBody();
+        if (body != null) {
+            body.destroy(world);
+        }
     }
 
     @Override
-    public Iterator<GameContext> iterateUpdatables() { return this.updateEntities.iterator(); }
+    public Iterable<Map.Entry<IEntity,GameContext>> iterateUpdatables() {
+        return this.updateEntities.entrySet();
+    }
     @Override
-    public Iterator<GameContext> iterateRenderables() { return this.renderEntities.iterator(); }
+    public Iterable<Map.Entry<IEntity,GameContext>> iterateRenderables() {
+        return this.renderEntities.entrySet();
+    }
 
     @Override
     public void updateWorld(float deltaTime) {
-       this.world.step(deltaTime, worldConfig.velocityIterations, worldConfig.positionIterations);
+       this.world.step(deltaTime, gameConfig.worldVelocityIterations, gameConfig.worldPositionIterations);
     }
 }

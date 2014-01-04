@@ -21,4 +21,5 @@ public class PhysicsBody {
     public void applyLinearImpulse(float impulseX, float impulseY, float pointX, float pointY, Boolean wake) {
         body.applyLinearImpulse(impulseX, impulseY, pointX, pointY, wake);
     }
+    public void destroy(World world) { world.destroyBody(this.body); }
 }

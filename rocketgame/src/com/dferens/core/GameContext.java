@@ -1,40 +1,43 @@
 package com.dferens.core;
 
 import java.util.Comparator;
+import java.util.Map;
 
 public class GameContext {
-    public static Comparator<GameContext> constructUpdateComparator() {
-        return new Comparator<GameContext>() {
-            @Override
-            public int compare(GameContext o1, GameContext o2) {
-                return Integer.compare(o1.updatePriority, o2.updatePriority);
-            }
-        };
-    }
-    public static Comparator<GameContext> constructRenderComparator() {
-        return new Comparator<GameContext>() {
-            @Override
-            public int compare(GameContext o1, GameContext o2) {
-                return Integer.compare(o1.renderPriority, o2.renderPriority);
-            }
-        };
-    }
+    static class RenderComparator implements Comparator<IEntity> {
+        private final Map<IEntity, GameContext> map;
 
-    private IEntity entity;
+        public RenderComparator(Map<IEntity, GameContext> map) {
+            this.map = map;
+        }
+        @Override
+        public int compare(IEntity o1, IEntity o2) {
+            return Integer.compare(map.get(o1).renderPriority, map.get(o2).renderPriority);
+        }
+    }
+    static class UpdateComparator implements Comparator<IEntity> {
+        private final Map<IEntity, GameContext> map;
+
+        public UpdateComparator(Map<IEntity, GameContext> map) {
+            this.map = map;
+        }
+        @Override
+        public int compare(IEntity o1, IEntity o2) {
+            return Integer.compare(map.get(o1).updatePriority, map.get(o2).updatePriority);
+        }
+    }
     private PhysicsBody boxBody;
     private int updatePriority;
     private int renderPriority;
 
-    public GameContext(IEntity entity, PhysicsBody body) {
-        this.entity = entity;
+    public GameContext(PhysicsBody body) {
         this.boxBody = body;
     }
-    public GameContext(IEntity entity, PhysicsBody body, int updatePriority, int renderPriority) {
-        this(entity, body);
+    public GameContext(PhysicsBody body, int updatePriority, int renderPriority) {
+        this(body);
         this.updatePriority = updatePriority;
         this.renderPriority = renderPriority;
     }
 
-    public IEntity getEntity() { return this.entity; }
     public PhysicsBody getBody() { return this.boxBody; }
 }
