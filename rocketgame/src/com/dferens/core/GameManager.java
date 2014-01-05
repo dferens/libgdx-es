@@ -13,18 +13,19 @@ public abstract class GameManager implements IGameConfigProvider {
 
     public GameConfig getGameConfig() { return this.config; }
 
-    public GameManager(GameConfig config) {
-        this.config = config;
+    public GameManager() {
+        this.config = this.createGameConfig();
         this.entityManager = this.createEntityManager(this);
         this.renderScope = new RenderScope(config.renderVisibleUnits);
         this.uiManager = this.createUIManager();
     }
 
     public void process(float deltaTime) {
-        this.updateEntities(deltaTime);
+        this.update(deltaTime);
         this.render(deltaTime);
     }
 
+    protected abstract GameConfig createGameConfig();
     protected abstract UIManager createUIManager();
     protected abstract IEntityManager createEntityManager(IGameConfigProvider configProvider);
 

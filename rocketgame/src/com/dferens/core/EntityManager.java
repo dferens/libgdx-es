@@ -9,7 +9,9 @@ public abstract class EntityManager implements IEntityManager {
     private final GameWorld world;
     private final IGameConfigProvider configProvider;
 
-    public EntityManager(IEntityPriorityResolver priorityResolver, IGameConfigProvider configProvider) {
+    public EntityManager(IEntityPriorityResolver priorityResolver,
+                         IGameConfigProvider configProvider,
+                         GameWorld world) {
         HashMap<IEntity, Context> updateHashMap = new HashMap<IEntity, Context>();
         HashMap<IEntity, Context> renderHashMap = new HashMap<IEntity, Context>();
         Comparator<IEntity> updateComparator = new Context.UpdatePriorityComparator(updateHashMap);
@@ -18,25 +20,30 @@ public abstract class EntityManager implements IEntityManager {
         this.renderEntities = new TreeMap<IEntity, Context>(renderComparator);
         this.priorityResolver = priorityResolver;
         this.configProvider = configProvider;
-        this.world = new GameWorld(this.configProvider);
+        this.world = world;
     }
 
     @Override
     public void createEntity(IEntity entity) {
         PhysicsBody body = null;
-        if (entity instanceof IPhysicsBody) {
-            body = this.world.createBody((IPhysicsBody) entity);
-        }
-        Context context = new Context(world, body);
+        Integer updatePriority = null, renderPriority = null;
 
-        if (entity instanceof IUpdatable) {
-            context.setUpdatePriority(priorityResolver.getUpdatePriority(entity));
+        if (entity instanceof IPhysicsBody)
+            body = this.world.createBody((IPhysicsBody) entity);
+
+        if (entity instanceof IUpdatable)
+            updatePriority = priorityResolver.getUpdatePriority(entity);
+
+        if (entity instanceof IRenderable)
+            renderPriority = priorityResolver.getRenderPriority(entity);
+
+        Context context = new Context(world, body, updatePriority, renderPriority);
+
+        if (updatePriority != null)
             this.updateEntities.put(entity, context);
-        }
-        if (entity instanceof IRenderable) {
-            context.setRenderPriority(priorityResolver.getRenderPriority(entity));
+
+        if (renderPriority != null)
             this.renderEntities.put(entity, context);
-        }
     }
 
     @Override

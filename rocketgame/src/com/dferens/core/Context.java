@@ -1,7 +1,5 @@
 package com.dferens.core;
 
-import com.badlogic.gdx.physics.box2d.World;
-
 import java.util.Comparator;
 import java.util.Map;
 
@@ -35,15 +33,13 @@ public class Context{
     protected final GameWorld world;
     protected final PhysicsBody boxBody;
 
-    public Context(GameWorld world, PhysicsBody body) {
+    public Context(GameWorld world, PhysicsBody body, Integer updatePriority, Integer renderPriority) {
         this.world = world;
         this.boxBody = body;
+        this.updatePriority = updatePriority;
+        this.renderPriority = renderPriority;
     }
 
     public GameWorld getBoxWorld() { return this.world; }
     public PhysicsBody getBody() { return this.boxBody; }
-    // TODO: update container
-    public void setUpdatePriority(int value) { this.updatePriority = value; }
-    // TODO: update container
-    public void setRenderPriority(int value) { this.renderPriority = value; }
 }

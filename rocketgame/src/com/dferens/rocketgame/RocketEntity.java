@@ -35,8 +35,9 @@ public class RocketEntity implements IPhysicsBody, IUpdatable, IRenderable {
 
     @Override
     public void update(float deltaTime, Context context, UIManager input) {
-        OnScreenUIManager screenInput = (OnScreenUIManager) input;
+        RockeGameUIManager screenInput = (RockeGameUIManager) input;
         PhysicsBody body = context.getBody();
+        RocketGameWorld world = (RocketGameWorld) context.getBoxWorld();
         float deltaSpeed = 0;
 
         if (screenInput.isMovingLeft()) {

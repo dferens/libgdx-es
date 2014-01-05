@@ -3,7 +3,6 @@ package com.dferens.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -17,7 +16,7 @@ public class RenderScope implements Disposable {
 
     public RenderScope(float visibleUnits) {
         this.batch = new SpriteBatch();
-        this.camera = this.setupCamera(visibleUnits);
+        this.camera = this.createCamera(visibleUnits);
     }
 
     public void moveCamera(float x, float y) {
@@ -34,7 +33,7 @@ public class RenderScope implements Disposable {
         batch.draw(texture, position.x, position.y);
     }
 
-    private OrthographicCamera setupCamera(float visibleUnits) {
+    private OrthographicCamera createCamera(float visibleUnits) {
         float widthPixels = Gdx.graphics.getWidth();
         float heightPixels = Gdx.graphics.getHeight();
         float viewportWidth, viewportHeight;

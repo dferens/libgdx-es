@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public abstract class LevelGameManager extends GameManager {
     public LevelGameManager(GameConfig config) {
-        super(config);
+        super();
     }
 
     @Override
