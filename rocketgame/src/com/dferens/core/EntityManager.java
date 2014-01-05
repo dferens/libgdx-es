@@ -3,8 +3,9 @@ package com.dferens.core;
 import java.util.*;
 
 public abstract class EntityManager implements IEntityManager {
-    private final TreeMap<IEntity, Context> updateEntities;
-    private final TreeMap<IEntity, Context> renderEntities;
+    private final Map<IEntity, Context> contextLookup;
+    private final SortedSet<IEntity> updateEntities;
+    private final SortedSet<IEntity> renderEntities;
     private final IEntityPriorityResolver priorityResolver;
     private final GameWorld world;
     private final IGameConfigProvider configProvider;
@@ -12,12 +13,9 @@ public abstract class EntityManager implements IEntityManager {
     public EntityManager(IEntityPriorityResolver priorityResolver,
                          IGameConfigProvider configProvider,
                          GameWorld world) {
-        HashMap<IEntity, Context> updateHashMap = new HashMap<IEntity, Context>();
-        HashMap<IEntity, Context> renderHashMap = new HashMap<IEntity, Context>();
-        Comparator<IEntity> updateComparator = new Context.UpdatePriorityComparator(updateHashMap);
-        Comparator<IEntity> renderComparator = new Context.RenderPriorityComparator(renderHashMap);
-        this.updateEntities = new TreeMap<IEntity, Context>(updateComparator);
-        this.renderEntities = new TreeMap<IEntity, Context>(renderComparator);
+        this.contextLookup = new HashMap<IEntity, Context>();
+        this.updateEntities = new TreeSet<IEntity>(new Context.UpdatePriorityComparator(this.contextLookup));
+        this.renderEntities = new TreeSet<IEntity>(new Context.RenderPriorityComparator(this.contextLookup));
         this.priorityResolver = priorityResolver;
         this.configProvider = configProvider;
         this.world = world;
@@ -38,23 +36,21 @@ public abstract class EntityManager implements IEntityManager {
             renderPriority = priorityResolver.getRenderPriority(entity);
 
         Context context = new Context(world, body, updatePriority, renderPriority);
+        this.contextLookup.put(entity, context);
 
         if (updatePriority != null)
-            this.updateEntities.put(entity, context);
+            this.updateEntities.add(entity);
 
         if (renderPriority != null)
-            this.renderEntities.put(entity, context);
+            this.renderEntities.add(entity);
     }
 
     @Override
     public void destroyEntity(IEntity entity) {
-        Context context = null;
-        if (this.updateEntities.containsKey(entity)) {
-            context = this.updateEntities.remove(entity);
-        }
-        if (this.renderEntities.containsKey(entity)) {
-            context = this.renderEntities.remove(entity);
-        }
+        Context context = this.contextLookup.get(entity);
+
+        this.updateEntities.remove(context);
+        this.renderEntities.remove(context);
 
         PhysicsBody body = context.getBody();
         if (body != null) {
@@ -63,12 +59,18 @@ public abstract class EntityManager implements IEntityManager {
     }
 
     @Override
-    public Iterable<Map.Entry<IEntity,Context>> iterateUpdatables() {
-        return this.updateEntities.entrySet();
+    public Iterable<IEntity> iterateUpdatables() {
+        return this.updateEntities;
     }
+
     @Override
-    public Iterable<Map.Entry<IEntity,Context>> iterateRenderables() {
-        return this.renderEntities.entrySet();
+    public Iterable<IEntity> iterateRenderables() {
+        return this.renderEntities;
+    }
+
+    @Override
+    public Context getContext(IEntity entity) {
+        return this.contextLookup.get(entity);
     }
 
     @Override

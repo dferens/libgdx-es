@@ -4,26 +4,30 @@ import java.util.Comparator;
 import java.util.Map;
 
 public class Context{
-    static class RenderPriorityComparator implements Comparator<IEntity> {
-        private final Map<IEntity, Context> map;
+    public static class UpdatePriorityComparator implements Comparator<IEntity> {
 
-        public RenderPriorityComparator(Map<IEntity, Context> map) {
-            this.map = map;
+        private final Map<IEntity, Context> lookup;
+
+        UpdatePriorityComparator(Map<IEntity, Context> lookup) {
+            this.lookup = lookup;
         }
         @Override
-        public int compare(IEntity o1, IEntity o2) {
-            return Integer.compare(map.get(o1).renderPriority, map.get(o2).renderPriority);
+        public int compare(IEntity e1, IEntity e2) {
+            Context o1 = lookup.get(e1), o2 = lookup.get(e2);
+            return Integer.compare(o1.updatePriority, o2.updatePriority);
         }
     }
-    static class UpdatePriorityComparator implements Comparator<IEntity> {
-        private final Map<IEntity, Context> map;
+    public static class RenderPriorityComparator implements Comparator<IEntity> {
 
-        public UpdatePriorityComparator(Map<IEntity, Context> map) {
-            this.map = map;
+        private final Map<IEntity, Context> lookup;
+
+        RenderPriorityComparator(Map<IEntity, Context> lookup) {
+            this.lookup = lookup;
         }
         @Override
-        public int compare(IEntity o1, IEntity o2) {
-            return Integer.compare(map.get(o1).updatePriority, map.get(o2).updatePriority);
+        public int compare(IEntity e1, IEntity e2) {
+            Context o1 = lookup.get(e1), o2 = lookup.get(e2);
+            return Integer.compare(o1.renderPriority, o2.renderPriority);
         }
     }
 

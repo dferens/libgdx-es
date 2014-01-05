@@ -3,8 +3,6 @@ package com.dferens.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 
-import java.util.Map;
-
 public abstract class GameManager implements IGameConfigProvider {
     protected final IEntityManager entityManager;
     protected final RenderScope renderScope;
@@ -44,18 +42,20 @@ public abstract class GameManager implements IGameConfigProvider {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     }
     protected void renderEntities(float deltaTime) {
-        for (Map.Entry<IEntity, Context> keyValue : entityManager.iterateRenderables()) {
-            IRenderable entity = (IRenderable) keyValue.getKey();
-            entity.render(deltaTime, keyValue.getValue(), renderScope);
+        for (IEntity entity : entityManager.iterateRenderables()) {
+            IRenderable renderableEntity = (IRenderable) entity;
+            Context context = entityManager.getContext(entity);
+            renderableEntity.render(deltaTime, context, renderScope);
         }
     }
     protected void renderUI(float deltaTime) {
         this.uiManager.render(deltaTime);
     }
     protected void updateEntities(float deltaTime) {
-        for (Map.Entry<IEntity, Context> keyValue : entityManager.iterateUpdatables()) {
-            IUpdatable entity = (IUpdatable) keyValue.getKey();
-            entity.update(deltaTime, keyValue.getValue(), uiManager);
+        for (IEntity entity : entityManager.iterateUpdatables()) {
+            IUpdatable updatableEntity = (IUpdatable) entity;
+            Context context = entityManager.getContext(entity);
+            updatableEntity.update(deltaTime, context, uiManager);
         }
     }
     protected void updateWorld(float deltaTime) {
