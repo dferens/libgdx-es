@@ -17,7 +17,7 @@ public abstract class EntityManager implements GameConfigProvider {
     @Override
     public GameConfig getGameConfig() { return this.configProvider.getGameConfig(); }
 
-    public EntityManager(GameConfigProvider configProvider, GameWorld world) {
+    protected EntityManager(GameConfigProvider configProvider, GameWorld world) {
         this.contextLookup = new HashMap<Entity, Context>();
         this.updateEntities = new TreeSet<Updatable>(new Context.UpdatePriorityComparator(this.contextLookup));
         this.renderEntities = new TreeSet<Renderable>(new Context.RenderPriorityComparator(this.contextLookup));

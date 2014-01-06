@@ -18,9 +18,9 @@ public abstract class Level implements Disposable{
     public abstract void parse() throws LevelParseException;
 
     /**
-     * Creates entities within game entityManager with given entity manager;
+     * Creates entities within game with given entity manager;
      *
-     * @param entityManager
+     * @param entityManager given entity manager
      */
     public abstract void loadEntities(EntityManager entityManager);
 

@@ -35,11 +35,10 @@ public class Context{
         }
     }
 
-    private int updatePriority;
-    private int renderPriority;
-
-    protected final EntityManager entityManager;
-    protected final PhysicsBody boxBody;
+    private final int updatePriority;
+    private final int renderPriority;
+    private final EntityManager entityManager;
+    private final PhysicsBody boxBody;
 
     public Context(EntityManager entityManager, PhysicsBody body, Integer updatePriority, Integer renderPriority) {
         this.entityManager = entityManager;

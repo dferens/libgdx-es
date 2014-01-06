@@ -40,8 +40,7 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
         fixtureDef.restitution = 0.1f;
         fixtureDef.shape = new CircleShape();
         boxBody.createFixture(fixtureDef);
-        PhysicsBody result = new PhysicsBody(boxBody);
-        return result;
+        return new PhysicsBody(boxBody);
     }
 
     @Override

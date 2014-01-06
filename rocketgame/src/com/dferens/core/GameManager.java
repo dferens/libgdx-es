@@ -6,11 +6,11 @@ import com.dferens.core.entities.Renderable;
 import com.dferens.core.entities.Updatable;
 
 public abstract class GameManager implements GameConfigProvider {
-    protected final GameWorld world;
+    private final GameWorld world;
     protected final EntityManager entityManager;
-    protected final RenderScope renderScope;
-    protected final InputScope inputScope;
-    protected final GameConfig config;
+    private final RenderScope renderScope;
+    private final InputScope inputScope;
+    private final GameConfig config;
 
     public EntityManager getEntityManager() { return this.entityManager; }
     public final GameConfig getGameConfig() { return this.config; }
