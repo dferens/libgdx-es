@@ -7,6 +7,6 @@ import com.dferens.core.IGameConfigProvider;
 public class RocketGameEntityManager extends EntityManager {
 
     public RocketGameEntityManager(IEntityPriorityResolver priorityResolver, IGameConfigProvider configProvider) {
-        super(priorityResolver, configProvider, null);
+        super(priorityResolver, configProvider);
     }
 }

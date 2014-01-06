@@ -7,16 +7,36 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
+import com.dferens.utils.StateMachine;
 
-public class RenderScope implements Disposable {
+public class RenderScope extends StateMachine implements Disposable {
+    private static class DrawingState extends State {
+
+        @Override
+        public void onEnter(StateMachine machine) {
+            ((RenderScope) machine).batch.begin();
+        }
+        @Override
+        public void onExit(StateMachine machine) {
+            ((RenderScope) machine).batch.end();
+        }
+
+    }
+    private static class ReadyState extends State { }
     private SpriteBatch batch;
-    private OrthographicCamera camera;
 
-    public SpriteBatch getBatch() { return this.batch; }
+    private OrthographicCamera camera;
+    private State readyState;
+    private State drawingState;
+
+    public SpriteBatch getBatch() { return batch; }
 
     public RenderScope(float visibleUnits) {
         this.batch = new SpriteBatch();
         this.camera = this.createCamera(visibleUnits);
+        this.readyState = new ReadyState();
+        this.drawingState = new DrawingState();
+        this.switchTo(readyState);
     }
 
     public void moveCamera(float x, float y) {
@@ -28,9 +48,14 @@ public class RenderScope implements Disposable {
         this.moveCamera(pos.x, pos.y);
     }
     public void draw(Texture texture, PhysicsBody body) {
+        this.switchTo(this.drawingState);
+
         Vector3 position = new Vector3(body.getX(), body.getY(), 0);
         camera.project(position);
         batch.draw(texture, position.x, position.y);
+    }
+    public void drawingDone() {
+        this.switchTo(this.readyState);
     }
 
     private OrthographicCamera createCamera(float visibleUnits) {
@@ -50,7 +75,5 @@ public class RenderScope implements Disposable {
     }
 
     @Override
-    public void dispose() {
-        batch.dispose();
-    }
+    public void dispose() { batch.dispose(); }
 }

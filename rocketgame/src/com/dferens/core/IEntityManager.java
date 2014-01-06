@@ -1,9 +1,13 @@
 package com.dferens.core;
 
 public interface IEntityManager {
+    void init();
+
     void createEntity(IEntity entity);
 
     void destroyEntity(IEntity entity);
+
+    void clear();
 
     /**
      * @return entities in order they should be updated.

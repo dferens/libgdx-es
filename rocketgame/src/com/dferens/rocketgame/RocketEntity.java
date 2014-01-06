@@ -3,6 +3,7 @@ package com.dferens.rocketgame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.dferens.core.*;
 
@@ -12,8 +13,13 @@ public class RocketEntity implements IPhysicsBody, IUpdatable, IRenderable {
 
     private final Texture rocketTexture;
     private final Sprite rocketSprite;
+    private final float spawnPositionX;
+    private final float spawnPositionY;
 
-    public RocketEntity() {
+    public RocketEntity(Vector2 spawnPosition) {
+        this.spawnPositionX = spawnPosition.x;
+        this.spawnPositionY = spawnPosition.y;
+
         rocketTexture = new Texture(Gdx.files.internal("data/rocket.png"));
         rocketSprite = new Sprite(rocketTexture);
     }
@@ -22,6 +28,7 @@ public class RocketEntity implements IPhysicsBody, IUpdatable, IRenderable {
     public PhysicsBody createBody(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(spawnPositionX, spawnPositionY);
         Body boxBody = world.createBody(bodyDef);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 1f;

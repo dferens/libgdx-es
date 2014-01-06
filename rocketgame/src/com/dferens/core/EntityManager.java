@@ -7,18 +7,23 @@ public abstract class EntityManager implements IEntityManager {
     private final SortedSet<IEntity> updateEntities;
     private final SortedSet<IEntity> renderEntities;
     private final IEntityPriorityResolver priorityResolver;
-    private final GameWorld world;
     private final IGameConfigProvider configProvider;
+    private GameWorld world;
 
     public EntityManager(IEntityPriorityResolver priorityResolver,
-                         IGameConfigProvider configProvider,
-                         GameWorld world) {
+                         IGameConfigProvider configProvider) {
         this.contextLookup = new HashMap<IEntity, Context>();
         this.updateEntities = new TreeSet<IEntity>(new Context.UpdatePriorityComparator(this.contextLookup));
         this.renderEntities = new TreeSet<IEntity>(new Context.RenderPriorityComparator(this.contextLookup));
         this.priorityResolver = priorityResolver;
         this.configProvider = configProvider;
-        this.world = world;
+
+        this.init();
+    }
+
+    @Override
+    public void init() {
+        this.world = new GameWorld(configProvider);
     }
 
     @Override
@@ -30,10 +35,10 @@ public abstract class EntityManager implements IEntityManager {
             body = this.world.createBody((IPhysicsBody) entity);
 
         if (entity instanceof IUpdatable)
-            updatePriority = priorityResolver.getUpdatePriority(entity);
+            updatePriority = priorityResolver.getUpdatePriority((IUpdatable) entity);
 
         if (entity instanceof IRenderable)
-            renderPriority = priorityResolver.getRenderPriority(entity);
+            renderPriority = priorityResolver.getRenderPriority((IRenderable) entity);
 
         Context context = new Context(world, body, updatePriority, renderPriority);
         this.contextLookup.put(entity, context);
@@ -47,7 +52,7 @@ public abstract class EntityManager implements IEntityManager {
 
     @Override
     public void destroyEntity(IEntity entity) {
-        Context context = this.contextLookup.get(entity);
+        Context context = this.contextLookup.remove(entity);
 
         this.updateEntities.remove(context);
         this.renderEntities.remove(context);
@@ -59,19 +64,24 @@ public abstract class EntityManager implements IEntityManager {
     }
 
     @Override
-    public Iterable<IEntity> iterateUpdatables() {
-        return this.updateEntities;
+    public void clear() {
+        //
+        // TODO: prevent calling this method inside update loop etc.
+        //
+        for (IEntity entity : this.contextLookup.keySet()) {
+            this.destroyEntity(entity);
+        }
+        this.world = null;
     }
 
     @Override
-    public Iterable<IEntity> iterateRenderables() {
-        return this.renderEntities;
-    }
+    public Iterable<IEntity> iterateUpdatables() { return this.updateEntities; }
 
     @Override
-    public Context getContext(IEntity entity) {
-        return this.contextLookup.get(entity);
-    }
+    public Iterable<IEntity> iterateRenderables() { return this.renderEntities; }
+
+    @Override
+    public Context getContext(IEntity entity) { return this.contextLookup.get(entity); }
 
     @Override
     public void updateWorld(float deltaTime) {
