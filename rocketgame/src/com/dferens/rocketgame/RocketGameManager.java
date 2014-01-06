@@ -18,8 +18,8 @@ public class RocketGameManager extends GameManager {
     }
 
     @Override
-    protected GameConfig createGameConfig() {
-        GameConfig config = new GameConfig();
+    protected Settings createGameConfig() {
+        Settings config = new Settings();
         config.renderVisibleUnits = 20;
         config.worldGravity = new Vector2(0, -10);
         config.worldPositionIterations = 10;
@@ -33,7 +33,7 @@ public class RocketGameManager extends GameManager {
     }
 
     @Override
-    public EntityManager createEntityManager(GameConfigProvider configProvider, GameWorld world) {
+    public EntityManager createEntityManager(SettingsProvider configProvider, GameWorld world) {
         return new RocketGameEntityManager(this, world);
     }
 

@@ -5,15 +5,15 @@ import com.badlogic.gdx.graphics.GL10;
 import com.dferens.core.entities.Renderable;
 import com.dferens.core.entities.Updatable;
 
-public abstract class GameManager implements GameConfigProvider {
+public abstract class GameManager implements SettingsProvider {
     private final GameWorld world;
     protected final EntityManager entityManager;
     private final RenderScope renderScope;
     private final InputScope inputScope;
-    private final GameConfig config;
+    private final Settings config;
 
     public EntityManager getEntityManager() { return this.entityManager; }
-    public final GameConfig getGameConfig() { return this.config; }
+    public final Settings getSettings() { return this.config; }
 
     public GameManager() {
         this.world = new GameWorld(this);
@@ -23,9 +23,9 @@ public abstract class GameManager implements GameConfigProvider {
         this.inputScope = this.createUIManager();
     }
 
-    protected abstract GameConfig createGameConfig();
+    protected abstract Settings createGameConfig();
     protected abstract InputScope createUIManager();
-    protected abstract EntityManager createEntityManager(GameConfigProvider configProvider, GameWorld world);
+    protected abstract EntityManager createEntityManager(SettingsProvider configProvider, GameWorld world);
 
     public final void process(float deltaTime) {
         this.update(deltaTime);

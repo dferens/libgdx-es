@@ -1,7 +1,7 @@
 package com.dferens.core.levels;
 
 import com.dferens.core.EntityManager;
-import com.dferens.core.GameConfigProvider;
+import com.dferens.core.SettingsProvider;
 import com.dferens.core.GameWorld;
 
 public abstract class LevelEntityManager extends EntityManager {
@@ -9,7 +9,7 @@ public abstract class LevelEntityManager extends EntityManager {
 
     public final Level getLevel() { return this.currentLevel; }
 
-    public LevelEntityManager(GameConfigProvider configProvider, GameWorld world) {
+    public LevelEntityManager(SettingsProvider configProvider, GameWorld world) {
         super(configProvider, world);
     }
 

@@ -7,21 +7,21 @@ import com.dferens.core.entities.Updatable;
 
 import java.util.*;
 
-public abstract class EntityManager implements GameConfigProvider {
+public abstract class EntityManager implements SettingsProvider {
     private final Map<Entity, Context> contextLookup;
     private final SortedSet<Updatable> updateEntities;
     private final SortedSet<Renderable> renderEntities;
-    protected final GameConfigProvider configProvider;
+    protected final SettingsProvider settingsProvider;
     protected final GameWorld world;
 
     @Override
-    public GameConfig getGameConfig() { return this.configProvider.getGameConfig(); }
+    public Settings getSettings() { return this.settingsProvider.getSettings(); }
 
-    protected EntityManager(GameConfigProvider configProvider, GameWorld world) {
+    protected EntityManager(SettingsProvider settingsProvider, GameWorld world) {
         this.contextLookup = new HashMap<Entity, Context>();
         this.updateEntities = new TreeSet<Updatable>(new Context.UpdatePriorityComparator(this.contextLookup));
         this.renderEntities = new TreeSet<Renderable>(new Context.RenderPriorityComparator(this.contextLookup));
-        this.configProvider = configProvider;
+        this.settingsProvider = settingsProvider;
         this.world = world;
         this.clear();
     }

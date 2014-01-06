@@ -6,15 +6,15 @@ import com.dferens.core.entities.PhysicsApplied;
 
 public class GameWorld implements Disposable {
     protected final World boxWorld;
-    protected final GameConfigProvider configProvider;
+    protected final SettingsProvider configProvider;
 
-    public GameWorld(GameConfigProvider configProvider) {
+    public GameWorld(SettingsProvider configProvider) {
         this.configProvider = configProvider;
-        this.boxWorld = new World(configProvider.getGameConfig().worldGravity, true);
+        this.boxWorld = new World(configProvider.getSettings().worldGravity, true);
     }
 
     public void step(float deltaTime) {
-        GameConfig config = configProvider.getGameConfig();
+        Settings config = configProvider.getSettings();
         this.boxWorld.step(deltaTime, config.worldVelocityIterations,
                                       config.worldPositionIterations);
     }
