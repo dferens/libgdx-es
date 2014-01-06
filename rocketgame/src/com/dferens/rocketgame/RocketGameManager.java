@@ -39,7 +39,7 @@ public class RocketGameManager extends GameManager {
     }
 
     @Override
-    public EntityManager createEntityManager(GameConfigProvider configProvider) {
+    public EntityManagerContract createEntityManager(GameConfigProvider configProvider) {
         return new RocketGameEntityManager(new RocketGameEntityPriorityResolver(), this);
     }
 

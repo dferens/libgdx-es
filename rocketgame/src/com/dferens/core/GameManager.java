@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 
 public abstract class GameManager implements GameConfigProvider {
-    protected final EntityManager entityManager;
+    protected final EntityManagerContract entityManager;
     protected final RenderScope renderScope;
     protected final InputScope inputScope;
     protected final GameConfig config;
@@ -20,7 +20,7 @@ public abstract class GameManager implements GameConfigProvider {
 
     protected abstract GameConfig createGameConfig();
     protected abstract InputScope createUIManager();
-    protected abstract EntityManager createEntityManager(GameConfigProvider configProvider);
+    protected abstract EntityManagerContract createEntityManager(GameConfigProvider configProvider);
 
     public final void process(float deltaTime) {
         this.update(deltaTime);

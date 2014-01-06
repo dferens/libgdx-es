@@ -2,13 +2,14 @@ package com.dferens.rocketgame;
 
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.*;
-import com.dferens.core.IPhysicsBody;
+import com.dferens.core.PhysicsApplied;
+import com.dferens.core.PhysicsBody;
 
 /**
  * As blocks should be rendered with specific map renderer, block has no render method
  * @see OrthogonalTiledMapRenderer;
  */
-public class BlockEntity implements IPhysicsBody {
+public class BlockEntity implements PhysicsApplied {
     private static final float BLOCK_FRICTION = 0.2f;
     private static final float BLOCK_RESTITUTION = 0f;
     private static final float BLOCK_DENSITY = 1f;

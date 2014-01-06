@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 public class Context{
-    public static class UpdatePriorityComparator implements Comparator<Entity> {
+    public static class UpdatePriorityComparator implements Comparator<Updatable> {
 
         private final Map<Entity, Context> lookup;
 
@@ -12,12 +12,12 @@ public class Context{
             this.lookup = lookup;
         }
         @Override
-        public int compare(Entity e1, Entity e2) {
-            Context o1 = lookup.get(e1), o2 = lookup.get(e2);
+        public int compare(Updatable u1, Updatable u2) {
+            Context o1 = lookup.get(u1), o2 = lookup.get(u2);
             return Integer.compare(o1.updatePriority, o2.updatePriority);
         }
     }
-    public static class RenderPriorityComparator implements Comparator<Entity> {
+    public static class RenderPriorityComparator implements Comparator<Renderable> {
 
         private final Map<Entity, Context> lookup;
 
@@ -25,8 +25,8 @@ public class Context{
             this.lookup = lookup;
         }
         @Override
-        public int compare(Entity e1, Entity e2) {
-            Context o1 = lookup.get(e1), o2 = lookup.get(e2);
+        public int compare(Renderable r1, Renderable r2) {
+            Context o1 = lookup.get(r1), o2 = lookup.get(r2);
             return Integer.compare(o1.renderPriority, o2.renderPriority);
         }
     }
