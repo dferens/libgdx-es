@@ -42,10 +42,9 @@ public abstract class GameManager implements GameConfigProvider {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     }
     protected void renderAll(float deltaTime) {
-        for (Entity entity : entityManager.iterateRenderables()) {
-            Renderable renderableEntity = (Renderable) entity;
+        for (Renderable entity : entityManager.iterateRenderables()) {
             Context context = entityManager.getContext(entity);
-            renderableEntity.render(deltaTime, context, renderScope);
+            entity.render(deltaTime, context, renderScope);
         }
     }
     protected final void renderUI(float deltaTime) {
@@ -55,10 +54,9 @@ public abstract class GameManager implements GameConfigProvider {
         this.entityManager.updateWorld(deltaTime);
     }
     protected void updateEntities(float deltaTime) {
-        for (Entity entity : entityManager.iterateUpdatables()) {
-            Updatable updatableEntity = (Updatable) entity;
+        for (Updatable entity : entityManager.iterateUpdatables()) {
             Context context = entityManager.getContext(entity);
-            updatableEntity.update(deltaTime, context, inputScope);
+            entity.update(deltaTime, context, inputScope);
         }
     }
 }
