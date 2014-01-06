@@ -2,7 +2,7 @@ package com.dferens.rocketgame;
 
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.*;
-import com.dferens.core.PhysicsApplied;
+import com.dferens.core.entities.PhysicsApplied;
 import com.dferens.core.PhysicsBody;
 
 /**

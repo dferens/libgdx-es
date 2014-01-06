@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
-import com.dferens.utils.StateMachine;
+import com.dferens.core.utils.StateMachine;
 
 public class RenderScope extends StateMachine implements Disposable {
     private static class DrawingState extends State {

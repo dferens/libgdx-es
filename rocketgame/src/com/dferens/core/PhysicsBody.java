@@ -2,7 +2,6 @@ package com.dferens.core;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class PhysicsBody {
 
@@ -18,11 +17,14 @@ public class PhysicsBody {
     public void setY(float value) { boxBody.setTransform(getX(), value, boxBody.getAngle()); }
 
     public Vector2 getLinearVelocity() { return boxBody.getLinearVelocity(); }
-    public void applyLinearImpulse(float impulseX, float impulseY, float pointX, float pointY, Boolean wake) {
-        boxBody.applyLinearImpulse(impulseX, impulseY, pointX, pointY, wake);
+    public void applyLinearImpulse(float impulseX, float impulseY, float pointX, float pointY) {
+        applyLinearImpulse(impulseX, impulseY, pointX, pointY, true);
+    }
+    public void applyLinearImpulse(float impulseX, float impulseY, float pointX, float pointY, boolean wake) {
+        this.boxBody.applyLinearImpulse(impulseX, impulseY, pointX, pointY, wake);
     }
 
-    public void destroy(World boxWorld) {
-        boxWorld.destroyBody(this.boxBody);
+    public void destroy() {
+        this.boxBody.getWorld().destroyBody(this.boxBody);
     }
 }

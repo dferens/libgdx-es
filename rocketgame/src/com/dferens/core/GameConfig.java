@@ -7,4 +7,12 @@ public class GameConfig {
     public int worldVelocityIterations;
     public int worldPositionIterations;
     public float renderVisibleUnits;
+    public float minTimeStep;
+
+    public GameConfig() {
+        // Defaults
+        this.worldVelocityIterations = 6;
+        this.worldPositionIterations = 2;
+        this.minTimeStep = 1/30f;
+    }
 }

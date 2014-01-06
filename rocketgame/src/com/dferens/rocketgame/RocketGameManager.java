@@ -1,20 +1,20 @@
 package com.dferens.rocketgame;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.dferens.core.*;
+import com.dferens.core.levels.LevelParseException;
 
 public class RocketGameManager extends GameManager {
 
-    private RocketGameLevel currentLevel = null;
-    private OrthogonalTiledMapRenderer mapRenderer = null;
+    @Override
+    public RocketGameEntityManager getEntityManager() {
+        return (RocketGameEntityManager) this.entityManager;
+    }
 
-    public RocketGameManager() {
-        super();
+    public RocketGameManager() { }
 
-        this.loadLevel(new RocketGameLevel("assets/levels/demo.tmx"));
+    public void load() throws LevelParseException {
+        this.getEntityManager().switchLevel(new RocketGameLevel("assets/levels/demo.tmx"));
     }
 
     @Override
@@ -33,25 +33,8 @@ public class RocketGameManager extends GameManager {
     }
 
     @Override
-    protected void renderAll(float deltaTime) {
-
-        super.renderAll(deltaTime);
+    public EntityManager createEntityManager(GameConfigProvider configProvider, GameWorld world) {
+        return new RocketGameEntityManager(this, world);
     }
 
-    @Override
-    public EntityManagerContract createEntityManager(GameConfigProvider configProvider) {
-        return new RocketGameEntityManager(new RocketGameEntityPriorityResolver(), this);
-    }
-
-    private void loadLevel(RocketGameLevel level) {
-        if (this.currentLevel != null) {
-            this.entityManager.clear();
-        }
-
-        this.currentLevel = level;
-        this.currentLevel.loadIntoGame(this.entityManager);
-        TiledMap tiledMap = this.currentLevel.getTiledMap();
-        SpriteBatch batch = this.renderScope.getBatch();
-        this.mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1, batch);
-    }
 }

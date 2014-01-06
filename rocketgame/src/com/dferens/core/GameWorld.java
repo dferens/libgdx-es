@@ -2,10 +2,11 @@ package com.dferens.core;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
+import com.dferens.core.entities.PhysicsApplied;
 
 public class GameWorld implements Disposable {
-    private final World boxWorld;
-    private final GameConfigProvider configProvider;
+    protected final World boxWorld;
+    protected final GameConfigProvider configProvider;
 
     public GameWorld(GameConfigProvider configProvider) {
         this.configProvider = configProvider;
@@ -20,12 +21,7 @@ public class GameWorld implements Disposable {
     public PhysicsBody createBody(PhysicsApplied entity) {
         return entity.createBody(this.boxWorld);
     }
-    public void destroyBody(PhysicsBody body) {
-        body.destroy(this.boxWorld);
-    }
 
     @Override
-    public void dispose() {
-        this.boxWorld.dispose();
-    }
+    public void dispose() {  this.boxWorld.dispose(); }
 }

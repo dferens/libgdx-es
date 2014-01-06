@@ -1,4 +1,4 @@
-package com.dferens.utils;
+package com.dferens.core.utils;
 
 public class StateMachine {
     public static class State {

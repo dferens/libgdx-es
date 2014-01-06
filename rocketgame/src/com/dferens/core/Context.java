@@ -1,14 +1,18 @@
 package com.dferens.core;
 
+import com.dferens.core.entities.Entity;
+import com.dferens.core.entities.Renderable;
+import com.dferens.core.entities.Updatable;
+
 import java.util.Comparator;
 import java.util.Map;
 
 public class Context{
     public static class UpdatePriorityComparator implements Comparator<Updatable> {
 
-        private final Map<Entity, Context> lookup;
+        private final Map<Entity, ? extends Context> lookup;
 
-        UpdatePriorityComparator(Map<Entity, Context> lookup) {
+        UpdatePriorityComparator(Map<Entity, ? extends Context> lookup) {
             this.lookup = lookup;
         }
         @Override
@@ -19,9 +23,9 @@ public class Context{
     }
     public static class RenderPriorityComparator implements Comparator<Renderable> {
 
-        private final Map<Entity, Context> lookup;
+        private final Map<Entity, ? extends Context> lookup;
 
-        RenderPriorityComparator(Map<Entity, Context> lookup) {
+        RenderPriorityComparator(Map<Entity, ? extends Context> lookup) {
             this.lookup = lookup;
         }
         @Override
@@ -34,16 +38,16 @@ public class Context{
     private int updatePriority;
     private int renderPriority;
 
-    protected final GameWorld world;
+    protected final EntityManager entityManager;
     protected final PhysicsBody boxBody;
 
-    public Context(GameWorld world, PhysicsBody body, Integer updatePriority, Integer renderPriority) {
-        this.world = world;
+    public Context(EntityManager entityManager, PhysicsBody body, Integer updatePriority, Integer renderPriority) {
+        this.entityManager = entityManager;
         this.boxBody = body;
         this.updatePriority = updatePriority;
         this.renderPriority = renderPriority;
     }
 
-    public GameWorld getBoxWorld() { return this.world; }
+    public EntityManager getEntityManager() { return this.entityManager; }
     public PhysicsBody getBody() { return this.boxBody; }
 }

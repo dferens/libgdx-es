@@ -1,22 +1,88 @@
 package com.dferens.rocketgame;
 
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
-import com.dferens.core.EntityManagerContract;
-import com.dferens.core.TmxLevel;
+import com.dferens.core.EntityManager;
+import com.dferens.core.levels.LevelParseException;
+import com.dferens.core.levels.TmxLevel;
 
 public class RocketGameLevel extends TmxLevel {
+    private static String LAYER_COLLISION = "blocks";
+    private static String LAYER_CONTROLS = "controls";
+    private static String POINT_SPAWN = "spawn";
+    private static String POINT_FINISH = "finish";
+
+    private final MapLayers backgroundLayers;
+    private final MapLayers foregroundLayers;
+    private TiledMapTileLayer collisionLayer;
+    private MapLayer controlLayer;
+    private Vector2 spawnPoint;
+    private Vector2 finishPoint;
+
+    public Vector2 getSpawnPoint() { return spawnPoint; }
+    public Vector2 getFinishPoint() { return finishPoint; }
 
     public RocketGameLevel(String levelFilePath) {
         super(levelFilePath);
+
+        this.backgroundLayers = new MapLayers();
+        this.foregroundLayers = new MapLayers();
+        this.spawnPoint = new Vector2();
     }
 
     @Override
-    public void loadIntoGame(EntityManagerContract entityManager) {
+    protected TiledMapTileLayer getMainLayer() { return this.getCollisionLayer(); }
+
+    @Override
+    public void parse() throws LevelParseException {
+        this.collisionLayer = this.getCollisionLayer();
+        this.controlLayer = this.getControlsLayer();
+
+        if (collisionLayer == null) {
+            throw new LevelParseException("No collision layer found");
+        } else if (controlLayer == null) {
+            throw new LevelParseException("No control layer found");
+        } else if (collisionLayer.getHeight() <= 1 || collisionLayer.getWidth() <= 1) {
+            throw new LevelParseException("Map is too small");
+        }
+
+        MapObject spawnPointObject = controlLayer.getObjects().get(POINT_SPAWN);
+        MapObject finishPointObject = controlLayer.getObjects().get(POINT_FINISH);
+
+        if (spawnPointObject == null) {
+            throw new LevelParseException("No spawn point specified");
+        } else if (!(spawnPointObject instanceof RectangleMapObject)) {
+            throw new LevelParseException("Spawn point should be specified with rectangle object");
+        } else if (finishPointObject == null) {
+            throw new LevelParseException("No finish point specified");
+        } else if (!(finishPointObject instanceof RectangleMapObject)) {
+            throw new LevelParseException("Finish point should be specified with rectangle object");
+        }
+
+        // Spawn & finish points
+        ((RectangleMapObject)spawnPointObject).getRectangle().getCenter(this.getSpawnPoint());
+        ((RectangleMapObject)finishPointObject).getRectangle().getCenter(this.getFinishPoint());
+
+        // Load background & foreground layers
+        MapLayers targetMapList = this.backgroundLayers;
+        for (MapLayer layer : this.tiledMap.getLayers()) {
+            if (layer == collisionLayer) targetMapList = this.foregroundLayers;
+            if (layer.getName() != "")
+                targetMapList.add(layer);
+        }
+    }
+
+    private MapLayer getControlsLayer() {
+        return this.getMapLayer(LAYER_CONTROLS);
+    }
+
+    @Override
+    public void loadEntities(EntityManager entityManager) {
         // Load collision blocks
-        TiledMapTileLayer collisionLayer = this.getCollisionLayer();
         int layerHeight = collisionLayer.getHeight();
 
         for (int mapY = 0; mapY < collisionLayer.getHeight(); mapY++) {
@@ -30,18 +96,12 @@ public class RocketGameLevel extends TmxLevel {
             }
         }
         // Initialize player
-        MapLayer controlLayer = this.getControlLayer();
-        RectangleMapObject start = (RectangleMapObject) controlLayer.getObjects().get("start");
-        Vector2 spawnPosition = new Vector2();
-        spawnPosition = start.getRectangle().getCenter(spawnPosition);
-        RocketEntity rocketEntity = new RocketEntity(spawnPosition);
+        // TODO: move to entityManager creation layer
+        RocketEntity rocketEntity = new RocketEntity(this.getSpawnPoint());
         entityManager.createEntity(rocketEntity);
     }
 
     private TiledMapTileLayer getCollisionLayer() {
-        return (TiledMapTileLayer) this.tiledMap.getLayers().get("blocks");
-    }
-    private MapLayer getControlLayer() {
-        return (TiledMapTileLayer) this.tiledMap.getLayers().get("control");
+        return this.getMapLayer(LAYER_COLLISION, TiledMapTileLayer.class);
     }
 }

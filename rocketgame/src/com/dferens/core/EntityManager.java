@@ -1,32 +1,31 @@
 package com.dferens.core;
 
+import com.dferens.core.entities.Entity;
+import com.dferens.core.entities.PhysicsApplied;
+import com.dferens.core.entities.Renderable;
+import com.dferens.core.entities.Updatable;
+
 import java.util.*;
 
-public abstract class EntityManager implements EntityManagerContract {
+public abstract class EntityManager implements GameConfigProvider {
     private final Map<Entity, Context> contextLookup;
     private final SortedSet<Updatable> updateEntities;
     private final SortedSet<Renderable> renderEntities;
-    private final EntityPriorityResolver priorityResolver;
-    private final GameConfigProvider configProvider;
-    private GameWorld world;
+    protected final GameConfigProvider configProvider;
+    protected final GameWorld world;
 
-    public EntityManager(EntityPriorityResolver priorityResolver,
-                         GameConfigProvider configProvider) {
+    @Override
+    public GameConfig getGameConfig() { return this.configProvider.getGameConfig(); }
+
+    public EntityManager(GameConfigProvider configProvider, GameWorld world) {
         this.contextLookup = new HashMap<Entity, Context>();
         this.updateEntities = new TreeSet<Updatable>(new Context.UpdatePriorityComparator(this.contextLookup));
         this.renderEntities = new TreeSet<Renderable>(new Context.RenderPriorityComparator(this.contextLookup));
-        this.priorityResolver = priorityResolver;
         this.configProvider = configProvider;
-
-        this.init();
+        this.world = world;
+        this.clear();
     }
 
-    @Override
-    public void init() {
-        this.world = new GameWorld(configProvider);
-    }
-
-    @Override
     public void createEntity(Entity entity) {
         PhysicsBody body = null;
         Integer updatePriority = null, renderPriority = null;
@@ -35,20 +34,18 @@ public abstract class EntityManager implements EntityManagerContract {
             body = this.world.createBody((PhysicsApplied) entity);
 
         if (entity instanceof Updatable) {
-            updatePriority = priorityResolver.getUpdatePriority((Updatable) entity);
+            updatePriority = ((Updatable)entity).getUpdatePriority();
             this.updateEntities.add((Updatable) entity);
         }
 
         if (entity instanceof Renderable) {
-            renderPriority = priorityResolver.getRenderPriority((Renderable) entity);
+            renderPriority = ((Renderable) entity).getRenderPriority();
             this.renderEntities.add((Renderable) entity);
         }
 
-        Context context = new Context(world, body, updatePriority, renderPriority);
+        Context context = new Context(this, body, updatePriority, renderPriority);
         this.contextLookup.put(entity, context);
     }
-
-    @Override
     public void destroyEntity(Entity entity) {
         Context context = this.contextLookup.remove(entity);
 
@@ -56,12 +53,8 @@ public abstract class EntityManager implements EntityManagerContract {
         this.renderEntities.remove(entity);
 
         PhysicsBody body = context.getBody();
-        if (body != null) {
-            world.destroyBody(body);
-        }
+        if (body != null) body.destroy();
     }
-
-    @Override
     public void clear() {
         //
         // TODO: prevent calling this method inside update loop etc.
@@ -69,20 +62,12 @@ public abstract class EntityManager implements EntityManagerContract {
         for (Entity entity : this.contextLookup.keySet()) {
             this.destroyEntity(entity);
         }
-        this.world = null;
     }
-
-    @Override
-    public Iterable<Updatable> iterateUpdatables() { return this.updateEntities; }
-
-    @Override
-    public Iterable<Renderable> iterateRenderables() { return this.renderEntities; }
-
-    @Override
-    public Context getContext(Entity entity) { return this.contextLookup.get(entity); }
-
-    @Override
     public void updateWorld(float deltaTime) {
-       this.world.step(deltaTime);
+        this.world.step(deltaTime);
     }
+
+    public Iterable<Updatable> iterateUpdatables() { return this.updateEntities; }
+    public Iterable<Renderable> iterateRenderables() { return this.renderEntities; }
+    public Context getContext(Entity entity) { return this.contextLookup.get(entity); }
 }
