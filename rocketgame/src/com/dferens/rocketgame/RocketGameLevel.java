@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
-import com.dferens.core.IEntityManager;
+import com.dferens.core.EntityManager;
 import com.dferens.core.TmxLevel;
 
 public class RocketGameLevel extends TmxLevel {
@@ -14,7 +14,7 @@ public class RocketGameLevel extends TmxLevel {
     }
 
     @Override
-    public void loadIntoGame(IEntityManager entityManager) {
+    public void loadIntoGame(EntityManager entityManager) {
         // Load collision blocks
         TiledMapTileLayer collisionLayer = this.getCollisionLayer();
         int layerHeight = collisionLayer.getHeight();

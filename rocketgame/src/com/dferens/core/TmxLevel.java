@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Disposable;
 
-public abstract class TmxLevel implements ILevel, Disposable {
+public abstract class TmxLevel implements Level, Disposable {
     protected static final TmxMapLoader loader = new TmxMapLoader();
 
     protected final TiledMap tiledMap;

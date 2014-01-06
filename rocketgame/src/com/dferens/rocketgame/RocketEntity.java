@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.dferens.core.*;
 
-public class RocketEntity implements IPhysicsBody, IUpdatable, IRenderable {
+public class RocketEntity implements IPhysicsBody, Updatable, Renderable {
     private static final float JUMP_IMPULSE = 10f;
     private static final float MOVE_SPEED = 5f;
 
@@ -25,7 +25,7 @@ public class RocketEntity implements IPhysicsBody, IUpdatable, IRenderable {
     }
 
     @Override
-    public PhysicsBody createBody(World world) {
+    public PhysicsApplied createBody(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(spawnPositionX, spawnPositionY);
@@ -36,14 +36,14 @@ public class RocketEntity implements IPhysicsBody, IUpdatable, IRenderable {
         fixtureDef.restitution = 0.1f;
         fixtureDef.shape = new CircleShape();
         boxBody.createFixture(fixtureDef);
-        PhysicsBody result = new PhysicsBody(boxBody);
+        PhysicsApplied result = new PhysicsApplied(boxBody);
         return result;
     }
 
     @Override
-    public void update(float deltaTime, Context context, UIManager input) {
-        RockeGameUIManager screenInput = (RockeGameUIManager) input;
-        PhysicsBody body = context.getBody();
+    public void update(float deltaTime, Context context, InputScope input) {
+        RockeGameInputScope screenInput = (RockeGameInputScope) input;
+        PhysicsApplied body = context.getBody();
         RocketGameWorld world = (RocketGameWorld) context.getBoxWorld();
         float deltaSpeed = 0;
 

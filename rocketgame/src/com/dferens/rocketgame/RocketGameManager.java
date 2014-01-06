@@ -28,8 +28,8 @@ public class RocketGameManager extends GameManager {
     }
 
     @Override
-    public UIManager createUIManager() {
-        return new RockeGameUIManager();
+    public InputScope createUIManager() {
+        return new RockeGameInputScope();
     }
 
     @Override
@@ -39,7 +39,7 @@ public class RocketGameManager extends GameManager {
     }
 
     @Override
-    public IEntityManager createEntityManager(IGameConfigProvider configProvider) {
+    public EntityManager createEntityManager(GameConfigProvider configProvider) {
         return new RocketGameEntityManager(new RocketGameEntityPriorityResolver(), this);
     }
 

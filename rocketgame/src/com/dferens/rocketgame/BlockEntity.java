@@ -3,7 +3,6 @@ package com.dferens.rocketgame;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.dferens.core.IPhysicsBody;
-import com.dferens.core.PhysicsBody;
 
 /**
  * As blocks should be rendered with specific map renderer, block has no render method

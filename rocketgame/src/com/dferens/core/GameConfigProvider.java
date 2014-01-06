@@ -1,5 +1,5 @@
 package com.dferens.core;
 
-public interface IGameConfigProvider {
+public interface GameConfigProvider {
     GameConfig getGameConfig();
 }

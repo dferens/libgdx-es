@@ -1,17 +1,17 @@
 package com.dferens.rocketgame;
 
-import com.dferens.core.IEntityPriorityResolver;
-import com.dferens.core.IRenderable;
-import com.dferens.core.IUpdatable;
+import com.dferens.core.EntityPriorityResolver;
+import com.dferens.core.Renderable;
+import com.dferens.core.Updatable;
 
-public class RocketGameEntityPriorityResolver implements IEntityPriorityResolver {
+public class RocketGameEntityPriorityResolver implements EntityPriorityResolver {
     @Override
-    public int getRenderPriority(IRenderable entity) {
+    public int getRenderPriority(Renderable entity) {
         return 0;
     }
 
     @Override
-    public int getUpdatePriority(IUpdatable entity) {
+    public int getUpdatePriority(Updatable entity) {
         return 0;
     }
 }

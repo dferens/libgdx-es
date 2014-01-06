@@ -1,8 +1,8 @@
 package com.dferens.rocketgame;
 
-import com.dferens.core.UIManager;
+import com.dferens.core.InputScope;
 
-public class RocketGameUIManager extends UIManager {
+public class RocketGameInputScope extends InputScope {
     @Override
     public void render(float deltaTime) { }
 }

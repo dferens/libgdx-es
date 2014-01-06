@@ -1,6 +1,6 @@
 package com.dferens.core;
 
-public interface IEntityPriorityResolver {
+public interface EntityPriorityResolver {
     /**
      * Returns entity's render priority, like z-index.
      * Entity with priority 1 will be rendered above entity with priority 0;
@@ -8,7 +8,7 @@ public interface IEntityPriorityResolver {
      * @param entity
      * @return
      */
-    int getRenderPriority(IRenderable entity);
+    int getRenderPriority(Renderable entity);
 
     /**
      * Returns entity's update priority, works similar to render priority;
@@ -16,5 +16,5 @@ public interface IEntityPriorityResolver {
      * @param entity
      * @return
      */
-    int getUpdatePriority(IUpdatable entity);
+    int getUpdatePriority(Updatable entity);
 }

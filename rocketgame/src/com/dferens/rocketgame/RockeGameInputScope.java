@@ -1,9 +1,9 @@
 package com.dferens.rocketgame;
 
 import com.badlogic.gdx.Gdx;
-import com.dferens.core.UIManager;
+import com.dferens.core.InputScope;
 
-public class RockeGameUIManager extends UIManager {
+public class RockeGameInputScope extends InputScope {
     public Boolean isMovingLeft() {
         if (isTouched()) {
             float x = this.getTouchPosX();

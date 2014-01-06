@@ -5,9 +5,9 @@ import com.badlogic.gdx.utils.Disposable;
 
 public class GameWorld implements Disposable {
     private final World boxWorld;
-    private final IGameConfigProvider configProvider;
+    private final GameConfigProvider configProvider;
 
-    public GameWorld(IGameConfigProvider configProvider) {
+    public GameWorld(GameConfigProvider configProvider) {
         this.configProvider = configProvider;
         this.boxWorld = new World(configProvider.getGameConfig().worldGravity, true);
     }
@@ -17,7 +17,7 @@ public class GameWorld implements Disposable {
         this.boxWorld.step(deltaTime, config.worldVelocityIterations,
                                       config.worldPositionIterations);
     }
-    public PhysicsBody createBody(IPhysicsBody entity) {
+    public PhysicsBody createBody(PhysicsApplied entity) {
         return entity.createBody(this.boxWorld);
     }
     public void destroyBody(PhysicsBody body) {

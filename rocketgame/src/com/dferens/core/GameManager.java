@@ -3,10 +3,10 @@ package com.dferens.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 
-public abstract class GameManager implements IGameConfigProvider {
-    protected final IEntityManager entityManager;
+public abstract class GameManager implements GameConfigProvider {
+    protected final EntityManager entityManager;
     protected final RenderScope renderScope;
-    protected final UIManager uiManager;
+    protected final InputScope inputScope;
     protected final GameConfig config;
 
     public final GameConfig getGameConfig() { return this.config; }
@@ -15,12 +15,12 @@ public abstract class GameManager implements IGameConfigProvider {
         this.config = this.createGameConfig();
         this.entityManager = this.createEntityManager(this);
         this.renderScope = new RenderScope(config.renderVisibleUnits);
-        this.uiManager = this.createUIManager();
+        this.inputScope = this.createUIManager();
     }
 
     protected abstract GameConfig createGameConfig();
-    protected abstract UIManager createUIManager();
-    protected abstract IEntityManager createEntityManager(IGameConfigProvider configProvider);
+    protected abstract InputScope createUIManager();
+    protected abstract EntityManager createEntityManager(GameConfigProvider configProvider);
 
     public final void process(float deltaTime) {
         this.update(deltaTime);
@@ -42,23 +42,23 @@ public abstract class GameManager implements IGameConfigProvider {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     }
     protected void renderAll(float deltaTime) {
-        for (IEntity entity : entityManager.iterateRenderables()) {
-            IRenderable renderableEntity = (IRenderable) entity;
+        for (Entity entity : entityManager.iterateRenderables()) {
+            Renderable renderableEntity = (Renderable) entity;
             Context context = entityManager.getContext(entity);
             renderableEntity.render(deltaTime, context, renderScope);
         }
     }
     protected final void renderUI(float deltaTime) {
-        uiManager.render(deltaTime);
+        inputScope.render(deltaTime);
     }
     protected void updateWorld(float deltaTime) {
         this.entityManager.updateWorld(deltaTime);
     }
     protected void updateEntities(float deltaTime) {
-        for (IEntity entity : entityManager.iterateUpdatables()) {
-            IUpdatable updatableEntity = (IUpdatable) entity;
+        for (Entity entity : entityManager.iterateUpdatables()) {
+            Updatable updatableEntity = (Updatable) entity;
             Context context = entityManager.getContext(entity);
-            updatableEntity.update(deltaTime, context, uiManager);
+            updatableEntity.update(deltaTime, context, inputScope);
         }
     }
 }
