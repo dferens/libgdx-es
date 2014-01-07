@@ -99,10 +99,6 @@ public class RocketGameLevel extends TmxLevel {
                 }
             }
         }
-        // Initialize player
-        // TODO: move to entityManager creation layer
-        RocketEntity rocketEntity = new RocketEntity(this.getSpawnPoint());
-        entityManager.createEntity(rocketEntity);
     }
 
     private TiledMapTileLayer getCollisionLayer() {

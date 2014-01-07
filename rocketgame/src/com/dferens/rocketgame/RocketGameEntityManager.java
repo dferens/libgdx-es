@@ -26,9 +26,11 @@ public class RocketGameEntityManager extends LevelEntityManager {
     @Override
     protected void afterNewLevelEntitiesLoad() {
         RocketGameLevel level = (RocketGameLevel) this.currentLevel;
+        // Creating player
         this.rocket = new RocketEntity(level.getSpawnPoint());
-        this.levelRenderer.onLevelChanged((TmxLevel) this.currentLevel);
         this.createEntity(this.rocket);
+        // Triggering level render
+        this.levelRenderer.onLevelChanged((TmxLevel) this.currentLevel);
         this.createEntity(levelRenderer.getForegroundRendererEntity());
         this.createEntity(levelRenderer.getBackgroundRendererEntity());
     }
