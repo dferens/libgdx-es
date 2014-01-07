@@ -9,11 +9,12 @@ import com.dferens.core.entities.Updatable;
 public abstract class GameManager implements SettingsProvider, Screen {
     private final GameWorld world;
     protected final EntityManager entityManager;
-    private final RenderScope renderScope;
+    protected final RenderScope renderScope;
     private final InputScope inputScope;
     private final Settings settings;
 
     public EntityManager getEntityManager() { return this.entityManager; }
+    public RenderScope getRenderScope() { return this.renderScope; }
     public final Settings getSettings() { return this.settings; }
 
     public GameManager() {

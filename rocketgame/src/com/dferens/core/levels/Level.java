@@ -1,5 +1,6 @@
 package com.dferens.core.levels;
 
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.utils.Disposable;
 import com.dferens.core.EntityManager;
 
@@ -37,6 +38,8 @@ public abstract class Level implements Disposable{
      * @return height in units.
      */
     public abstract float getHeight();
+
+    public abstract MapLayer getMainLayer();
 
     @Override
     public void dispose() { }

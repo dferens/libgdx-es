@@ -12,13 +12,18 @@ public abstract class TmxLevel extends Level {
 
     protected final TiledMap tiledMap;
 
+    public TiledMap getTiledMap() { return this.tiledMap; }
+
     public TmxLevel(String levelFilePath) {
         super(levelFilePath);
         Texture.setEnforcePotImages(false);
         this.tiledMap = loader.load(this.levelPath);
     }
 
-    public TiledMap getTiledMap() { return this.tiledMap; }
+    public float calculateMapScale() {
+        float tileSizePixels = this.getMainLayer().getTileWidth();
+        return 1 / (tileSizePixels);
+    }
 
     protected MapLayer getMapLayer(String layerName) {
         return this.tiledMap.getLayers().get(layerName);
@@ -28,7 +33,8 @@ public abstract class TmxLevel extends Level {
         if (ClassReflection.isInstance(layerClass, layer)) return (T)layer;
         else return null;
     }
-    protected abstract TiledMapTileLayer getMainLayer();
+    @Override
+    public abstract TiledMapTileLayer getMainLayer();
 
     @Override
     public float getWidth() { return this.getMainLayer().getWidth(); }

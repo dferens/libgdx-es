@@ -17,9 +17,30 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
 public class EntityManagerTest extends LibgdxTest implements SettingsProvider {
     private class TestEntityManager extends EntityManager {
 
-        protected TestEntityManager(SettingsProvider settingsProvider, GameWorld world) {
-            super(settingsProvider, world);
+        protected TestEntityManager(GameManager gameManager, GameWorld world) {
+            super(gameManager, world);
         }
+    }
+    private class TestGameManager extends GameManager {
+        @Override
+        protected Settings createSettings() {
+            return null;
+        }
+
+        @Override
+        protected InputScope createUIManager() {
+            return null;
+        }
+
+        @Override
+        protected EntityManager createEntityManager(SettingsProvider configProvider, GameWorld world) {
+            return null;
+        }
+
+        @Override
+        public void pause() { }
+        @Override
+        public void resume() { }
     }
     private EntityManager entityManager;
 
@@ -49,7 +70,7 @@ public class EntityManagerTest extends LibgdxTest implements SettingsProvider {
     @Before
     public void setUp() throws Exception{
         gameSettings = new Settings();
-        entityManager = new TestEntityManager(this, new GameWorld(this));
+        entityManager = new TestEntityManager(new TestGameManager(), new GameWorld(this));
         entityFactory = new TestEntityFactory();
         testEntities = new LinkedList<TestEntityFactory.TestEntity>();
         simpleEntity = entityFactory.createSimpleEntity();

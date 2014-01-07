@@ -39,7 +39,15 @@ public class RocketGameLevel extends TmxLevel {
     }
 
     @Override
-    protected TiledMapTileLayer getMainLayer() { return this.getCollisionLayer(); }
+    public TiledMapTileLayer getMainLayer() { return this.getCollisionLayer(); }
+
+    private MapLayer getControlsLayer() {
+        return this.getMapLayer(LAYER_CONTROLS);
+    }
+
+    private TiledMapTileLayer getCollisionLayer() {
+        return this.getMapLayer(LAYER_COLLISION, TiledMapTileLayer.class);
+    }
 
     @Override
     public void parse() throws LevelParseException {
@@ -80,10 +88,6 @@ public class RocketGameLevel extends TmxLevel {
         }
     }
 
-    private MapLayer getControlsLayer() {
-        return this.getMapLayer(LAYER_CONTROLS);
-    }
-
     @Override
     public void loadEntities(EntityManager entityManager) {
         // Load collision blocks
@@ -99,9 +103,5 @@ public class RocketGameLevel extends TmxLevel {
                 }
             }
         }
-    }
-
-    private TiledMapTileLayer getCollisionLayer() {
-        return this.getMapLayer(LAYER_COLLISION, TiledMapTileLayer.class);
     }
 }

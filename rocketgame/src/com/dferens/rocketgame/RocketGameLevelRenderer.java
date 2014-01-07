@@ -3,31 +3,32 @@ package com.dferens.rocketgame;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.dferens.core.Context;
 import com.dferens.core.InputScope;
 import com.dferens.core.RenderScope;
 import com.dferens.core.entities.Renderable;
 import com.dferens.core.entities.Updatable;
 import com.dferens.core.levels.TmxLevel;
+import com.dferens.core.utils.ScaledOrthogonalTiledMapRenderer;
 
 // TODO: refactor this shit
 
-public class LevelRenderer {
+public class RocketGameLevelRenderer {
     class BackgroundRendererEntity implements Renderable, Updatable {
-        private final LevelRenderer levelRenderer;
+        private final RocketGameLevelRenderer levelRenderer;
 
-        BackgroundRendererEntity(LevelRenderer levelRenderer) {
+        BackgroundRendererEntity(RocketGameLevelRenderer levelRenderer) {
             this.levelRenderer = levelRenderer;
         }
 
         @Override
         public void update(float deltaTime, Context context, InputScope input) {
-//            RocketGameEntityManager entityManager = (RocketGameEntityManager) context.getEntityManager();
-//            RocketEntity rocket = entityManager.getRocket();
-//            PhysicsBody rocketBody = entityManager.getContext(rocket).getBody();
-//            float totalLevelWidth = entityManager.getLevel().getWidth();
-//            float trackPointX = rocketBody.getX();
+            // TODO: make camera track player
+            /*RocketGameEntityManager entityManager = (RocketGameEntityManager) context.getEntityManager();
+            RocketEntity rocket = entityManager.getRocket();
+            PhysicsBody rocketBody = entityManager.getContext(rocket).getBody();
+            float totalLevelWidth = entityManager.getLevel().getWidth();
+            float trackPointX = rocketBody.getX();*/
         }
 
         @Override
@@ -50,9 +51,9 @@ public class LevelRenderer {
         public int getRenderPriority() { return Priority.BACKGROUND; }
     }
     class ForegroundRendererEntity implements Renderable, Updatable {
-        private final LevelRenderer levelRenderer;
+        private final RocketGameLevelRenderer levelRenderer;
 
-        ForegroundRendererEntity(LevelRenderer levelRenderer) {
+        ForegroundRendererEntity(RocketGameLevelRenderer levelRenderer) {
             this.levelRenderer = levelRenderer;
         }
 
@@ -77,23 +78,23 @@ public class LevelRenderer {
         @Override
         public int getRenderPriority() { return Priority.FOREGROUND; }
     }
-    private OrthogonalTiledMapRenderer mapRenderer;
+    private ScaledOrthogonalTiledMapRenderer mapRenderer;
     private BackgroundRendererEntity backgroundRendererEntity;
     private ForegroundRendererEntity foregroundRendererEntity;
 
     public BackgroundRendererEntity getBackgroundRendererEntity() { return backgroundRendererEntity; }
     public ForegroundRendererEntity getForegroundRendererEntity() { return foregroundRendererEntity; }
 
-    public LevelRenderer(TiledMap tiledMap) {
+    public RocketGameLevelRenderer(TiledMap tiledMap, float unitScale) {
         // TODO: use batch from render scope
-        // TODO: calculate unit scale
-        this.mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 0.015f);
+        this.mapRenderer = new ScaledOrthogonalTiledMapRenderer(tiledMap, unitScale);
         this.backgroundRendererEntity = new BackgroundRendererEntity(this);
         this.foregroundRendererEntity = new ForegroundRendererEntity(this);
     }
-    public LevelRenderer() { this(null); }
+    public RocketGameLevelRenderer(float unitScale) { this(null, unitScale); }
 
     public void onLevelChanged(TmxLevel level) {
         this.mapRenderer.setMap(level.getTiledMap());
+        this.mapRenderer.setUnitScale(level.calculateMapScale());
     }
 }

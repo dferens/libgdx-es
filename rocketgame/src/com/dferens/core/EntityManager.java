@@ -11,17 +11,17 @@ public abstract class EntityManager implements SettingsProvider {
     private final Map<Entity, Context> contextLookup;
     private final SortedSet<Updatable> updateEntities;
     private final SortedSet<Renderable> renderEntities;
-    protected final SettingsProvider settingsProvider;
+    protected final GameManager gameManager;
     protected final GameWorld world;
 
     @Override
-    public Settings getSettings() { return this.settingsProvider.getSettings(); }
+    public Settings getSettings() { return this.gameManager.getSettings(); }
 
-    protected EntityManager(SettingsProvider settingsProvider, GameWorld world) {
+    protected EntityManager(GameManager gameManager, GameWorld world) {
         this.contextLookup = new HashMap<Entity, Context>();
         this.updateEntities = new TreeSet<Updatable>(new Context.UpdatePriorityComparator(this.contextLookup));
         this.renderEntities = new TreeSet<Renderable>(new Context.RenderPriorityComparator(this.contextLookup));
-        this.settingsProvider = settingsProvider;
+        this.gameManager = gameManager;
         this.world = world;
         this.clear();
     }

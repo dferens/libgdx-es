@@ -11,25 +11,25 @@ import com.badlogic.gdx.utils.Disposable;
 import com.dferens.core.utils.StateMachine;
 
 public class RenderScope extends StateMachine implements Disposable {
+    private static class ReadyState extends State { }
     private static class DrawingState extends State {
 
         @Override
         public void onEnter(StateMachine machine) {
             ((RenderScope) machine).batch.begin();
         }
+
         @Override
         public void onExit(StateMachine machine) {
             ((RenderScope) machine).batch.end();
         }
-
     }
-    private static class ReadyState extends State { }
-    private SpriteBatch batch;
 
+    private SpriteBatch batch;
     private OrthographicCamera camera;
+
     private State readyState;
     private State drawingState;
-
     public SpriteBatch getBatch() { return batch; }
 
     public RenderScope(float visibleUnits) {
@@ -46,6 +46,7 @@ public class RenderScope extends StateMachine implements Disposable {
         this.camera.update();
         this.batch.setProjectionMatrix(camera.combined);
     }
+
     public void moveCamera(Vector2 pos) {
         this.moveCamera(pos.x, pos.y);
     }

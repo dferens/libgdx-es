@@ -19,7 +19,7 @@ public class RocketGameManager extends GameManager {
     @Override
     protected Settings createSettings() {
         Settings settings = new Settings();
-        settings.renderVisibleUnits = 20;
+        settings.renderVisibleUnits = 30;
         settings.worldGravity.set(0, -10);
         settings.worldPositionIterations = 10;
         settings.worldVelocityIterations = 2;

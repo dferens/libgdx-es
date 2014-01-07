@@ -1,20 +1,20 @@
 package com.dferens.rocketgame;
 
+import com.dferens.core.GameManager;
 import com.dferens.core.GameWorld;
-import com.dferens.core.SettingsProvider;
 import com.dferens.core.levels.LevelEntityManager;
 import com.dferens.core.levels.TmxLevel;
 
 public class RocketGameEntityManager extends LevelEntityManager {
     private RocketEntity rocket;
-    private LevelRenderer levelRenderer;
+    private RocketGameLevelRenderer levelRenderer;
 
     public RocketEntity getRocket() { return this.rocket; }
 
-    public RocketGameEntityManager(SettingsProvider settingsProvider, GameWorld world) {
-        super(settingsProvider, world);
+    public RocketGameEntityManager(GameManager gameManager, GameWorld world) {
+        super(gameManager, world);
 
-        this.levelRenderer = new LevelRenderer();
+        this.levelRenderer = new RocketGameLevelRenderer(1);
     }
 
     @Override
