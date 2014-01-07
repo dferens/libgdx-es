@@ -10,9 +10,10 @@ public class Settings {
     public float minTimeStep;
 
     public Settings() {
-        // Defaults
+        this.worldGravity = new Vector2(0, -9.8f);
         this.worldVelocityIterations = 6;
         this.worldPositionIterations = 2;
+        this.renderVisibleUnits = 20;
         this.minTimeStep = 1/30f;
     }
 }

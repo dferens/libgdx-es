@@ -22,41 +22,46 @@ public class LevelRenderer {
             float totalLevelWidth = entityManager.getLevel().getWidth();
             float trackPointX = rocketBody.getX();
         }
+
         @Override
         public void render(float deltaTime, Context context, RenderScope renderer) {
             // TODO: parallax-like effect
         }
-
         @Override
         public int getUpdatePriority() { return Priority.BACKGROUND; }
+
         @Override
         public int getRenderPriority() { return Priority.BACKGROUND; }
     }
     class ForegroundRendererEntity implements Renderable, Updatable {
-
         @Override
         public void update(float deltaTime, Context context, InputScope input) { }
+
         @Override
         public void render(float deltaTime, Context context, RenderScope renderer) {
             // TODO: parallax-like effect
         }
-
         @Override
         public int getUpdatePriority() { return Priority.FOREGROUND; }
+
         @Override
         public int getRenderPriority() { return Priority.FOREGROUND; }
     }
-
     private OrthogonalTiledMapRenderer mapRenderer;
+    private BackgroundRendererEntity backgroundRendererEntity;
+    private ForegroundRendererEntity foregroundRendererEntity;
+
+    public BackgroundRendererEntity getBackgroundRendererEntity() { return backgroundRendererEntity; }
+    public ForegroundRendererEntity getForegroundRendererEntity() { return foregroundRendererEntity; }
 
     public LevelRenderer(TiledMap tiledMap) {
         this.mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1);
+        this.backgroundRendererEntity = new BackgroundRendererEntity();
+        this.foregroundRendererEntity = new ForegroundRendererEntity();
     }
+    public LevelRenderer() { this(null); }
 
     public void onLevelChanged(TmxLevel level) {
         this.mapRenderer.setMap(level.getTiledMap());
     }
-
-    public Entity createBackgroundRendererEntity() { return new BackgroundRendererEntity(); }
-    public Entity createForegroundRendererEntity() { return new ForegroundRendererEntity(); }
 }

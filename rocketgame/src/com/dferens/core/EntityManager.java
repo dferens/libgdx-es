@@ -32,34 +32,36 @@ public abstract class EntityManager implements SettingsProvider {
 
         if (entity instanceof PhysicsApplied)
             body = this.world.createBody((PhysicsApplied) entity);
-
-        if (entity instanceof Updatable) {
+        if (entity instanceof Updatable)
             updatePriority = ((Updatable)entity).getUpdatePriority();
-            this.updateEntities.add((Updatable) entity);
-        }
-
-        if (entity instanceof Renderable) {
+        if (entity instanceof Renderable)
             renderPriority = ((Renderable) entity).getRenderPriority();
-            this.renderEntities.add((Renderable) entity);
-        }
 
         Context context = new Context(this, body, updatePriority, renderPriority);
         this.contextLookup.put(entity, context);
+
+        if (updatePriority != null) this.updateEntities.add((Updatable) entity);
+        if (renderPriority != null) this.renderEntities.add((Renderable) entity);
+
     }
     public void destroyEntity(Entity entity) {
-        Context context = this.contextLookup.remove(entity);
+        Context context = this.contextLookup.get(entity);
 
-        this.updateEntities.remove(entity);
-        this.renderEntities.remove(entity);
+        if (entity instanceof Updatable) this.updateEntities.remove((Updatable)entity);
+        if (entity instanceof Renderable) this.renderEntities.remove((Renderable)entity);
 
         PhysicsBody body = context.getBody();
-        if (body != null) body.destroy();
+        if (body != null) context.destroyBody();
+
+        this.contextLookup.remove(entity);
     }
     public void clear() {
         //
         // TODO: prevent calling this method inside update loop etc.
         //
-        for (Entity entity : this.contextLookup.keySet()) {
+        Entity[] entities = new Entity[getNumberOfEntities()];
+        this.contextLookup.keySet().toArray(entities);
+        for (Entity entity : entities) {
             this.destroyEntity(entity);
         }
     }
@@ -67,7 +69,8 @@ public abstract class EntityManager implements SettingsProvider {
         this.world.step(deltaTime);
     }
 
-    public Iterable<Updatable> iterateUpdatables() { return this.updateEntities; }
-    public Iterable<Renderable> iterateRenderables() { return this.renderEntities; }
+    public Collection<Updatable> iterateUpdatables() { return this.updateEntities; }
+    public Collection<Renderable> iterateRenderables() { return this.renderEntities; }
+    public int getNumberOfEntities() { return this.contextLookup.keySet().size(); }
     public Context getContext(Entity entity) { return this.contextLookup.get(entity); }
 }
