@@ -25,6 +25,8 @@ public class RocketGameLevel extends TmxLevel {
 
     public Vector2 getSpawnPoint() { return spawnPoint; }
     public Vector2 getFinishPoint() { return finishPoint; }
+    public MapLayers getBackgroundLayers() { return backgroundLayers; }
+    public MapLayers getForegroundLayers() { return foregroundLayers; }
 
     public RocketGameLevel(String levelFilePath) throws LevelParseException {
         super(levelFilePath);
@@ -73,7 +75,7 @@ public class RocketGameLevel extends TmxLevel {
         MapLayers targetMapList = this.backgroundLayers;
         for (MapLayer layer : this.tiledMap.getLayers()) {
             if (layer == collisionLayer) targetMapList = this.foregroundLayers;
-            if (layer.getName() != "")
+            if (layer instanceof TiledMapTileLayer)
                 targetMapList.add(layer);
         }
     }

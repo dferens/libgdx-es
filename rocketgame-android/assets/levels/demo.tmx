@@ -18,7 +18,10 @@
  <tileset firstgid="1981" name="key" tilewidth="32" tileheight="32">
   <image source="resources/tilesets/my/key.png" width="32" height="32"/>
  </tileset>
- <layer name="Background" width="60" height="25">
+ <imagelayer name="Image Layer 1" width="60" height="25">
+  <image source="../../../../../../Documents/RocketGame/res/backgrounds/background_1.jpg"/>
+ </imagelayer>
+ <layer name="Background" width="60" height="25" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1243,1244,1245,1245,1245,1245,1245,1245,1245,1245,1245,1245,0,0,0,0,0,0,0,0,0,0,0,
@@ -47,7 +50,7 @@
 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="BLOCKS" width="60" height="25">
+ <layer name="BLOCKS" width="60" height="25" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -87,14 +90,13 @@
    <polyline points="0,0 95,0 103,-18 129,-30 131,-26 155,-26 163,-31 177,-24 188,-9 191,-3 351,-2 352,61 289,63 277,56 196,55 189,61 180,56 168,49 162,33 125,34 119,47 107,58 96,61 94,57 73,56 66,61 64,65 1,65 -1,0 95,-1"/>
   </object>
  </objectgroup>
- <objectgroup name="Keys" width="60" height="25">
+ <objectgroup name="Keys" width="60" height="25" visible="0">
   <object name="key_2" x="1697" y="349" width="30" height="30"/>
   <object name="key_1" x="1056" y="257" width="32" height="26"/>
   <object name="key_3" x="478" y="480" width="38" height="30"/>
  </objectgroup>
- <objectgroup name="CONTROLS" width="60" height="25">
+ <objectgroup name="CONTROLS" width="60" height="25" visible="0">
   <object name="POINT_SPAWN" x="0" y="544" width="55" height="89"/>
   <object name="POINT_FINISH" x="1858" y="512" width="58" height="126"/>
  </objectgroup>
- <imagelayer name="Image Layer 1" width="60" height="25" visible="0"/>
 </map>

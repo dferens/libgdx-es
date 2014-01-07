@@ -25,28 +25,19 @@ public class RocketGameManager extends GameManager {
         settings.worldVelocityIterations = 2;
         return settings;
     }
-
     @Override
     public InputScope createUIManager() {
-        return new RockeGameInputScope();
+        return new RocketGameInputScope();
     }
-
     @Override
     public EntityManager createEntityManager(SettingsProvider configProvider, GameWorld world) {
         return new RocketGameEntityManager(this, world);
     }
 
-    /**
-     * @see com.badlogic.gdx.ApplicationListener#pause()
-     */
     @Override
     public void pause() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
-
-    /**
-     * @see com.badlogic.gdx.ApplicationListener#resume()
-     */
     @Override
     public void resume() {
         //To change body of implemented methods use File | Settings | File Templates.

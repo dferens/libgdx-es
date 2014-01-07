@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
@@ -34,13 +35,14 @@ public class RenderScope extends StateMachine implements Disposable {
     public RenderScope(float visibleUnits) {
         this.batch = new SpriteBatch();
         this.camera = this.createCamera(visibleUnits);
+        this.moveCamera(camera.viewportWidth / 2, camera.viewportHeight / 2);
         this.readyState = new ReadyState();
         this.drawingState = new DrawingState();
         this.switchTo(readyState);
     }
 
-    public void moveCamera(float x, float y) {
-        this.camera.translate(x, y);
+    public void moveCamera(float dx, float dy) {
+        this.camera.translate(dx, dy);
         this.camera.update();
         this.batch.setProjectionMatrix(camera.combined);
     }
@@ -56,6 +58,9 @@ public class RenderScope extends StateMachine implements Disposable {
     }
     public void drawingDone() {
         this.switchTo(this.readyState);
+    }
+    public void syncronize(MapRenderer renderer) {
+        renderer.setView(this.camera);
     }
 
     private OrthographicCamera createCamera(float visibleUnits) {
