@@ -1,5 +1,6 @@
 package com.dferens.core.levels;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -13,6 +14,7 @@ public abstract class TmxLevel extends Level {
 
     public TmxLevel(String levelFilePath) {
         super(levelFilePath);
+        Texture.setEnforcePotImages(false);
         this.tiledMap = loader.load(this.levelPath);
     }
 

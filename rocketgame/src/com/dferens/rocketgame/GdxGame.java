@@ -11,6 +11,7 @@ public class GdxGame extends Game {
         try {
             gameManager.load();
             this.setScreen(gameManager);
+
         } catch (LevelParseException e) {
             Gdx.app.error("RocketGame", "Load map error", e);
         }

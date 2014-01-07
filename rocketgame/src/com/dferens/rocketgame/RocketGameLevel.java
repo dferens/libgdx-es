@@ -11,10 +11,10 @@ import com.dferens.core.levels.LevelParseException;
 import com.dferens.core.levels.TmxLevel;
 
 public class RocketGameLevel extends TmxLevel {
-    private static String LAYER_COLLISION = "blocks";
-    private static String LAYER_CONTROLS = "controls";
-    private static String POINT_SPAWN = "spawn";
-    private static String POINT_FINISH = "finish";
+    private static String LAYER_COLLISION = "BLOCKS";
+    private static String LAYER_CONTROLS = "CONTROLS";
+    private static String POINT_SPAWN = "POINT_SPAWN";
+    private static String POINT_FINISH = "POINT_FINISH";
 
     private final MapLayers backgroundLayers;
     private final MapLayers foregroundLayers;
@@ -26,12 +26,14 @@ public class RocketGameLevel extends TmxLevel {
     public Vector2 getSpawnPoint() { return spawnPoint; }
     public Vector2 getFinishPoint() { return finishPoint; }
 
-    public RocketGameLevel(String levelFilePath) {
+    public RocketGameLevel(String levelFilePath) throws LevelParseException {
         super(levelFilePath);
 
         this.backgroundLayers = new MapLayers();
         this.foregroundLayers = new MapLayers();
         this.spawnPoint = new Vector2();
+        this.finishPoint = new Vector2();
+        this.parse();
     }
 
     @Override
