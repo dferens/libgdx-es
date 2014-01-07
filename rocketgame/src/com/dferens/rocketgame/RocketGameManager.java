@@ -1,6 +1,5 @@
 package com.dferens.rocketgame;
 
-import com.badlogic.gdx.math.Vector2;
 import com.dferens.core.*;
 import com.dferens.core.levels.LevelParseException;
 
@@ -18,13 +17,13 @@ public class RocketGameManager extends GameManager {
     }
 
     @Override
-    protected Settings createGameConfig() {
-        Settings config = new Settings();
-        config.renderVisibleUnits = 20;
-        config.worldGravity = new Vector2(0, -10);
-        config.worldPositionIterations = 10;
-        config.worldVelocityIterations = 2;
-        return config;
+    protected Settings createSettings() {
+        Settings settings = new Settings();
+        settings.renderVisibleUnits = 20;
+        settings.worldGravity.set(0, -10);
+        settings.worldPositionIterations = 10;
+        settings.worldVelocityIterations = 2;
+        return settings;
     }
 
     @Override
@@ -37,4 +36,19 @@ public class RocketGameManager extends GameManager {
         return new RocketGameEntityManager(this, world);
     }
 
+    /**
+     * @see com.badlogic.gdx.ApplicationListener#pause()
+     */
+    @Override
+    public void pause() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    /**
+     * @see com.badlogic.gdx.ApplicationListener#resume()
+     */
+    @Override
+    public void resume() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
