@@ -21,8 +21,10 @@ public abstract class TmxLevel extends Level {
     }
 
     public float calculateMapScale() {
-        float tileSizePixels = this.getMainLayer().getTileWidth();
-        return 1 / (tileSizePixels);
+        return 1 / (this.getTileSizePixels());
+    }
+    public float getTileSizePixels() {
+        return this.getMainLayer().getTileWidth();
     }
 
     protected MapLayer getMapLayer(String layerName) {
