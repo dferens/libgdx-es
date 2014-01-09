@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.dferens.core.utils.StateMachine;
 
@@ -25,19 +26,22 @@ public class RenderScope extends StateMachine implements Disposable {
         }
     }
 
+    private GameManager gameManager;
     private SpriteBatch batch;
     private OrthographicCamera camera;
-
     private State readyState;
     private State drawingState;
+    private Box2DDebugRenderer debugRenderer;
     public SpriteBatch getBatch() { return batch; }
 
-    public RenderScope(float visibleUnits) {
+    public RenderScope(GameManager gameManager, float visibleUnits) {
+        this.gameManager = gameManager;
         this.batch = new SpriteBatch();
         this.camera = this.createCamera(visibleUnits);
         this.moveCamera(camera.viewportWidth / 2, camera.viewportHeight / 2);
         this.readyState = new ReadyState();
         this.drawingState = new DrawingState();
+        this.debugRenderer = new Box2DDebugRenderer();
         this.switchTo(readyState);
     }
 
@@ -52,15 +56,22 @@ public class RenderScope extends StateMachine implements Disposable {
     }
     public void draw(Texture texture, PhysicsBody body) {
         this.switchTo(this.drawingState);
-
-        Vector3 position = new Vector3(body.getX(), body.getY(), 0);
-        camera.project(position);
+        Vector3 position = this.convertCoordinates(body.getX(), body.getY());
         batch.draw(texture, position.x, position.y);
     }
-    public void drawingDone() {
+    public void draw(Texture texture, PhysicsBody body, float width, float height) {
+        this.switchTo(this.drawingState);
+        Vector3 position = this.convertCoordinates(body.getX(), body.getY());
+        batch.draw(texture, position.x, position.y, unitsToPixels(width), unitsToPixels(height));
+    }
+    public void commit() {
+        if (this.gameManager.getSettings().debugModeOn) {
+            GameWorld world = gameManager.getEntityManager().getWorld();
+            world.draw(this.debugRenderer, this.camera);
+        }
         this.switchTo(this.readyState);
     }
-    public void syncronize(MapRenderer renderer) {
+    public void synchronise(MapRenderer renderer) {
         renderer.setView(this.camera);
     }
 
@@ -79,6 +90,16 @@ public class RenderScope extends StateMachine implements Disposable {
         }
         return new OrthographicCamera(viewportWidth, viewportHeight);
     }
+    private Vector3 convertCoordinates(float xUnits, float yUnits) {
+        Vector3 position = new Vector3(xUnits, yUnits, 0);
+        camera.project(position);
+        return position;
+    }
+    private void convertCoordinates(Vector3 coords) {
+        camera.project(coords);
+    }
+    private float unitsToPixels(float units) { return units * this.getPixelsPerUnit(); }
+    private float getPixelsPerUnit() { return (Gdx.graphics.getWidth() / camera.viewportWidth); }
 
     @Override
     public void dispose() { batch.dispose(); }

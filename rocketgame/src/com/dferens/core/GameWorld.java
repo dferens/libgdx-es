@@ -1,5 +1,7 @@
 package com.dferens.core;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.dferens.core.entities.PhysicsApplied;
@@ -20,6 +22,9 @@ public class GameWorld implements Disposable {
     }
     public PhysicsBody createBody(PhysicsApplied entity) {
         return entity.createBody(this.boxWorld);
+    }
+    public void draw(Box2DDebugRenderer debugRenderer, Camera camera) {
+        debugRenderer.render(this.boxWorld, camera.combined);
     }
 
     @Override

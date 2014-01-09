@@ -7,13 +7,15 @@ public class Settings {
     public int worldVelocityIterations;
     public int worldPositionIterations;
     public float renderVisibleUnits;
-    public float minTimeStep;
+    public float maxTimeStep;
+    public boolean debugModeOn;
 
     public Settings() {
         this.worldGravity = new Vector2(0, -9.8f);
         this.worldVelocityIterations = 6;
         this.worldPositionIterations = 2;
         this.renderVisibleUnits = 20;
-        this.minTimeStep = 1/30f;
+        this.maxTimeStep = 1/30f;
+        this.debugModeOn = true;
     }
 }
