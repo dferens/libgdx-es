@@ -1,6 +1,7 @@
 package com.dferens.rocketgame;
 
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.dferens.core.entities.PhysicsApplied;
 import com.dferens.core.PhysicsBody;
@@ -27,16 +28,16 @@ public class BlockEntity implements PhysicsApplied {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(gridX + 0.5f, gridY + 0.5f);
+        Body boxBody = world.createBody(bodyDef);
 
         PolygonShape blockShape = new PolygonShape();
-        blockShape.setAsBox(0.5f, 0.5f, bodyDef.position, 0);
+        blockShape.setAsBox(0.5f, 0.5f, Vector2.Zero, 0);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = blockShape;
         fixtureDef.friction = BLOCK_FRICTION;
         fixtureDef.restitution = BLOCK_RESTITUTION;
         fixtureDef.density = BLOCK_DENSITY;
 
-        Body boxBody = world.createBody(bodyDef);
         boxBody.createFixture(fixtureDef);
         return new PhysicsBody(boxBody);
     }
