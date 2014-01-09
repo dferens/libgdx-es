@@ -23,8 +23,4 @@ local.properties
 proguard/
 
 # Project libs
-rocketgame/libs/
-rocketgame-android/libs
-
-# Custom project files
-rocketgame-android/assets/levels/demo.tmx
+libs/
