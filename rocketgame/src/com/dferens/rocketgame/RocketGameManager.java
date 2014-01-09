@@ -26,7 +26,7 @@ public class RocketGameManager extends GameManager {
         return settings;
     }
     @Override
-    public InputScope createUIManager() {
+    public InputScope getUIManager() {
         return new RocketGameInputScope();
     }
     @Override

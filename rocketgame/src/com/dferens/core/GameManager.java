@@ -21,20 +21,19 @@ public abstract class GameManager implements SettingsProvider, Screen {
         this.settings = this.createSettings();
         this.world = new GameWorld(this);
         this.entityManager = this.createEntityManager(this, world);
-        this.renderScope = new RenderScope(settings.renderVisibleUnits);
-        this.inputScope = this.createUIManager();
+        this.renderScope = new RenderScope(this);
+        this.inputScope = this.getUIManager();
     }
 
     protected abstract Settings createSettings();
-    protected abstract InputScope createUIManager();
+    protected abstract InputScope getUIManager();
     protected abstract EntityManager createEntityManager(SettingsProvider configProvider, GameWorld world);
-
 
     protected final void innerRender(float deltaTime) {
         clearScreen();
         renderEntities(deltaTime);
         renderUI(deltaTime);
-        this.renderScope.drawingDone();
+        this.renderScope.commit();
     }
 
     protected final void update(float deltaTime) {
@@ -66,6 +65,7 @@ public abstract class GameManager implements SettingsProvider, Screen {
     }
 
     public final void process(float deltaTime) {
+        deltaTime = Math.min(deltaTime, settings.maxTimeStep);
         this.update(deltaTime);
         this.innerRender(deltaTime);
     }

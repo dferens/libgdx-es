@@ -32,12 +32,11 @@ public class RenderScope extends StateMachine implements Disposable {
     private State readyState;
     private State drawingState;
     private Box2DDebugRenderer debugRenderer;
-    public SpriteBatch getBatch() { return batch; }
 
-    public RenderScope(GameManager gameManager, float visibleUnits) {
+    public RenderScope(GameManager gameManager) {
         this.gameManager = gameManager;
         this.batch = new SpriteBatch();
-        this.camera = this.createCamera(visibleUnits);
+        this.camera = this.createCamera(gameManager.getSettings().renderVisibleUnits);
         this.moveCamera(camera.viewportWidth / 2, camera.viewportHeight / 2);
         this.readyState = new ReadyState();
         this.drawingState = new DrawingState();

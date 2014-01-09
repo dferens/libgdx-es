@@ -16,6 +16,7 @@ public abstract class EntityManager implements SettingsProvider {
 
     @Override
     public Settings getSettings() { return this.gameManager.getSettings(); }
+    public GameWorld getWorld() { return  this.world; }
 
     protected EntityManager(GameManager gameManager, GameWorld world) {
         this.contextLookup = new HashMap<Entity, Context>();

@@ -16,27 +16,17 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
 
 public class EntityManagerTest extends LibgdxTest implements SettingsProvider {
     private class TestEntityManager extends EntityManager {
-
         protected TestEntityManager(GameManager gameManager, GameWorld world) {
             super(gameManager, world);
         }
     }
     private class TestGameManager extends GameManager {
         @Override
-        protected Settings createSettings() {
-            return null;
-        }
-
+        protected Settings createSettings() { return null; }
         @Override
-        protected InputScope createUIManager() {
-            return null;
-        }
-
+        protected InputScope getUIManager() { return null; }
         @Override
-        protected EntityManager createEntityManager(SettingsProvider configProvider, GameWorld world) {
-            return null;
-        }
-
+        protected EntityManager createEntityManager(SettingsProvider configProvider, GameWorld world) { return null; }
         @Override
         public void pause() { }
         @Override

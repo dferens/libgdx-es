@@ -36,7 +36,6 @@ public class Context{
         }
     }
     private final int updatePriority;
-
     private final int renderPriority;
     private final EntityManager entityManager;
     private PhysicsBody boxBody;

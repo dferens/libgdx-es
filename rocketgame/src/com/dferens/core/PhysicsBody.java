@@ -13,10 +13,14 @@ public class PhysicsBody {
 
     public float getX() { return boxBody.getPosition().x; }
     public float getY() { return boxBody.getPosition().y; }
+    public Vector2 getPosition() { return boxBody.getPosition(); }
     public void setX(float value) { boxBody.setTransform(value, getY(), boxBody.getAngle()); }
     public void setY(float value) { boxBody.setTransform(getX(), value, boxBody.getAngle()); }
 
     public Vector2 getLinearVelocity() { return boxBody.getLinearVelocity(); }
+    public void setLinearVelocity(float vx, float vy) {
+        this.boxBody.setLinearVelocity(vx, vy);
+    }
     public void applyLinearImpulse(float impulseX, float impulseY, float pointX, float pointY) {
         applyLinearImpulse(impulseX, impulseY, pointX, pointY, true);
     }
