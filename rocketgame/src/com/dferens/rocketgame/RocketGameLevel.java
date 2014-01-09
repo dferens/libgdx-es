@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.dferens.core.EntityManager;
 import com.dferens.core.levels.LevelParseException;
@@ -76,13 +77,23 @@ public class RocketGameLevel extends TmxLevel {
         }
 
         // Spawn & finish points
-        ((RectangleMapObject)spawnPointObject).getRectangle().getCenter(this.getSpawnPoint());
-        ((RectangleMapObject)finishPointObject).getRectangle().getCenter(this.getFinishPoint());
+        Rectangle spawnBounds = ((RectangleMapObject) spawnPointObject).getRectangle();
+        Rectangle finishBounds = ((RectangleMapObject) finishPointObject).getRectangle();
+        Vector2 positionPixels = new Vector2();
+        spawnBounds.getCenter(positionPixels);
+        this.spawnPoint.set(positionPixels.x / this.getTileSizePixels(),
+                            positionPixels.y / this.getTileSizePixels());
+        finishBounds.getCenter(positionPixels);
+        this.finishPoint.set(positionPixels.x / this.getTileSizePixels(),
+                             positionPixels.y / this.getTileSizePixels());
 
         // Load background & foreground layers
         MapLayers targetMapList = this.backgroundLayers;
         for (MapLayer layer : this.tiledMap.getLayers()) {
-            if (layer == collisionLayer) targetMapList = this.foregroundLayers;
+            if (layer == collisionLayer) {
+                targetMapList = this.foregroundLayers;
+                continue;
+            }
             if (layer instanceof TiledMapTileLayer)
                 targetMapList.add(layer);
         }
@@ -90,17 +101,12 @@ public class RocketGameLevel extends TmxLevel {
 
     @Override
     public void loadEntities(EntityManager entityManager) {
-        // Load collision blocks
         int layerHeight = collisionLayer.getHeight();
 
-        for (int mapY = 0; mapY < collisionLayer.getHeight(); mapY++) {
+        for (int mapY = 0; mapY < layerHeight;  mapY++) {
             for (int mapX = 0; mapX < collisionLayer.getWidth(); mapX++) {
-                TiledMapTileLayer.Cell cell = collisionLayer.getCell(mapX, mapY);
-                // Converting top-left coordinates to bottom-left
-                int blockX = mapX, blockY = (layerHeight - 1 - mapY);
-                if (cell != null) {
-                    entityManager.createEntity(new BlockEntity(blockX, blockY));
-                }
+                if (collisionLayer.getCell(mapX, mapY) != null)
+                    entityManager.createEntity(new BlockEntity(mapX, mapY));
             }
         }
     }
