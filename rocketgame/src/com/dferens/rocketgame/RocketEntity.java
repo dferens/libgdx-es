@@ -35,7 +35,7 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
         bodyDef.position.set(spawnPositionX, spawnPositionY);
         Body boxBody = world.createBody(bodyDef);
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 1f;
+        fixtureDef.density = 10f;
         fixtureDef.friction = 0.1f;
         fixtureDef.restitution = 0.9f;
         CircleShape rocketShape = new CircleShape();
@@ -50,16 +50,18 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
         RocketGameInputScope screenInput = (RocketGameInputScope) input;
         PhysicsBody body = context.getBody();
 
-        if (screenInput.isJumping()) {
-            float deltaSpeed = 0;
+        float deltaSpeed = 0;
 
-            if (screenInput.isMovingLeft()) {
-                deltaSpeed = - MOVE_SPEED;
-            }
-            else if (screenInput.isMovingRight()) {
-                deltaSpeed = MOVE_SPEED;
-            }
-            body.getLinearVelocity().x = deltaSpeed;
+        if (screenInput.isMovingLeft()) {
+            deltaSpeed = - MOVE_SPEED;
+        }
+        else if (screenInput.isMovingRight()) {
+            deltaSpeed = MOVE_SPEED;
+        }
+
+        body.setLinearVelocity(deltaSpeed, body.getLinearVelocity().y);
+
+        if (screenInput.isJumping()) {
             body.applyLinearImpulse(0, JUMP_IMPULSE, body.getX(), body.getY());
         }
     }
@@ -69,14 +71,12 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
 
     @Override
     public void render(float deltaTime, Context context, RenderScope renderScope) {
-        renderScope.draw(rocketTexture, context.getBody());
+        renderScope.draw(rocketTexture, context.getBody(), 1, 1);
     }
 
     @Override
     public int getRenderPriority() { return Priority.ENTITIES; }
 
     @Override
-    public void dispose() {
-        rocketTexture.dispose();
-    }
+    public void dispose() { rocketTexture.dispose(); }
 }

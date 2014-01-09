@@ -36,7 +36,7 @@ public class RocketGameLevelRenderer {
             RocketGameEntityManager entityManager = (RocketGameEntityManager) context.getEntityManager();
             RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
 
-            renderer.syncronize(this.levelRenderer.mapRenderer);
+            renderer.synchronise(this.levelRenderer.mapRenderer);
             this.levelRenderer.mapRenderer.getSpriteBatch().begin();
 
             for (MapLayer layer : level.getBackgroundLayers())
@@ -65,7 +65,7 @@ public class RocketGameLevelRenderer {
             RocketGameEntityManager entityManager = (RocketGameEntityManager) context.getEntityManager();
             RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
 
-            renderer.syncronize(this.levelRenderer.mapRenderer);
+            renderer.synchronise(this.levelRenderer.mapRenderer);
 
             for (MapLayer layer : level.getForegroundLayers())
                 this.levelRenderer.mapRenderer.renderTileLayer((TiledMapTileLayer) layer);
