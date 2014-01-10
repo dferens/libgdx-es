@@ -36,6 +36,7 @@ public class RocketGameLevelRenderer {
             RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
 
             renderer.synchronise(this.levelRenderer.mapRenderer);
+            renderer.commitDraw(true);
             for (MapLayer layer : level.getBackgroundLayers())
                 this.levelRenderer.mapRenderer.renderTileLayer((TiledMapTileLayer) layer);
 
@@ -64,9 +65,12 @@ public class RocketGameLevelRenderer {
             RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
 
             renderer.synchronise(this.levelRenderer.mapRenderer);
+            renderer.commitDraw(true);
 
             for (MapLayer layer : level.getForegroundLayers())
                 this.levelRenderer.mapRenderer.renderTileLayer((TiledMapTileLayer) layer);
+
+            renderer.commitDraw(true);
         }
         @Override
         public int getUpdatePriority() { return Priority.FOREGROUND; }
