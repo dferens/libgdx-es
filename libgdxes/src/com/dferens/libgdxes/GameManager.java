@@ -8,12 +8,12 @@ import com.dferens.libgdxes.entities.Updatable;
 
 public abstract class GameManager implements SettingsProvider, Screen {
     private final GameWorld world;
-    protected final EntityManager entityManager;
-    protected final RenderScope renderScope;
-    private final InputScope inputScope;
     private final Settings settings;
+    protected final EntityManager entities;
+    protected final RenderScope renderScope;
+    protected final InputScope inputScope;
 
-    public EntityManager getEntityManager() { return this.entityManager; }
+    public EntityManager getEntities() { return this.entities; }
     public RenderScope getRenderScope() { return this.renderScope; }
     public final Settings getSettings() { return this.settings; }
 
@@ -21,7 +21,7 @@ public abstract class GameManager implements SettingsProvider, Screen {
         this.settings = this.createSettings();
         this.world = new GameWorld(this);
         this.renderScope = new RenderScope(this);
-        this.entityManager = this.createEntityManager(this, world);
+        this.entities = this.createEntityManager(this, world);
         this.inputScope = this.getUIManager();
     }
 
@@ -47,8 +47,8 @@ public abstract class GameManager implements SettingsProvider, Screen {
     }
 
     protected void renderEntities(float deltaTime) {
-        for (Renderable entity : entityManager.iterateRenderables()) {
-            Context context = entityManager.getContext(entity);
+        for (Renderable entity : entities.iterateRenderables()) {
+            Context context = entities.getContext(entity);
             entity.render(deltaTime, context, renderScope);
         }
     }
@@ -56,11 +56,11 @@ public abstract class GameManager implements SettingsProvider, Screen {
         inputScope.render(deltaTime);
     }
     protected void updateWorld(float deltaTime) {
-        this.entityManager.updateWorld(deltaTime);
+        this.entities.updateWorld(deltaTime);
     }
     protected void updateEntities(float deltaTime) {
-        for (Updatable entity : entityManager.iterateUpdatables()) {
-            Context context = entityManager.getContext(entity);
+        for (Updatable entity : entities.iterateUpdatables()) {
+            Context context = entities.getContext(entity);
             entity.update(deltaTime, context, inputScope);
         }
     }

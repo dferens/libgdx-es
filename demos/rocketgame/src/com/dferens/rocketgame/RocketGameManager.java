@@ -8,14 +8,10 @@ import com.dferens.libgdxes.levels.LevelParseException;
 public class RocketGameManager extends GameManager {
 
     @Override
-    public RocketGameEntityManager getEntityManager() {
-        return (RocketGameEntityManager) this.entityManager;
-    }
-
-    public RocketGameManager() { }
+    public RocketGameEntityManager getEntities() { return (RocketGameEntityManager) super.getEntities(); }
 
     public void load() throws LevelParseException {
-        this.getEntityManager().switchLevel(new RocketGameLevel("data/levels/demo.tmx"));
+        this.getEntities().switchLevel(new RocketGameLevel("data/levels/demo.tmx"));
     }
 
     @Override

@@ -23,10 +23,10 @@ public class RocketGameLevelRenderer {
         @Override
         public void update(float deltaTime, Context context, InputScope input) {
             // TODO: make camera track player
-            /*RocketGameEntityManager entityManager = (RocketGameEntityManager) context.getEntityManager();
-            RocketEntity rocket = entityManager.getRocket();
-            PhysicsBody rocketBody = entityManager.getContext(rocket).getBody();
-            float totalLevelWidth = entityManager.getLevel().getWidth();
+            /*RocketGameEntityManager entities = (RocketGameEntityManager) context.getEntityManager();
+            RocketEntity rocket = entities.getRocket();
+            PhysicsBody rocketBody = entities.getContext(rocket).getBody();
+            float totalLevelWidth = entities.getLevel().getWidth();
             float trackPointX = rocketBody.getX();*/
         }
 
