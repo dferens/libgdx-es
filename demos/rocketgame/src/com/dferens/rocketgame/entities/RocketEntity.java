@@ -1,4 +1,4 @@
-package com.dferens.rocketgame;
+package com.dferens.rocketgame.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +12,8 @@ import com.dferens.libgdxes.RenderScope;
 import com.dferens.libgdxes.entities.PhysicsApplied;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
+import com.dferens.rocketgame.Priority;
+import com.dferens.rocketgame.RocketGameInputScope;
 
 public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disposable {
     private static final float JUMP_IMPULSE = 10f;
@@ -25,7 +27,7 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
         this.spawnPositionX = spawnPosition.x;
         this.spawnPositionY = spawnPosition.y;
 
-        rocketTexture = new Texture(Gdx.files.internal("data/rocket.png"));
+        this.rocketTexture = new Texture(Gdx.files.internal("data/rocket.png"));
     }
 
     @Override

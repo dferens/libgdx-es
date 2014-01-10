@@ -5,32 +5,27 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.dferens.libgdxes.*;
 import com.dferens.libgdxes.levels.LevelParseException;
 
-public class RocketGameManager extends GameManager {
-
-    @Override
-    public RocketGameEntityManager getEntities() { return (RocketGameEntityManager) super.getEntities(); }
+public class RocketGameManager extends GameManager<Settings,
+                                                   RocketGameEntityManager,
+                                                   RenderScope,
+                                                   RocketGameInputScope > {
 
     public void load() throws LevelParseException {
         this.getEntities().switchLevel(new RocketGameLevel("data/levels/demo.tmx"));
     }
 
+
     @Override
-    protected Settings createSettings() {
-        Settings settings = new Settings();
-        settings.renderVisibleUnits = 30;
-        settings.worldGravity.set(0, -10);
-        settings.worldPositionIterations = 10;
-        settings.worldVelocityIterations = 2;
-        settings.systemFont = new BitmapFont(Gdx.files.internal("data/fonts/arial-15.fnt"));
-        return settings;
-    }
-    @Override
-    public InputScope getUIManager() {
-        return new RocketGameInputScope();
-    }
-    @Override
-    public EntityManager createEntityManager(SettingsProvider configProvider, GameWorld world) {
-        return new RocketGameEntityManager(this, world);
+    protected void setupComponents(GameWorld world) {
+        this.settings = new Settings();
+        this.settings.renderVisibleUnits = 30;
+        this.settings.worldGravity.set(0, -10);
+        this.settings.worldPositionIterations = 10;
+        this.settings.worldVelocityIterations = 2;
+        this.settings.systemFont = new BitmapFont(Gdx.files.internal("data/fonts/arial-15.fnt"));
+        this.entities = new RocketGameEntityManager(this, world);
+        this.renderScope = new RenderScope(this);
+        this.inputScope = new RocketGameInputScope();
     }
 
     @Override

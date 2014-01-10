@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dferens.libgdxes.EntityManager;
 import com.dferens.libgdxes.levels.LevelParseException;
 import com.dferens.libgdxes.levels.TmxLevel;
+import com.dferens.rocketgame.entities.BlockEntity;
 
 public class RocketGameLevel extends TmxLevel {
     private static String LAYER_COLLISION = "BLOCKS";

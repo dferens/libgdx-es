@@ -27,7 +27,7 @@ public class EntityManagerTest extends LibgdxTest implements SettingsProvider {
         @Override
         protected InputScope getUIManager() { return null; }
         @Override
-        protected EntityManager createEntityManager(SettingsProvider configProvider, GameWorld world) { return null; }
+        protected EntityManager createEntityManager(GameWorld world) { return null; }
         @Override
         public void pause() { }
         @Override

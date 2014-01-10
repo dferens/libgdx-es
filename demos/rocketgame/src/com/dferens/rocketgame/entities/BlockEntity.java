@@ -1,4 +1,4 @@
-package com.dferens.rocketgame;
+package com.dferens.rocketgame.entities;
 
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;

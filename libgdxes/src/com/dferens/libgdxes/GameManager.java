@@ -6,28 +6,26 @@ import com.badlogic.gdx.graphics.GL10;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
 
-public abstract class GameManager implements SettingsProvider, Screen {
+public abstract class GameManager<S extends Settings,
+                                  E extends EntityManager,
+                                  R extends RenderScope,
+                                  I extends InputScope> implements SettingsProvider, Screen {
     private final GameWorld world;
-    private final Settings settings;
-    protected final EntityManager entities;
-    protected final RenderScope renderScope;
-    protected final InputScope inputScope;
+    protected S settings;
+    protected E entities;
+    protected R renderScope;
+    protected I inputScope;
 
-    public EntityManager getEntities() { return this.entities; }
-    public RenderScope getRenderScope() { return this.renderScope; }
+    public E getEntities() { return this.entities; }
+    public R getRenderScope() { return this.renderScope; }
     public final Settings getSettings() { return this.settings; }
 
     public GameManager() {
-        this.settings = this.createSettings();
         this.world = new GameWorld(this);
-        this.renderScope = new RenderScope(this);
-        this.entities = this.createEntityManager(this, world);
-        this.inputScope = this.getUIManager();
+        this.setupComponents(this.world);
     }
 
-    protected abstract Settings createSettings();
-    protected abstract InputScope getUIManager();
-    protected abstract EntityManager createEntityManager(SettingsProvider configProvider, GameWorld world);
+    protected abstract void setupComponents(GameWorld world);
 
     protected final void innerRender(float deltaTime) {
         clearScreen();
