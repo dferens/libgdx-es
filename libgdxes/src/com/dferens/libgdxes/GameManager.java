@@ -23,6 +23,7 @@ public abstract class GameManager<S extends Settings,
     public GameManager() {
         this.world = new GameWorld(this);
         this.setupComponents(this.world);
+        this.world.initialize();
     }
 
     protected abstract void setupComponents(GameWorld world);

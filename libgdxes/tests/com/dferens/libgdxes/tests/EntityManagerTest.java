@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 
-public class EntityManagerTest extends LibgdxTest implements SettingsProvider {
+public class EntityManagerTest extends LibgdxTest {
     private class TestEntityManager extends EntityManager {
         protected TestEntityManager(GameManager gameManager, GameWorld world) {
             super(gameManager, world);
@@ -23,11 +23,14 @@ public class EntityManagerTest extends LibgdxTest implements SettingsProvider {
     }
     private class TestGameManager extends GameManager {
         @Override
-        protected Settings createSettings() { return null; }
-        @Override
-        protected InputScope getUIManager() { return null; }
-        @Override
-        protected EntityManager createEntityManager(GameWorld world) { return null; }
+        protected void setupComponents(GameWorld world) {
+            this.settings = new Settings();
+            this.settings.debugModeOn = false;
+            this.entities = new TestEntityManager(this, world);
+            this.inputScope = null;
+            this.renderScope = null;
+        }
+
         @Override
         public void pause() { }
         @Override
@@ -35,7 +38,6 @@ public class EntityManagerTest extends LibgdxTest implements SettingsProvider {
     }
     private EntityManager entityManager;
 
-    private Settings gameSettings;
     private TestEntityFactory entityFactory;
     private List<TestEntityFactory.TestEntity> testEntities;
     private TestEntityFactory.TestEntity simpleEntity;
@@ -55,13 +57,10 @@ public class EntityManagerTest extends LibgdxTest implements SettingsProvider {
     private Context getContext(Entity entity) { return entityManager.getContext(entity); }
     private int getNumberOfEntities() { return entityManager.getNumberOfEntities(); }
 
-    @Override
-    public Settings getSettings() { return gameSettings; }
-
     @Before
     public void setUp() throws Exception{
-        gameSettings = new Settings();
-        entityManager = new TestEntityManager(new TestGameManager(), new GameWorld(this));
+        TestGameManager testGameManager = new TestGameManager();
+        entityManager = testGameManager.getEntities();
         entityFactory = new TestEntityFactory();
         testEntities = new LinkedList<TestEntityFactory.TestEntity>();
         simpleEntity = entityFactory.createSimpleEntity();
@@ -72,11 +71,6 @@ public class EntityManagerTest extends LibgdxTest implements SettingsProvider {
         testEntities.add(updatableEntity);
         testEntities.add(renderableEntity);
         testEntities.add(physicsAppliedEntity);
-    }
-
-    @Test
-    public void testGetSettings() throws Exception {
-        assertEquals(entityManager.getSettings(), this.gameSettings);
     }
 
     @Test

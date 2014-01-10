@@ -7,11 +7,14 @@ import com.badlogic.gdx.utils.Disposable;
 import com.dferens.libgdxes.entities.PhysicsApplied;
 
 public class GameWorld implements Disposable {
-    protected final World boxWorld;
     protected final SettingsProvider configProvider;
+    protected World boxWorld;
 
     public GameWorld(SettingsProvider configProvider) {
         this.configProvider = configProvider;
+    }
+
+    public void initialize() {
         this.boxWorld = new World(configProvider.getSettings().worldGravity, true);
     }
 
