@@ -12,12 +12,13 @@ public class Settings {
     public boolean debugModeOn;
     public BitmapFont systemFont;
 
-    public Settings() {
+    public Settings(boolean debugModeOn) {
         this.worldGravity = new Vector2(0, -9.8f);
         this.worldVelocityIterations = 6;
         this.worldPositionIterations = 2;
         this.renderVisibleUnits = 20;
         this.maxTimeStep = 1/30f;
-        this.debugModeOn = true;
+        this.debugModeOn = debugModeOn;
     }
+    public Settings() { this(false); }
 }

@@ -67,7 +67,6 @@ public class RocketGameLevelRenderer {
 
             for (MapLayer layer : level.getForegroundLayers())
                 this.levelRenderer.mapRenderer.renderTileLayer((TiledMapTileLayer) layer);
-
         }
         @Override
         public int getUpdatePriority() { return Priority.FOREGROUND; }

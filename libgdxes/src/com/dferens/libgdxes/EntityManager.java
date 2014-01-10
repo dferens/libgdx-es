@@ -9,7 +9,7 @@ import com.dferens.libgdxes.entities.utils.FPSLoggerEntity;
 
 import java.util.*;
 
-public abstract class EntityManager implements SettingsProvider {
+public abstract class EntityManager implements SettingsProvider, Scope {
     private final Map<Entity, Context> contextLookup;
     private final SortedSet<Updatable> updateEntities;
     private final SortedSet<Renderable> renderEntities;
@@ -28,7 +28,10 @@ public abstract class EntityManager implements SettingsProvider {
         this.renderEntities = new TreeSet<Renderable>(new Context.RenderPriorityComparator(this.contextLookup));
         this.gameManager = gameManager;
         this.world = world;
+    }
 
+    @Override
+    public void initialize() {
         this.clear();
     }
 

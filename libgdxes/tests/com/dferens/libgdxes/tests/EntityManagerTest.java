@@ -22,9 +22,12 @@ public class EntityManagerTest extends LibgdxTest {
         }
     }
     private class TestGameManager extends GameManager {
+        public TestGameManager() {
+            super(new Settings(false));
+        }
+
         @Override
         protected void setupComponents(GameWorld world) {
-            this.settings = new Settings();
             this.settings.debugModeOn = false;
             this.entities = new TestEntityManager(this, world);
             this.inputScope = null;

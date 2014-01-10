@@ -1,8 +1,9 @@
 package com.dferens.rocketgame;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.dferens.libgdxes.*;
+import com.dferens.libgdxes.GameManager;
+import com.dferens.libgdxes.GameWorld;
+import com.dferens.libgdxes.RenderScope;
+import com.dferens.libgdxes.Settings;
 import com.dferens.libgdxes.levels.LevelParseException;
 
 public class RocketGameManager extends GameManager<Settings,
@@ -10,30 +11,31 @@ public class RocketGameManager extends GameManager<Settings,
                                                    RenderScope,
                                                    RocketGameInputScope > {
 
-    public void load() throws LevelParseException {
-        this.getEntities().switchLevel(new RocketGameLevel("data/levels/demo.tmx"));
-    }
-
+    public RocketGameManager(Settings settings) { super(settings); }
 
     @Override
     protected void setupComponents(GameWorld world) {
-        this.settings = new Settings();
-        this.settings.renderVisibleUnits = 30;
-        this.settings.worldGravity.set(0, -10);
-        this.settings.worldPositionIterations = 10;
-        this.settings.worldVelocityIterations = 2;
-        this.settings.systemFont = new BitmapFont(Gdx.files.internal("data/fonts/arial-15.fnt"));
+        settings.debugModeOn = true;
         this.entities = new RocketGameEntityManager(this, world);
         this.renderScope = new RenderScope(this);
         this.inputScope = new RocketGameInputScope();
+
+        this.entities.initialize();
+        this.renderScope.initialize();
+        this.inputScope.initialize();
     }
 
     @Override
     public void pause() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+
     @Override
     public void resume() {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void load() throws LevelParseException {
+        this.getEntities().switchLevel(new RocketGameLevel("data/levels/demo.tmx"));
     }
 }

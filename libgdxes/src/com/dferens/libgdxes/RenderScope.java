@@ -13,8 +13,17 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.dferens.libgdxes.utils.ScaledOrthogonalTiledMapRenderer;
 import com.dferens.libgdxes.utils.StateMachine;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class RenderScope extends StateMachine implements Disposable {
+public class RenderScope extends StateMachine implements Disposable, Scope {
+    private static class NotReadyState extends State {
+        @Override
+        public void onExit(StateMachine machine) {
+            if (((RenderScope) machine).camera == null) {
+                throw new NotImplementedException();
+            }
+        }
+    }
     private static class ReadyState extends State { }
     private static class DrawingState extends State {
         @Override
@@ -30,16 +39,22 @@ public class RenderScope extends StateMachine implements Disposable {
 
     private SpriteBatch batch;
     private OrthographicCamera camera;
-    private State readyState;
+    private State readyState, notReadyState;
     private State drawingState;
 
     public RenderScope(GameManager gameManager) {
         this.gameManager = gameManager;
         this.batch = new SpriteBatch();
-        this.camera = this.createCamera(gameManager.getSettings().renderVisibleUnits);
-        this.moveCamera(camera.viewportWidth / 2, camera.viewportHeight / 2);
         this.readyState = new ReadyState();
         this.drawingState = new DrawingState();
+        this.notReadyState = new NotReadyState();
+        this.switchTo(notReadyState);
+    }
+
+    @Override
+    public void initialize() {
+        this.camera = this.createCamera(gameManager.getSettings().renderVisibleUnits);
+        this.moveCamera(camera.viewportWidth / 2, camera.viewportHeight / 2);
         this.switchTo(readyState);
     }
 

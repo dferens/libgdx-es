@@ -11,7 +11,7 @@ public abstract class GameManager<S extends Settings,
                                   R extends RenderScope,
                                   I extends InputScope> implements SettingsProvider, Screen {
     private final GameWorld world;
-    protected S settings;
+    protected final S settings;
     protected E entities;
     protected R renderScope;
     protected I inputScope;
@@ -20,10 +20,10 @@ public abstract class GameManager<S extends Settings,
     public R getRenderScope() { return this.renderScope; }
     public final Settings getSettings() { return this.settings; }
 
-    public GameManager() {
+    public GameManager(S settings) {
+        this.settings = settings;
         this.world = new GameWorld(this);
         this.setupComponents(this.world);
-        this.world.initialize();
     }
 
     protected abstract void setupComponents(GameWorld world);

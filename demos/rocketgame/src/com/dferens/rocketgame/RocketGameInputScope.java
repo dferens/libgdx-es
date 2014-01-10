@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.dferens.libgdxes.InputScope;
 
 public class RocketGameInputScope extends InputScope {
+    @Override
+    public void initialize() { }
+
     public Boolean isMovingLeft() {
         if (isTouched()) {
             float x = this.getTouchPosX();
