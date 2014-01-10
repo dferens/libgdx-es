@@ -24,3 +24,6 @@ proguard/
 
 # Project libs
 libs/
+
+# IDEA files
+.idea/
