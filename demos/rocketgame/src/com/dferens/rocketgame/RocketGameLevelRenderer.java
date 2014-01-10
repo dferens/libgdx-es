@@ -1,7 +1,6 @@
 package com.dferens.rocketgame;
 
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.InputScope;
@@ -37,12 +36,11 @@ public class RocketGameLevelRenderer {
             RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
 
             renderer.synchronise(this.levelRenderer.mapRenderer);
-            this.levelRenderer.mapRenderer.getSpriteBatch().begin();
-
             for (MapLayer layer : level.getBackgroundLayers())
                 this.levelRenderer.mapRenderer.renderTileLayer((TiledMapTileLayer) layer);
 
             this.levelRenderer.mapRenderer.renderTileLayer(level.getMainLayer());
+            renderer.commitDraw(true);
         }
         @Override
         public int getUpdatePriority() { return Priority.BACKGROUND; }
@@ -70,11 +68,9 @@ public class RocketGameLevelRenderer {
             for (MapLayer layer : level.getForegroundLayers())
                 this.levelRenderer.mapRenderer.renderTileLayer((TiledMapTileLayer) layer);
 
-            this.levelRenderer.mapRenderer.getSpriteBatch().end();
         }
         @Override
         public int getUpdatePriority() { return Priority.FOREGROUND; }
-
         @Override
         public int getRenderPriority() { return Priority.FOREGROUND; }
     }
@@ -85,13 +81,12 @@ public class RocketGameLevelRenderer {
     public BackgroundRendererEntity getBackgroundRendererEntity() { return backgroundRendererEntity; }
     public ForegroundRendererEntity getForegroundRendererEntity() { return foregroundRendererEntity; }
 
-    public RocketGameLevelRenderer(TiledMap tiledMap, float unitScale) {
+    public RocketGameLevelRenderer(ScaledOrthogonalTiledMapRenderer mapRenderer) {
         // TODO: use batch from render scope
-        this.mapRenderer = new ScaledOrthogonalTiledMapRenderer(tiledMap, unitScale);
+        this.mapRenderer = mapRenderer;
         this.backgroundRendererEntity = new BackgroundRendererEntity(this);
         this.foregroundRendererEntity = new ForegroundRendererEntity(this);
     }
-    public RocketGameLevelRenderer(float unitScale) { this(null, unitScale); }
 
     public void onLevelChanged(TmxLevel level) {
         this.mapRenderer.setMap(level.getTiledMap());

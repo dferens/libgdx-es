@@ -14,7 +14,7 @@ public class RocketGameEntityManager extends LevelEntityManager {
     public RocketGameEntityManager(GameManager gameManager, GameWorld world) {
         super(gameManager, world);
 
-        this.levelRenderer = new RocketGameLevelRenderer(1);
+        this.levelRenderer = new RocketGameLevelRenderer(this.gameManager.getRenderScope().createMapRenderer(null, 1));
     }
 
     @Override

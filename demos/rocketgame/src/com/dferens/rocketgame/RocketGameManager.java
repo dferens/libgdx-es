@@ -1,5 +1,7 @@
 package com.dferens.rocketgame;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.dferens.libgdxes.*;
 import com.dferens.libgdxes.levels.LevelParseException;
 
@@ -13,7 +15,7 @@ public class RocketGameManager extends GameManager {
     public RocketGameManager() { }
 
     public void load() throws LevelParseException {
-        this.getEntityManager().switchLevel(new RocketGameLevel("levels/demo.tmx"));
+        this.getEntityManager().switchLevel(new RocketGameLevel("data/levels/demo.tmx"));
     }
 
     @Override
@@ -23,6 +25,7 @@ public class RocketGameManager extends GameManager {
         settings.worldGravity.set(0, -10);
         settings.worldPositionIterations = 10;
         settings.worldVelocityIterations = 2;
+        settings.systemFont = new BitmapFont(Gdx.files.internal("data/fonts/arial-15.fnt"));
         return settings;
     }
     @Override

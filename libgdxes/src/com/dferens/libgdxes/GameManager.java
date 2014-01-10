@@ -20,8 +20,8 @@ public abstract class GameManager implements SettingsProvider, Screen {
     public GameManager() {
         this.settings = this.createSettings();
         this.world = new GameWorld(this);
-        this.entityManager = this.createEntityManager(this, world);
         this.renderScope = new RenderScope(this);
+        this.entityManager = this.createEntityManager(this, world);
         this.inputScope = this.getUIManager();
     }
 
@@ -31,9 +31,10 @@ public abstract class GameManager implements SettingsProvider, Screen {
 
     protected final void innerRender(float deltaTime) {
         clearScreen();
+        this.renderScope.beginDraw();
         renderEntities(deltaTime);
         renderUI(deltaTime);
-        this.renderScope.commit();
+        this.renderScope.commitDraw();
     }
 
     protected final void update(float deltaTime) {

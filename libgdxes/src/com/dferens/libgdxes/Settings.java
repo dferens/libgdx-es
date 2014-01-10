@@ -1,5 +1,6 @@
 package com.dferens.libgdxes;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 
 public class Settings {
@@ -9,6 +10,7 @@ public class Settings {
     public float renderVisibleUnits;
     public float maxTimeStep;
     public boolean debugModeOn;
+    public BitmapFont systemFont;
 
     public Settings() {
         this.worldGravity = new Vector2(0, -9.8f);
