@@ -91,12 +91,10 @@ public class RocketGameLevel extends TmxLevel {
         // Load background & foreground layers
         MapLayers targetMapList = this.backgroundLayers;
         for (MapLayer layer : this.tiledMap.getLayers()) {
+            if (layer instanceof TiledMapTileLayer) targetMapList.add(layer);
             if (layer == collisionLayer) {
                 targetMapList = this.foregroundLayers;
-                continue;
             }
-            if (layer instanceof TiledMapTileLayer)
-                targetMapList.add(layer);
         }
     }
 

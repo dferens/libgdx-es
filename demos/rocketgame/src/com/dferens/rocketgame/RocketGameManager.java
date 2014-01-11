@@ -15,7 +15,6 @@ public class RocketGameManager extends GameManager<Settings,
 
     @Override
     protected void setupComponents(GameWorld world) {
-        settings.debugModeOn = true;
         this.entities = new RocketGameEntityManager(this, world);
         this.renderScope = new RenderScope(this);
         this.inputScope = new RocketGameInputScope();

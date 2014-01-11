@@ -1,6 +1,8 @@
 package com.dferens.libgdxes.utils;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -15,17 +17,26 @@ public class ScaledOrthogonalTiledMapRenderer extends OrthogonalTiledMapRenderer
     public ScaledOrthogonalTiledMapRenderer(TiledMap map) {
         super(map);
     }
-
     public ScaledOrthogonalTiledMapRenderer(TiledMap map, float unitScale) {
         super(map, unitScale);
     }
 
-    @Override
-    public void renderTileLayer(TiledMapTileLayer layer) {
-        if (this.ownsSpriteBatch) this.spriteBatch.begin();
-        super.renderTileLayer(layer);
-        if (this.ownsSpriteBatch) this.spriteBatch.end();
+    public void render(MapLayers layers) {
+        beginRender();
+        for (MapLayer layer : layers) {
+            if (layer.isVisible()) {
+                if (layer instanceof TiledMapTileLayer) {
+                    renderTileLayer((TiledMapTileLayer)layer);
+                }
+            }
+        }
+        endRender();
     }
+
+    @Override
+    public void beginRender() { super.beginRender(); }
+    @Override
+    public void endRender() { super.endRender(); }
 
     public ScaledOrthogonalTiledMapRenderer(TiledMap map, float unitScale, SpriteBatch batch) {
         super(map, unitScale);

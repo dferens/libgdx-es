@@ -10,7 +10,7 @@ public class GdxGame extends Game {
     @Override
     public void create() {
         Settings settings = new Settings(true);
-        settings.renderVisibleUnits = 90;
+        settings.renderVisibleUnits = 30;
         settings.worldGravity.set(0, -10);
         settings.worldPositionIterations = 10;
         settings.worldVelocityIterations = 2;

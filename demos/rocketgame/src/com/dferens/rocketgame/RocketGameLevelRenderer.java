@@ -1,13 +1,11 @@
 package com.dferens.rocketgame;
 
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.InputScope;
-import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
 import com.dferens.libgdxes.levels.TmxLevel;
+import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.utils.ScaledOrthogonalTiledMapRenderer;
 
 // TODO: refactor this shit
@@ -36,12 +34,9 @@ public class RocketGameLevelRenderer {
             RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
 
             renderer.synchronise(this.levelRenderer.mapRenderer);
-            renderer.commitDraw(true);
-            for (MapLayer layer : level.getBackgroundLayers())
-                this.levelRenderer.mapRenderer.renderTileLayer((TiledMapTileLayer) layer);
-
-            this.levelRenderer.mapRenderer.renderTileLayer(level.getMainLayer());
-            renderer.commitDraw(true);
+            renderer.commitDraw(false);
+            this.levelRenderer.mapRenderer.render(level.getBackgroundLayers());
+            renderer.beginDraw();
         }
         @Override
         public int getUpdatePriority() { return Priority.BACKGROUND; }
@@ -64,13 +59,13 @@ public class RocketGameLevelRenderer {
             RocketGameEntityManager entityManager = (RocketGameEntityManager) context.getEntityManager();
             RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
 
-            renderer.synchronise(this.levelRenderer.mapRenderer);
-            renderer.commitDraw(true);
+//            renderer.synchronise(this.levelRenderer.mapRenderer);
+//            renderer.commitDraw(true);
 
-            for (MapLayer layer : level.getForegroundLayers())
-                this.levelRenderer.mapRenderer.renderTileLayer((TiledMapTileLayer) layer);
+//            for (MapLayer layer : level.getForegroundLayers())
+//                this.levelRenderer.mapRenderer.renderTileLayer((TiledMapTileLayer) layer);
 
-            renderer.commitDraw(true);
+//            renderer.commitDraw(true);
         }
         @Override
         public int getUpdatePriority() { return Priority.FOREGROUND; }
