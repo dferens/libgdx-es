@@ -18,7 +18,7 @@ import com.dferens.rocketgame.RocketGameInputScope;
 
 public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disposable {
     private static final float JUMP_IMPULSE = 10f;
-    private static final float MOVE_SPEED = 5f;
+    private static final float MOVE_SPEED = 30f;
 
     private final Texture rocketTexture;
     private final float spawnPositionX;
@@ -38,9 +38,9 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
         bodyDef.position.set(spawnPositionX, spawnPositionY);
         Body boxBody = world.createBody(bodyDef);
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 10f;
-        fixtureDef.friction = 0.1f;
-        fixtureDef.restitution = 0.9f;
+        fixtureDef.density = 5f;
+        fixtureDef.friction = 1f;
+        fixtureDef.restitution = 0.2f;
         CircleShape rocketShape = new CircleShape();
         rocketShape.setRadius(1f);
         fixtureDef.shape = rocketShape;
@@ -53,16 +53,9 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
         RocketGameInputScope screenInput = (RocketGameInputScope) input;
         PhysicsBody body = context.getBody();
 
-        float deltaSpeed = 0;
-
-        if (screenInput.isMovingLeft()) {
-            deltaSpeed = - MOVE_SPEED;
-        }
-        else if (screenInput.isMovingRight()) {
-            deltaSpeed = MOVE_SPEED;
-        }
-
-        body.setLinearVelocity(deltaSpeed, body.getLinearVelocity().y);
+        float newVelocityX = (float)(MOVE_SPEED * screenInput.getMovingRate());
+        float currentVelocityY = body.getLinearVelocity().y;
+        body.setLinearVelocity(newVelocityX, currentVelocityY);
 
         if (screenInput.isJumping()) {
             body.applyLinearImpulse(0, JUMP_IMPULSE, body.getX(), body.getY());

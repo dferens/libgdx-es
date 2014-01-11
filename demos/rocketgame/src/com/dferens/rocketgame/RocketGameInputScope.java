@@ -7,28 +7,25 @@ public class RocketGameInputScope extends InputScope {
     @Override
     public void initialize() { }
 
-    public Boolean isMovingLeft() {
-        if (isTouched()) {
-            float x = this.getTouchPosX();
-            float y = this.getTouchPosY();
-
-            return ((x < Gdx.graphics.getWidth() / 2) &&
-                    (y < Gdx.graphics.getHeight() / 2));
+    /**
+     * Returns player moving rate in range [-1; 1]
+     * @return negative negative for left side, positive for right side
+     */
+    public double getMovingRate() {
+        double sourceValue = Gdx.input.getAccelerometerY();
+        double filteredValue;
+        if (Math.abs(sourceValue) < 1) {
+            filteredValue = 0;
+        } else {
+            filteredValue = Math.pow(Math.abs(sourceValue), 1.5) * Math.signum(sourceValue);
+        }
+        return filteredValue / 10;
+    }
+    public boolean isJumping() {
+        if (Gdx.input.isTouched()) {
+            return ((Gdx.graphics.getHeight() - Gdx.input.getY()) < (Gdx.graphics.getHeight() / 4));
         }
         return false;
-    }
-    public Boolean isMovingRight() {
-        if (isTouched()) {
-            float x = this.getTouchPosX();
-            float y = this.getTouchPosY();
-
-            return ((x > Gdx.graphics.getWidth() / 2) &&
-                    (y < Gdx.graphics.getHeight() / 2));
-        }
-        return false;
-    }
-    public Boolean isJumping() {
-        return isTouched();
     }
 
     @Override

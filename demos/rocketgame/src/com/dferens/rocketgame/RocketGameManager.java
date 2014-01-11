@@ -35,6 +35,6 @@ public class RocketGameManager extends GameManager<Settings,
     }
 
     public void load() throws LevelParseException {
-        this.getEntities().switchLevel(new RocketGameLevel("data/levels/demo.tmx"));
+        this.getEntities().switchLevel(new RocketGameLevel("data/levels/demo/demo.tmx"));
     }
 }
