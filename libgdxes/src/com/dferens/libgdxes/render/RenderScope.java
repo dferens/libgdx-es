@@ -1,21 +1,27 @@
-package com.dferens.libgdxes;
+package com.dferens.libgdxes.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
+import com.dferens.libgdxes.GameManager;
+import com.dferens.libgdxes.GameWorld;
+import com.dferens.libgdxes.Scope;
+import com.dferens.libgdxes.UnitConverter;
 import com.dferens.libgdxes.utils.ScaledOrthogonalTiledMapRenderer;
 import com.dferens.libgdxes.utils.StateMachine;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class RenderScope extends StateMachine implements Disposable, Scope {
+public class RenderScope extends StateMachine implements Disposable, Scope, UnitConverter {
     private static class NotReadyState extends State {
         @Override
         public void onExit(StateMachine machine) {
@@ -42,6 +48,8 @@ public class RenderScope extends StateMachine implements Disposable, Scope {
     private State readyState, notReadyState;
     private State drawingState;
 
+    public Matrix4 getProjectionMatrix() { return this.camera.combined; }
+
     public RenderScope(GameManager gameManager) {
         this.gameManager = gameManager;
         this.batch = new SpriteBatch();
@@ -62,45 +70,18 @@ public class RenderScope extends StateMachine implements Disposable, Scope {
         this.camera.translate(dx, dy);
         this.camera.update();
     }
-
     public void moveCamera(Vector2 pos) {
         this.moveCamera(pos.x, pos.y);
     }
 
-    public void draw(Texture texture, PhysicsBody body) {
-        /**
-         * TODO: draw methods refactoring
-         *
-         *  Possible solution:
-         *
-         *      renderScope.draw(drawingObject, positionX, positionY, isPointCenter)
-         *                 .transform(newWidth, newHeight, rotation)
-         *
-         *      renderScope.draw(textureOrSpriteOrFontOrAnything)
-         *                 .screenCoordinates(screenPixelsX, screenPixelsY)
-         *
-         *  Requirements:
-         *   - different types of drawable objects (TextureRegion, Sprite etc.);
-         *   - screen / world coordinates;
-         *   - positioning and transformations;
-         */
-        Vector3 position = this.convertCoordinates(body.getX(), body.getY());
-        batch.draw(texture, position.x, position.y);
+    public DrawChain draw(Texture texture) { return new DrawChain(this, texture); }
+    public DrawChain draw(TextureRegion textureRegion) { return new DrawChain(this, textureRegion); }
+    public DrawChain draw(BitmapFont font, String text) { return new DrawChain(this, font, text); }
+    public DrawChain draw(GameWorld gameWorld, Box2DDebugRenderer debugRenderer) {
+        return new DrawChain(this, gameWorld, debugRenderer);
     }
-    public void draw(Texture texture, PhysicsBody body, float width, float height) {
-        Vector3 position = this.convertCoordinates(body.getX(), body.getY());
-        batch.draw(texture, position.x, position.y, unitsToPixels(width), unitsToPixels(height));
-    }
-    public void draw(GameWorld world, Box2DDebugRenderer boxDebugRenderer) {
-        // For the unknown reasons, debug renderer breaks all SpriteBatch objects
-        // Flushing sprite batch helps
-        this.commitDraw(true);
-        world.draw(boxDebugRenderer, this.camera);
-        this.commitDraw(true);
-    }
-    public void drawDirectly(BitmapFont renderFont, String text, Vector2 screenCoordinates) {
-        renderFont.draw(batch, text, screenCoordinates.x, screenCoordinates.y);
-    }
+    public void render(DrawChain drawChain) { drawChain.execute(this.batch); }
+
     public void beginDraw() {
         this.switchTo(this.drawingState);
     }
@@ -133,16 +114,20 @@ public class RenderScope extends StateMachine implements Disposable, Scope {
         }
         return new OrthographicCamera(viewportWidth, viewportHeight);
     }
-    private Vector3 convertCoordinates(float xUnits, float yUnits) {
+    @Override
+    public Vector3 convertCoordinates(float xUnits, float yUnits) {
         Vector3 position = new Vector3(xUnits, yUnits, 0);
         camera.project(position);
         return position;
     }
-    private void convertCoordinates(Vector3 coords) {
+    @Override
+    public void convertCoordinates(Vector3 coords) {
         camera.project(coords);
     }
-    private float unitsToPixels(float units) { return units * this.getPixelsPerUnit(); }
-    private float getPixelsPerUnit() { return (Gdx.graphics.getWidth() / camera.viewportWidth); }
+    @Override
+    public float unitsToPixels(float units) { return units * this.getPixelsPerUnit(); }
+    @Override
+    public float getPixelsPerUnit() { return (Gdx.graphics.getWidth() / camera.viewportWidth); }
 
     @Override
     public void dispose() { batch.dispose(); }

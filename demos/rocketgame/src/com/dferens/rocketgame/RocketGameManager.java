@@ -2,7 +2,7 @@ package com.dferens.rocketgame;
 
 import com.dferens.libgdxes.GameManager;
 import com.dferens.libgdxes.GameWorld;
-import com.dferens.libgdxes.RenderScope;
+import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.Settings;
 import com.dferens.libgdxes.levels.LevelParseException;
 

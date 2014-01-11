@@ -1,6 +1,6 @@
 package com.dferens.libgdxes;
 
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
@@ -24,8 +24,8 @@ public class GameWorld implements Disposable {
         return entity.createBody(this.boxWorld);
     }
 
-    public void draw(Box2DDebugRenderer debugRenderer, Camera camera) {
-        debugRenderer.render(this.boxWorld, camera.combined);
+    public void draw(Box2DDebugRenderer debugRenderer, Matrix4 projMatrix) {
+        debugRenderer.render(this.boxWorld, projMatrix);
     }
 
     @Override

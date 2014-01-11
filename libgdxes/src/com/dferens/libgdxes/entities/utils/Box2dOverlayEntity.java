@@ -3,7 +3,7 @@ package com.dferens.libgdxes.entities.utils;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.GameWorld;
-import com.dferens.libgdxes.RenderScope;
+import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.utils.StandardPriorities;
 
@@ -18,7 +18,8 @@ public class Box2dOverlayEntity implements Renderable {
     @Override
     public void render(float deltaTime, Context context, RenderScope renderer) {
         GameWorld world = context.getEntityManager().getWorld();
-        renderer.draw(world, this.renderer);
+        renderer.draw(world, this.renderer)
+                .commit();
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.InputScope;
-import com.dferens.libgdxes.RenderScope;
+import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
 import com.dferens.libgdxes.levels.TmxLevel;

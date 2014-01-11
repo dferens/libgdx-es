@@ -2,10 +2,10 @@ package com.dferens.libgdxes.entities.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector2;
 import com.dferens.libgdxes.Context;
-import com.dferens.libgdxes.RenderScope;
 import com.dferens.libgdxes.entities.Renderable;
+import com.dferens.libgdxes.render.Position;
+import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.utils.StandardPriorities;
 
 public class FPSLoggerEntity implements Renderable {
@@ -32,12 +32,12 @@ public class FPSLoggerEntity implements Renderable {
     }
 
     @Override
-    public void render(float deltaTime, Context context, RenderScope renderer) {
+    public void render(float deltaTime, Context context, RenderScope renderScope) {
         if (this.shouldRender()) this.invalidate();
-        BitmapFont.TextBounds bounds = this.renderFont.getBounds(this.cachedFpsValue);
-        Vector2 renderPosition = new Vector2(Gdx.graphics.getWidth() - 2*bounds.width,
-                                             Gdx.graphics.getHeight() - 2*bounds.height);
-        renderer.drawDirectly(this.renderFont, this.cachedFpsValue, renderPosition);
+        renderScope.draw(this.renderFont, this.cachedFpsValue)
+                   .screenCoords(Gdx.graphics.getWidth() - 20, Gdx.graphics.getHeight() - 20)
+                   .startAt(Position.CENTER_RIGHT)
+                   .commit();
     }
 
     @Override

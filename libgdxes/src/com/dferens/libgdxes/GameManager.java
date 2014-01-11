@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
+import com.dferens.libgdxes.render.RenderScope;
 
 public abstract class GameManager<S extends Settings,
                                   E extends EntityManager,

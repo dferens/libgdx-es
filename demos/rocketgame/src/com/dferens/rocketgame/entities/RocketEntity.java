@@ -8,10 +8,11 @@ import com.badlogic.gdx.utils.Disposable;
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.InputScope;
 import com.dferens.libgdxes.PhysicsBody;
-import com.dferens.libgdxes.RenderScope;
 import com.dferens.libgdxes.entities.PhysicsApplied;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
+import com.dferens.libgdxes.render.Position;
+import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.rocketgame.Priority;
 import com.dferens.rocketgame.RocketGameInputScope;
 
@@ -27,7 +28,7 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
         this.spawnPositionX = spawnPosition.x;
         this.spawnPositionY = spawnPosition.y;
 
-        this.rocketTexture = new Texture(Gdx.files.internal("data/rocket.png"));
+        this.rocketTexture = new Texture(Gdx.files.internal("data/character.png"));
     }
 
     @Override
@@ -73,7 +74,11 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
 
     @Override
     public void render(float deltaTime, Context context, RenderScope renderScope) {
-        renderScope.draw(rocketTexture, context.getBody(), 1, 1);
+        renderScope.draw(rocketTexture)
+                   .bodyCoords(context.getBody())
+                   .startAt(Position.CENTER)
+                   .transformInUnits(2, 2)
+                   .commit();
     }
 
     @Override

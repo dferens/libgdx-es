@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.InputScope;
 import com.dferens.libgdxes.PhysicsBody;
-import com.dferens.libgdxes.RenderScope;
+import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.entities.Entity;
 import com.dferens.libgdxes.entities.PhysicsApplied;
 import com.dferens.libgdxes.entities.Renderable;
