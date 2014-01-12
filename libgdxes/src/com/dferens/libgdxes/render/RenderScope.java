@@ -45,7 +45,8 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
 
     private SpriteBatch batch;
     private OrthographicCamera camera;
-    private State readyState, notReadyState;
+    private State readyState;
+    private State notReadyState;
     private State drawingState;
 
     @Override
@@ -79,6 +80,9 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     public void moveCameraByViewport(float viewportPosX, float viewportPosY) {
         this.moveCameraBy(viewportPosX * camera.viewportWidth,
                           viewportPosY * camera.viewportHeight);
+    }
+    public void moveCameraTo(Vector2 pos) {
+        moveCameraBy(pos.x - camera.position.x, pos.y - camera.position.y);
     }
     public void moveCamera(Vector2 pos) { this.moveCameraBy(pos.x, pos.y); }
 

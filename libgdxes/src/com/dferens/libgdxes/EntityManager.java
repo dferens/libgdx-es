@@ -13,6 +13,7 @@ public abstract class EntityManager implements SettingsProvider, Scope {
     private final Map<Entity, Context> contextLookup;
     private final SortedSet<Updatable> updateEntities;
     private final SortedSet<Renderable> renderEntities;
+    protected final Collection<Entity> ownEntities;
     protected final GameManager gameManager;
     protected final GameWorld world;
     protected FPSLoggerEntity fpsLoggerEntity;
@@ -33,6 +34,7 @@ public abstract class EntityManager implements SettingsProvider, Scope {
             @Override
             protected int getPriority(Context c) { return c.getRenderPriority(); }
         });
+        this.ownEntities = new LinkedList<Entity>();
         this.gameManager = gameManager;
         this.world = world;
     }
@@ -42,11 +44,40 @@ public abstract class EntityManager implements SettingsProvider, Scope {
         this.clear();
     }
 
+    public void clear() {
+        // TODO: prevent calling this method inside update loop etc.
+        Entity[] entities = new Entity[getNumberOfEntities()];
+        this.contextLookup.keySet().toArray(entities);
+        for (Entity entity : entities) {
+            if (this.ownEntities.contains(entity) == false) {
+                this.destroyEntity(entity);
+            }
+        }
+        setupOwnEntities();
+    }
+
+    protected void setupOwnEntities() {
+        this.setupStandardEntities();
+
+        if (getSettings().debugModeOn) {
+            this.setupDebugEntities();
+        }
+    }
+    protected void setupStandardEntities() {
+
+    }
+
     protected void setupDebugEntities() {
-        this.fpsLoggerEntity = new FPSLoggerEntity(getSettings().systemFont);
-        this.boxOverlay = new Box2dOverlayEntity();
-        this.createEntity(this.fpsLoggerEntity);
-        this.createEntity(this.boxOverlay);
+        if (this.fpsLoggerEntity == null) {
+            this.fpsLoggerEntity = new FPSLoggerEntity(getSettings().systemFont);
+            this.ownEntities.add(fpsLoggerEntity);
+            this.createEntity(this.fpsLoggerEntity);
+        }
+        if (this.boxOverlay == null) {
+            this.boxOverlay = new Box2dOverlayEntity();
+            this.ownEntities.add(boxOverlay);
+            this.createEntity(this.boxOverlay);
+        }
     }
 
     public void createEntity(Entity entity) {
@@ -78,18 +109,6 @@ public abstract class EntityManager implements SettingsProvider, Scope {
 
         this.contextLookup.remove(entity);
     }
-    public void clear() {
-        // TODO: prevent calling this method inside update loop etc.
-        Entity[] entities = new Entity[getNumberOfEntities()];
-        this.contextLookup.keySet().toArray(entities);
-        for (Entity entity : entities) {
-            this.destroyEntity(entity);
-        }
-
-        if (getSettings().debugModeOn)
-            this.setupDebugEntities();
-    }
-
     public void updateWorld(float deltaTime) {
         this.world.step(deltaTime);
     }

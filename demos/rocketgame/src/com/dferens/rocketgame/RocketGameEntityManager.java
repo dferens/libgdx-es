@@ -42,6 +42,6 @@ public class RocketGameEntityManager extends LevelEntityManager {
         this.createEntity(levelRenderer.getForegroundRendererEntity());
         this.createEntity(levelRenderer.getBackgroundRendererEntity());
         this.createEntity(this.cameraman);
-        this.cameraman.setEntityToTrack(this.rocket);
+        this.cameraman.setEntity(this.rocket);
     }
 }
