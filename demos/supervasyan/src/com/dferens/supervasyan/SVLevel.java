@@ -1,5 +1,6 @@
 package com.dferens.supervasyan;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
@@ -10,13 +11,14 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dferens.libgdxes.EntityManager;
+import com.dferens.libgdxes.GameManager;
 import com.dferens.libgdxes.entities.Entity;
 import com.dferens.libgdxes.levels.LevelParseException;
 import com.dferens.libgdxes.levels.TmxLevel;
-import com.dferens.libgdxes.render.entities.ImageLayerRendererEntity;
-import com.dferens.libgdxes.render.entities.TileLayerRendererEntity;
 import com.dferens.libgdxes.render.SeparateLayerRenderer;
 import com.dferens.libgdxes.render.TiledMapImageLayer;
+import com.dferens.libgdxes.render.entities.ImageLayerRendererEntity;
+import com.dferens.libgdxes.render.entities.TileLayerRendererEntity;
 import com.dferens.libgdxes.utils.loaders.ImageLayerSupportedTmxMapLoader;
 import com.dferens.supervasyan.entities.BlockEntity;
 
@@ -32,9 +34,11 @@ public class SVLevel extends TmxLevel {
     private MapLayer controlLayer;
     private Vector2 spawnPoint;
     private Vector2 finishPoint;
+    private Color backgroundColor;
 
     public Vector2 getSpawnPoint() { return spawnPoint; }
     public Vector2 getFinishPoint() { return finishPoint; }
+    public Color getBackgroundColor() { return backgroundColor; }
 
     @Override
     public MapLayers getBackgroundLayers() { return backgroundLayers; }
@@ -64,6 +68,9 @@ public class SVLevel extends TmxLevel {
 
     @Override
     public void parse() throws LevelParseException {
+        String backgroundcolor = this.tiledMap.getProperties().get("backgroundcolor", String.class);
+        this.backgroundColor = Color.valueOf(backgroundcolor.substring(1));
+
         this.collisionLayer = this.getCollisionLayer();
         this.controlLayer = this.getControlsLayer();
 
@@ -143,5 +150,10 @@ public class SVLevel extends TmxLevel {
         Entity collisionLayerRenderer = new TileLayerRendererEntity(
                 this.getMainLayer(), Priority.BACKGROUND_BLOCKS, mapRenderer);
         entityManager.createEntities(backgroundRenderer1, collisionLayerRenderer);
+    }
+
+    @Override
+    public void loadSettings(GameManager gameManager) {
+        gameManager.getRenderScope().setBackgroundColor(this.backgroundColor);
     }
 }

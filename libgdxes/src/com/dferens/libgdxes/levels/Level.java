@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.utils.Disposable;
 import com.dferens.libgdxes.EntityManager;
+import com.dferens.libgdxes.GameManager;
 
 public abstract class Level implements Disposable{
     protected final String levelPath;
@@ -25,6 +26,8 @@ public abstract class Level implements Disposable{
      * @param entityManager given entity manager
      */
     public abstract void loadEntities(EntityManager entityManager);
+
+    public abstract void loadSettings(GameManager gameManager);
 
     /**
      * Returns level width.

@@ -1,6 +1,8 @@
 package com.dferens.libgdxes.render;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -42,21 +44,27 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     private State readyState;
     private State notReadyState;
     private State drawingState;
+    private Color backgroundColor;
 
-    @Override
-    public float unitsToPixels(float units) { return units * this.getPixelsPerUnit(); }
-    @Override
-    public float getPixelsPerUnit() { return (Gdx.graphics.getWidth() / camera.viewportWidth); }
     public Matrix4 getProjectionMatrix() { return this.camera.combined; }
+    public Color getBackgroundColor() { return this.backgroundColor; }
+
+    public void setBackgroundColor(Color value) { this.backgroundColor = value; }
 
     public RenderScope(GameManager gameManager) {
         this.gameManager = gameManager;
         this.batch = new SpriteBatch();
         this.readyState = new ReadyState();
-        this.drawingState = new DrawingState();
         this.notReadyState = new NotReadyState();
+        this.drawingState = new DrawingState();
+        this.backgroundColor = Color.WHITE;
         this.switchTo(notReadyState);
     }
+
+    @Override
+    public float unitsToPixels(float units) { return units * this.getPixelsPerUnit(); }
+    @Override
+    public float getPixelsPerUnit() { return (Gdx.graphics.getWidth() / camera.viewportWidth); }
 
     @Override
     public void initialize() {
@@ -84,6 +92,10 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     }
     public void render(DrawChain drawChain) { drawChain.execute(this.batch); }
 
+    public void clearScreen() {
+        Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    }
     public void beginDraw() {
         this.switchTo(this.drawingState);
     }

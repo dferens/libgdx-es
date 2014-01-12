@@ -1,8 +1,6 @@
 package com.dferens.libgdxes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
 import com.dferens.libgdxes.render.RenderScope;
@@ -30,7 +28,7 @@ public abstract class GameManager<S extends Settings,
     protected abstract void setupComponents(GameWorld world);
 
     protected final void innerRender(float deltaTime) {
-        clearScreen();
+        this.renderScope.clearScreen();
         this.renderScope.beginDraw();
         renderEntities(deltaTime);
         renderUI(deltaTime);
@@ -40,10 +38,6 @@ public abstract class GameManager<S extends Settings,
     protected final void update(float deltaTime) {
         updateWorld(deltaTime);
         updateEntities(deltaTime);
-    }
-    protected final void clearScreen() {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     }
 
     protected void renderEntities(float deltaTime) {

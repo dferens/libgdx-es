@@ -29,6 +29,7 @@ public abstract class LevelEntityManager extends EntityManager {
     protected final void loadLevel(Level level) throws LevelParseException {
         this.beforeNewLevelEntitiesLoad(level);
         this.currentLevel = level;
+        this.currentLevel.loadSettings(gameManager);
         this.currentLevel.loadEntities(this);
         this.afterNewLevelEntitiesLoad();
     }
