@@ -107,6 +107,21 @@ public class EntityManagerTest extends LibgdxTest {
     }
 
     @Test
+    public void testCreateEntitySamePriority() throws Exception {
+        int totalNumber = 100;
+        for (int i = 0; i < totalNumber; i++) {
+            testEntities.add(entityFactory.createSimpleEntity());
+            testEntities.add(entityFactory.createUpdatableEntity(1));
+            testEntities.add(entityFactory.createRenderableEntity(1));
+            testEntities.add(entityFactory.createPhysicsApplied());
+        }
+        createEntity(testEntities);
+
+        assertEquals(iterateUpdatables().size(), totalNumber + 1);
+        assertEquals(iterateRenderables().size(), totalNumber + 1);
+    }
+
+    @Test
     public void testDestroyEntity() throws Exception {
         createEntity(simpleEntity);
         createEntity(updatableEntity);
