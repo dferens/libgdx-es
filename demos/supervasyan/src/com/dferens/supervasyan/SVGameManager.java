@@ -1,4 +1,4 @@
-package com.dferens.rocketgame;
+package com.dferens.supervasyan;
 
 import com.dferens.libgdxes.GameManager;
 import com.dferens.libgdxes.GameWorld;
@@ -6,16 +6,16 @@ import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.Settings;
 import com.dferens.libgdxes.levels.LevelParseException;
 
-public class RocketGameManager extends GameManager<Settings,
-                                                   RocketGameEntityManager,
+public class SVGameManager extends GameManager<Settings,
+        SVEntityManager,
                                                    RenderScope,
                                                    RocketGameInputScope > {
 
-    public RocketGameManager(Settings settings) { super(settings); }
+    public SVGameManager(Settings settings) { super(settings); }
 
     @Override
     protected void setupComponents(GameWorld world) {
-        this.entities = new RocketGameEntityManager(this, world);
+        this.entities = new SVEntityManager(this, world);
         this.renderScope = new RenderScope(this);
         this.inputScope = new RocketGameInputScope();
 

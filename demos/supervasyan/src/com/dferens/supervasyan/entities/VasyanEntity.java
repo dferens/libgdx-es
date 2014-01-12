@@ -1,4 +1,4 @@
-package com.dferens.rocketgame.entities;
+package com.dferens.supervasyan.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,10 +13,10 @@ import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
 import com.dferens.libgdxes.render.Position;
 import com.dferens.libgdxes.render.RenderScope;
-import com.dferens.rocketgame.Priority;
-import com.dferens.rocketgame.RocketGameInputScope;
+import com.dferens.supervasyan.Priority;
+import com.dferens.supervasyan.RocketGameInputScope;
 
-public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disposable {
+public class VasyanEntity implements PhysicsApplied, Updatable, Renderable, Disposable {
     private static final float JUMP_IMPULSE = 10f;
     private static final float MOVE_SPEED = 30f;
 
@@ -24,7 +24,7 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
     private final float spawnPositionX;
     private final float spawnPositionY;
 
-    public RocketEntity(Vector2 spawnPosition) {
+    public VasyanEntity(Vector2 spawnPosition) {
         this.spawnPositionX = spawnPosition.x;
         this.spawnPositionY = spawnPosition.y;
 

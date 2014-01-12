@@ -1,20 +1,20 @@
-package com.dferens.rocketgame;
+package com.dferens.supervasyan;
 
 import com.dferens.libgdxes.GameManager;
 import com.dferens.libgdxes.GameWorld;
 import com.dferens.libgdxes.levels.LevelEntityManager;
 import com.dferens.libgdxes.levels.TmxLevel;
 import com.dferens.libgdxes.entities.utils.CameramanEntity;
-import com.dferens.rocketgame.entities.RocketEntity;
+import com.dferens.supervasyan.entities.VasyanEntity;
 
-public class RocketGameEntityManager extends LevelEntityManager {
-    private RocketEntity rocket;
+public class SVEntityManager extends LevelEntityManager {
+    private VasyanEntity player;
     private CameramanEntity cameraman;
     private RocketGameLevelRenderer levelRenderer;
 
-    public RocketEntity getRocket() { return this.rocket; }
+    public VasyanEntity getPlayer() { return this.player; }
 
-    public RocketGameEntityManager(GameManager gameManager, GameWorld world) {
+    public SVEntityManager(GameManager gameManager, GameWorld world) {
         super(gameManager, world);
         this.cameraman = new CameramanEntity();
     }
@@ -27,21 +27,21 @@ public class RocketGameEntityManager extends LevelEntityManager {
 
     @Override
     protected void beforeLevelEntitiesClear() {
-        this.rocket.dispose();
-        this.rocket = null;
+        this.player.dispose();
+        this.player = null;
     }
 
     @Override
     protected void afterNewLevelEntitiesLoad() {
         RocketGameLevel level = (RocketGameLevel) this.currentLevel;
         // Creating player
-        this.rocket = new RocketEntity(level.getSpawnPoint());
-        this.createEntity(this.rocket);
+        this.player = new VasyanEntity(level.getSpawnPoint());
+        this.createEntity(this.player);
         // Triggering level render
         this.levelRenderer.onLevelChanged((TmxLevel) this.currentLevel);
         this.createEntity(levelRenderer.getForegroundRendererEntity());
         this.createEntity(levelRenderer.getBackgroundRendererEntity());
         this.createEntity(this.cameraman);
-        this.cameraman.setEntity(this.rocket);
+        this.cameraman.setEntity(this.player);
     }
 }

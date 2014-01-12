@@ -1,4 +1,4 @@
-package com.dferens.rocketgame;
+package com.dferens.supervasyan;
 
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.InputScope;
@@ -10,19 +10,19 @@ import com.dferens.libgdxes.utils.ScaledOrthogonalTiledMapRenderer;
 
 // TODO: refactor this shit
 
-public class RocketGameLevelRenderer {
+public class SVLevelRenderer {
     class BackgroundRendererEntity implements Renderable, Updatable {
-        private final RocketGameLevelRenderer levelRenderer;
+        private final SVLevelRenderer levelRenderer;
 
-        BackgroundRendererEntity(RocketGameLevelRenderer levelRenderer) {
+        BackgroundRendererEntity(SVLevelRenderer levelRenderer) {
             this.levelRenderer = levelRenderer;
         }
 
         @Override
         public void update(float deltaTime, Context context, InputScope input, RenderScope renderScope) {
             // TODO: make camera track player
-            /*RocketGameEntityManager entities = (RocketGameEntityManager) context.getEntityManager();
-            RocketEntity rocket = entities.getRocket();
+            /*SVEntityManager entities = (SVEntityManager) context.getEntityManager();
+            VasyanEntity rocket = entities.getPlayer();
             PhysicsBody rocketBody = entities.getContext(rocket).getBody();
             float totalLevelWidth = entities.getLevel().getWidth();
             float trackPointX = rocketBody.getX();*/
@@ -30,7 +30,7 @@ public class RocketGameLevelRenderer {
 
         @Override
         public void render(float deltaTime, Context context, RenderScope renderer) {
-            RocketGameEntityManager entityManager = (RocketGameEntityManager) context.getEntityManager();
+            SVEntityManager entityManager = (SVEntityManager) context.getEntityManager();
             RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
 
             renderer.synchronise(this.levelRenderer.mapRenderer);
@@ -45,9 +45,9 @@ public class RocketGameLevelRenderer {
         public int getRenderPriority() { return Priority.BACKGROUND; }
     }
     class ForegroundRendererEntity implements Renderable, Updatable {
-        private final RocketGameLevelRenderer levelRenderer;
+        private final SVLevelRenderer levelRenderer;
 
-        ForegroundRendererEntity(RocketGameLevelRenderer levelRenderer) {
+        ForegroundRendererEntity(SVLevelRenderer levelRenderer) {
             this.levelRenderer = levelRenderer;
         }
 
@@ -56,7 +56,7 @@ public class RocketGameLevelRenderer {
 
         @Override
         public void render(float deltaTime, Context context, RenderScope renderer) {
-            RocketGameEntityManager entityManager = (RocketGameEntityManager) context.getEntityManager();
+            SVEntityManager entityManager = (SVEntityManager) context.getEntityManager();
             RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
 
 //            renderer.synchronise(this.levelRenderer.mapRenderer);
@@ -79,7 +79,7 @@ public class RocketGameLevelRenderer {
     public BackgroundRendererEntity getBackgroundRendererEntity() { return backgroundRendererEntity; }
     public ForegroundRendererEntity getForegroundRendererEntity() { return foregroundRendererEntity; }
 
-    public RocketGameLevelRenderer(ScaledOrthogonalTiledMapRenderer mapRenderer) {
+    public SVLevelRenderer(ScaledOrthogonalTiledMapRenderer mapRenderer) {
         // TODO: use batch from render scope
         this.mapRenderer = mapRenderer;
         this.backgroundRendererEntity = new BackgroundRendererEntity(this);

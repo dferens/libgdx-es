@@ -1,4 +1,4 @@
-package com.dferens.rocketgame;
+package com.dferens.supervasyan;
 
 public class Priority {
     public static final int BACKGROUND = 0;

@@ -1,4 +1,4 @@
-package com.dferens.rocketgame;
+package com.dferens.supervasyan;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
@@ -12,9 +12,9 @@ import com.dferens.libgdxes.levels.LevelParseException;
 import com.dferens.libgdxes.levels.TmxLevel;
 import com.dferens.libgdxes.utils.TiledMapImageLayer;
 import com.dferens.libgdxes.utils.loaders.ImageLayerSupportedTmxMapLoader;
-import com.dferens.rocketgame.entities.BlockEntity;
+import com.dferens.supervasyan.entities.BlockEntity;
 
-public class RocketGameLevel extends TmxLevel {
+public class SVLevel extends TmxLevel {
     private static String LAYER_COLLISION = "BLOCKS";
     private static String LAYER_CONTROLS = "CONTROLS";
     private static String POINT_SPAWN = "POINT_SPAWN";
@@ -32,7 +32,7 @@ public class RocketGameLevel extends TmxLevel {
     public MapLayers getBackgroundLayers() { return backgroundLayers; }
     public MapLayers getForegroundLayers() { return foregroundLayers; }
 
-    public RocketGameLevel(String levelFilePath) throws LevelParseException {
+    public SVLevel(String levelFilePath) throws LevelParseException {
         super(levelFilePath, new ImageLayerSupportedTmxMapLoader());
 
         this.backgroundLayers = new MapLayers();

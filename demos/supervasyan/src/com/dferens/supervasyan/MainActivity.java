@@ -1,4 +1,4 @@
-package com.dferens.rocketgame;
+package com.dferens.supervasyan;
 
 import android.os.Bundle;
 

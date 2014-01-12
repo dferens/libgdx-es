@@ -1,9 +1,9 @@
-package com.dferens.rocketgame;
+package com.dferens.supervasyan;
 
 import com.badlogic.gdx.Gdx;
 import com.dferens.libgdxes.InputScope;
 
-public class RocketGameInputScope extends InputScope {
+public class SVInputScope extends InputScope {
     @Override
     public void initialize() { }
 
