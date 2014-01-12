@@ -4,7 +4,7 @@ import com.dferens.libgdxes.GameManager;
 import com.dferens.libgdxes.GameWorld;
 import com.dferens.libgdxes.levels.LevelEntityManager;
 import com.dferens.libgdxes.levels.TmxLevel;
-import com.dferens.rocketgame.entities.CameramanEntity;
+import com.dferens.libgdxes.entities.utils.CameramanEntity;
 import com.dferens.rocketgame.entities.RocketEntity;
 
 public class RocketGameEntityManager extends LevelEntityManager {

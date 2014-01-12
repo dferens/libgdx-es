@@ -1,4 +1,4 @@
-package com.dferens.rocketgame.entities;
+package com.dferens.libgdxes.entities.utils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.dferens.libgdxes.Context;
@@ -8,21 +8,27 @@ import com.dferens.libgdxes.entities.PhysicsApplied;
 import com.dferens.libgdxes.entities.Updatable;
 import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.utils.AxisTracker;
-import com.dferens.rocketgame.Priority;
+import com.dferens.libgdxes.utils.StandardPriorities;
 
 public class CameramanEntity implements Updatable {
     protected PhysicsApplied entity;
     protected AxisTracker xAxisTracker;
     protected AxisTracker yAxisTracker;
+    protected int updatePriority;
 
     public CameramanEntity() {
+        // TODO: add easing function
         this.xAxisTracker = new AxisTracker(0.9f, 0.1f);
         this.yAxisTracker = new AxisTracker(Float.MAX_VALUE, Float.MIN_VALUE);
     }
 
     public void setEntityToTrack(PhysicsApplied entity) {
-        // TODO: change update priority
         this.entity = entity;
+
+        if (entity instanceof Updatable)
+            this.updatePriority = ((Updatable) entity).getUpdatePriority();
+        else
+            this.updatePriority = StandardPriorities.LAST;
     }
     public void setAxisX(float forwardCoeff, float backwardCoeff) {
         this.xAxisTracker.setForward(forwardCoeff);
@@ -50,5 +56,5 @@ public class CameramanEntity implements Updatable {
     }
 
     @Override
-    public int getUpdatePriority() { return Priority.FOREGROUND; }
+    public int getUpdatePriority() { return this.updatePriority; }
 }
