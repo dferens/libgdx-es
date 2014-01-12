@@ -1,6 +1,7 @@
 package com.dferens.libgdxes.levels;
 
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.utils.Disposable;
 import com.dferens.libgdxes.EntityManager;
 
@@ -39,7 +40,10 @@ public abstract class Level implements Disposable{
      */
     public abstract float getHeight();
 
+    public abstract MapLayers getBackgroundLayers();
     public abstract MapLayer getMainLayer();
+    public abstract MapLayers getForegroundLayers();
+    public abstract MapLayers getLayers();
 
     @Override
     public void dispose() { }

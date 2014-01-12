@@ -7,7 +7,7 @@ import com.dferens.libgdxes.entities.PhysicsApplied;
 import com.dferens.libgdxes.PhysicsBody;
 
 /**
- * As blocks should be rendered with specific map renderer, block has no render method
+ * As blocks should be rendered with specific map mapRenderer, block has no render method
  * @see OrthogonalTiledMapRenderer;
  */
 public class BlockEntity implements PhysicsApplied {

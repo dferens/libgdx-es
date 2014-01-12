@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.ImageResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader;
-import com.dferens.libgdxes.utils.TiledMapImageLayer;
+import com.dferens.libgdxes.render.TiledMapImageLayer;
 
 import java.io.IOError;
 

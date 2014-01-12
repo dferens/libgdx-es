@@ -11,7 +11,7 @@ public class TextureRegionDrawable extends Drawable{
         this.textureRegion = textureRegion;
     }
     @Override
-    public void execute(SpriteBatch batch, float x, float y, Position position, float width, float height, float angle) {
+    public void execute(SpriteBatch batch, float x, float y, Position position, float width, float height, float scaleX, float scaleY, float angle) {
         if (width == -1) width = this.textureRegion.getRegionWidth();
         if (height == -1) height = this.textureRegion.getRegionHeight();
         x -= this.calculateOffsetOfX(position, width);

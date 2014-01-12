@@ -1,4 +1,4 @@
-package com.dferens.libgdxes.utils;
+package com.dferens.libgdxes.render;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -8,12 +8,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 /**
- * Original map renderer will probably change matrices of passed SpriteBatch (yes, WTF???)
- * i think we should disable this feature and left renderer with its own SpriteBatch.
+ * Original map mapRenderer will probably change matrices of passed SpriteBatch (yes, WTF???)
+ * i think we should disable this feature and left mapRenderer with its own SpriteBatch.
  */
-public class ScaledOrthogonalTiledMapRenderer extends OrthogonalTiledMapRenderer {
+public class ScaledOrthogonalTiledMapRenderer extends OrthogonalTiledMapRenderer implements SeparateLayerRenderer {
     public void setUnitScale(float value) { this.unitScale = value; }
 
+    public ScaledOrthogonalTiledMapRenderer() {
+        super(null);
+    }
     public ScaledOrthogonalTiledMapRenderer(TiledMap map) {
         super(map);
     }
@@ -23,16 +26,24 @@ public class ScaledOrthogonalTiledMapRenderer extends OrthogonalTiledMapRenderer
 
     public void render(MapLayers layers) {
         beginRender();
-        for (MapLayer layer : layers) {
-            if (layer.isVisible()) {
-                if (layer instanceof TiledMapTileLayer) {
-                    renderTileLayer((TiledMapTileLayer)layer);
-                } else if (layer instanceof  TiledMapImageLayer) {
-                    renderImageLayer((TiledMapImageLayer) layer);
-                }
+        for (MapLayer layer : layers) renderLayer(layer);
+        endRender();
+    }
+    @Override
+    public void render(MapLayer... layers) {
+        beginRender();
+        for (MapLayer layer : layers) renderLayer(layer);
+        endRender();
+    }
+
+    private void renderLayer(MapLayer layer) {
+        if (layer.isVisible()) {
+            if (layer instanceof TiledMapTileLayer) {
+                renderTileLayer((TiledMapTileLayer)layer);
+            } else if (layer instanceof TiledMapImageLayer) {
+                renderImageLayer((TiledMapImageLayer) layer);
             }
         }
-        endRender();
     }
 
     protected void renderImageLayer(TiledMapImageLayer layer) {

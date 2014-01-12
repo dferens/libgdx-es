@@ -14,7 +14,7 @@ public class BitmapFontDrawable extends Drawable {
     }
 
     @Override
-    public void execute(SpriteBatch batch, float x, float y, Position position, float width, float height, float angle) {
+    public void execute(SpriteBatch batch, float x, float y, Position position, float width, float height, float scaleX, float scaleY, float angle) {
         BitmapFont.TextBounds bounds = this.font.getBounds(this.text);
         x -= this.calculateOffsetOfX(position, bounds.width);
         y -= this.calculateOffsetOfY(position, bounds.height);

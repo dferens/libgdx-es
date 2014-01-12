@@ -7,26 +7,20 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
-import com.dferens.libgdxes.GameManager;
-import com.dferens.libgdxes.GameWorld;
-import com.dferens.libgdxes.Scope;
-import com.dferens.libgdxes.UnitConverter;
-import com.dferens.libgdxes.utils.ScaledOrthogonalTiledMapRenderer;
+import com.dferens.libgdxes.*;
 import com.dferens.libgdxes.utils.StateMachine;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class RenderScope extends StateMachine implements Disposable, Scope, UnitConverter {
     private static class NotReadyState extends State {
         @Override
         public void onExit(StateMachine machine) {
             if (((RenderScope) machine).camera == null) {
-                throw new NotImplementedException();
+                throw new UnsupportedOperationException();
             }
         }
     }
@@ -66,7 +60,7 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
 
     @Override
     public void initialize() {
-        this.camera = this.createCamera(gameManager.getSettings().renderVisibleUnits);
+        this.setupCamera(gameManager.getSettings());
         this.moveCameraBy(camera.viewportWidth / 2, camera.viewportHeight / 2);
         this.switchTo(readyState);
     }
@@ -77,10 +71,6 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     }
     public void moveCameraByX(float dx) { this.moveCameraBy(dx, 0); }
     public void moveCameraByY(float dy) { this.moveCameraBy(0, dy); }
-    public void moveCameraByViewport(float viewportPosX, float viewportPosY) {
-        this.moveCameraBy(viewportPosX * camera.viewportWidth,
-                          viewportPosY * camera.viewportHeight);
-    }
     public void moveCameraTo(Vector2 pos) {
         moveCameraBy(pos.x - camera.position.x, pos.y - camera.position.y);
     }
@@ -114,13 +104,10 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
                        .scl(-1)
                        .div(camera.viewportWidth, camera.viewportHeight);
     }
-    public ScaledOrthogonalTiledMapRenderer createMapRenderer(TiledMap map, float unitScale) {
-        return new ScaledOrthogonalTiledMapRenderer(map, unitScale, this.batch);
-    }
 
-    private OrthographicCamera createCamera(float visibleUnits) {
-        float widthPixels = Gdx.graphics.getWidth();
-        float heightPixels = Gdx.graphics.getHeight();
+    private void setupCamera(Settings settings) {
+        float visibleUnits = settings.renderVisibleUnits;
+        float widthPixels = Gdx.graphics.getWidth(), heightPixels = Gdx.graphics.getHeight();
         float viewportWidth, viewportHeight;
 
         if (widthPixels >= heightPixels) {
@@ -131,8 +118,9 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
             viewportHeight = visibleUnits;
             viewportWidth = visibleUnits * widthPixels / heightPixels;
         }
-        return new OrthographicCamera(viewportWidth, viewportHeight);
+        this.camera = new OrthographicCamera(viewportWidth, viewportHeight);
     }
+
     @Override
     public Vector3 convertCoordinates(float xUnits, float yUnits) {
         Vector3 position = new Vector3(xUnits, yUnits, 0);

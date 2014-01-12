@@ -18,7 +18,7 @@ public class GameWorldDrawable extends Drawable {
     }
 
     @Override
-    public void execute(SpriteBatch batch, float x, float y, Position position, float width, float height, float angle) {
+    public void execute(SpriteBatch batch, float x, float y, Position position, float width, float height, float scaleX, float scaleY, float angle) {
         // Pausing outer batch
         renderScope.commitDraw();
         world.draw(debugRenderer, renderScope.getProjectionMatrix());

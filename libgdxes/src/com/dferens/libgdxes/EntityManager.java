@@ -98,6 +98,9 @@ public abstract class EntityManager implements SettingsProvider, Scope {
         if (renderPriority != null) this.renderEntities.add((Renderable) entity);
 
     }
+    public void createEntities(Entity... entities) {
+        for (Entity entity : entities) this.createEntity(entity);
+    }
     public void destroyEntity(Entity entity) {
         Context context = this.contextLookup.get(entity);
 
@@ -108,6 +111,9 @@ public abstract class EntityManager implements SettingsProvider, Scope {
         if (body != null) context.destroyBody();
 
         this.contextLookup.remove(entity);
+    }
+    public void destroyEntities(Entity... entities) {
+        for (Entity entity : entities) this.destroyEntity(entity);
     }
     public void updateWorld(float deltaTime) {
         this.world.step(deltaTime);

@@ -2,6 +2,7 @@ package com.dferens.libgdxes.levels;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -40,6 +41,9 @@ public abstract class TmxLevel extends Level {
     }
     @Override
     public abstract TiledMapTileLayer getMainLayer();
+
+    @Override
+    public MapLayers getLayers() { return this.tiledMap.getLayers(); }
 
     @Override
     public float getWidth() { return this.getMainLayer().getWidth(); }

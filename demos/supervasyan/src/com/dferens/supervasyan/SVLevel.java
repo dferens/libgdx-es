@@ -3,14 +3,20 @@ package com.dferens.supervasyan;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.dferens.libgdxes.EntityManager;
+import com.dferens.libgdxes.entities.Entity;
 import com.dferens.libgdxes.levels.LevelParseException;
 import com.dferens.libgdxes.levels.TmxLevel;
-import com.dferens.libgdxes.utils.TiledMapImageLayer;
+import com.dferens.libgdxes.render.entities.ImageLayerRendererEntity;
+import com.dferens.libgdxes.render.entities.TileLayerRendererEntity;
+import com.dferens.libgdxes.render.SeparateLayerRenderer;
+import com.dferens.libgdxes.render.TiledMapImageLayer;
 import com.dferens.libgdxes.utils.loaders.ImageLayerSupportedTmxMapLoader;
 import com.dferens.supervasyan.entities.BlockEntity;
 
@@ -29,8 +35,14 @@ public class SVLevel extends TmxLevel {
 
     public Vector2 getSpawnPoint() { return spawnPoint; }
     public Vector2 getFinishPoint() { return finishPoint; }
+
+    @Override
     public MapLayers getBackgroundLayers() { return backgroundLayers; }
+    @Override
+    public TiledMapTileLayer getMainLayer() { return this.getCollisionLayer(); }
+    @Override
     public MapLayers getForegroundLayers() { return foregroundLayers; }
+    public TiledMapImageLayer getBackgroundLayer1() { return (TiledMapImageLayer) this.backgroundLayers.get(0); }
 
     public SVLevel(String levelFilePath) throws LevelParseException {
         super(levelFilePath, new ImageLayerSupportedTmxMapLoader());
@@ -41,9 +53,6 @@ public class SVLevel extends TmxLevel {
         this.finishPoint = new Vector2();
         this.parse();
     }
-
-    @Override
-    public TiledMapTileLayer getMainLayer() { return this.getCollisionLayer(); }
 
     private MapLayer getControlsLayer() {
         return this.getMapLayer(LAYER_CONTROLS);
@@ -101,17 +110,38 @@ public class SVLevel extends TmxLevel {
                 targetMapList = this.foregroundLayers;
             }
         }
+
+        Array<TiledMapImageLayer> imageLayers = this.getLayers().getByType(TiledMapImageLayer.class);
+        for (TiledMapImageLayer layer : imageLayers) {
+            MapProperties properties = layer.getProperties();
+            Integer startX = properties.get("X", 0, Integer.class);
+            Integer startY = properties.get("Y", 0, Integer.class);
+            layer.setPosition(startX, startY);
+        }
+
+        if (this.backgroundLayers.getCount() != 2) {
+            throw new LevelParseException("2 background layers are required.");
+        } else if (this.foregroundLayers.getCount() != 1) {
+            throw new LevelParseException("1 foreground layers are required.");
+        }
     }
 
     @Override
     public void loadEntities(EntityManager entityManager) {
+        // Load collision blocks
         int layerHeight = collisionLayer.getHeight();
-
         for (int mapY = 0; mapY < layerHeight;  mapY++) {
             for (int mapX = 0; mapX < collisionLayer.getWidth(); mapX++) {
                 if (collisionLayer.getCell(mapX, mapY) != null)
                     entityManager.createEntity(new BlockEntity(mapX, mapY));
             }
         }
+        // Load layer renderers
+        SeparateLayerRenderer mapRenderer = ((SVEntityManager) entityManager).getMapRenderer();
+        Entity backgroundRenderer1 = new ImageLayerRendererEntity(
+                this.getBackgroundLayer1(), Priority.BACKGROUND_FAR, this.calculateMapScale());
+        Entity collisionLayerRenderer = new TileLayerRendererEntity(
+                this.getMainLayer(), Priority.BACKGROUND_BLOCKS, mapRenderer);
+        entityManager.createEntities(backgroundRenderer1, collisionLayerRenderer);
     }
 }

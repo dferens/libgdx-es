@@ -19,6 +19,8 @@ public class DrawChain {
     private Position texturePosition;
     private float widthPixels;
     private float heightPixels;
+    private float widthScale;
+    private float heightScale;
     private float rotationAngleDegrees;
     private Vector3 temp;
 
@@ -30,6 +32,8 @@ public class DrawChain {
         this.posPixelsY = 0;
         this.widthPixels = -1;
         this.heightPixels = -1;
+        this.widthScale = 1;
+        this.heightScale = 1;
         this.temp = new Vector3();
     }
     public DrawChain(RenderScope renderScope, Texture texture) {
@@ -77,6 +81,11 @@ public class DrawChain {
         this.heightPixels = newHeight;
         return this;
     }
+    public DrawChain scale(float scaleX, float scaleY) {
+        this.widthScale = scaleX;
+        this.heightScale = scaleY;
+        return this;
+    }
 
     public DrawChain rotateDegrees(float angle) {
         this.rotationAngleDegrees = angle;
@@ -91,7 +100,7 @@ public class DrawChain {
     void execute(SpriteBatch batch) {
         drawable.execute(batch,
                          this.posPixelsX, this.posPixelsY, this.texturePosition,
-                         this.widthPixels, this.heightPixels,
+                         this.widthPixels, this.heightPixels, this.widthScale, this.heightScale,
                          this.rotationAngleDegrees);
     }
 }
