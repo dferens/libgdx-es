@@ -14,10 +14,13 @@ public abstract class TmxLevel extends Level {
 
     public TiledMap getTiledMap() { return this.tiledMap; }
 
-    public TmxLevel(String levelFilePath) {
+    public TmxLevel(String levelFilePath, TmxMapLoader loader) {
         super(levelFilePath);
         Texture.setEnforcePotImages(false);
         this.tiledMap = loader.load(this.levelPath);
+    }
+    public TmxLevel(String levelFilePath) {
+        this(levelFilePath, loader);
     }
 
     public float calculateMapScale() {
