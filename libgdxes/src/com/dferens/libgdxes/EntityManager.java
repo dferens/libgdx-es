@@ -21,11 +21,18 @@ public abstract class EntityManager implements SettingsProvider, Scope {
     @Override
     public Settings getSettings() { return this.gameManager.getSettings(); }
     public GameWorld getWorld() { return  this.world; }
+    public GameManager getGameManager() { return this.gameManager; }
 
     protected EntityManager(GameManager gameManager, GameWorld world) {
         this.contextLookup = new HashMap<Entity, Context>();
-        this.updateEntities = new TreeSet<Updatable>(new Context.UpdatePriorityComparator(this.contextLookup));
-        this.renderEntities = new TreeSet<Renderable>(new Context.RenderPriorityComparator(this.contextLookup));
+        this.updateEntities = new TreeSet<Updatable>(new PriorityComparator<Updatable>(this.contextLookup) {
+            @Override
+            protected int getPriority(Context c) { return c.getUpdatePriority(); }
+        });
+        this.renderEntities = new TreeSet<Renderable>(new PriorityComparator<Renderable>(this.contextLookup) {
+            @Override
+            protected int getPriority(Context c) { return c.getRenderPriority(); }
+        });
         this.gameManager = gameManager;
         this.world = world;
     }
