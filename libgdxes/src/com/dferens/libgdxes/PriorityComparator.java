@@ -16,7 +16,7 @@ public abstract class PriorityComparator<T extends Entity> implements Comparator
     public int compare(T o1, T o2) {
         Context c1 = lookup.get(o1);
         Context c2 = lookup.get(o2);
-        int result = Integer.compare(this.getPriority(c1), this.getPriority(c2));
+        int result = this.getPriority(c1) - this.getPriority(c2);
         if (result != 0) {
             return result;
         } else {

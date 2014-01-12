@@ -31,7 +31,7 @@ public class SVLevelRenderer {
         @Override
         public void render(float deltaTime, Context context, RenderScope renderer) {
             SVEntityManager entityManager = (SVEntityManager) context.getEntityManager();
-            RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
+            SVLevel level = (SVLevel) entityManager.getLevel();
 
             renderer.synchronise(this.levelRenderer.mapRenderer);
             renderer.commitDraw(false);
@@ -57,7 +57,7 @@ public class SVLevelRenderer {
         @Override
         public void render(float deltaTime, Context context, RenderScope renderer) {
             SVEntityManager entityManager = (SVEntityManager) context.getEntityManager();
-            RocketGameLevel level = (RocketGameLevel) entityManager.getLevel();
+            SVLevel level = (SVLevel) entityManager.getLevel();
 
 //            renderer.synchronise(this.levelRenderer.mapRenderer);
 //            renderer.commitDraw(true);

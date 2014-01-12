@@ -9,7 +9,7 @@ import com.dferens.libgdxes.levels.LevelParseException;
 public class SVGameManager extends GameManager<Settings,
         SVEntityManager,
                                                    RenderScope,
-                                                   RocketGameInputScope > {
+        SVInputScope> {
 
     public SVGameManager(Settings settings) { super(settings); }
 
@@ -17,7 +17,7 @@ public class SVGameManager extends GameManager<Settings,
     protected void setupComponents(GameWorld world) {
         this.entities = new SVEntityManager(this, world);
         this.renderScope = new RenderScope(this);
-        this.inputScope = new RocketGameInputScope();
+        this.inputScope = new SVInputScope();
 
         this.entities.initialize();
         this.renderScope.initialize();
@@ -35,6 +35,6 @@ public class SVGameManager extends GameManager<Settings,
     }
 
     public void load() throws LevelParseException {
-        this.getEntities().switchLevel(new RocketGameLevel("data/levels/demo/demo.tmx"));
+        this.getEntities().switchLevel(new SVLevel("data/levels/demo/demo.tmx"));
     }
 }

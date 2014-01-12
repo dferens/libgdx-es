@@ -10,7 +10,7 @@ import com.dferens.supervasyan.entities.VasyanEntity;
 public class SVEntityManager extends LevelEntityManager {
     private VasyanEntity player;
     private CameramanEntity cameraman;
-    private RocketGameLevelRenderer levelRenderer;
+    private SVLevelRenderer levelRenderer;
 
     public VasyanEntity getPlayer() { return this.player; }
 
@@ -22,7 +22,7 @@ public class SVEntityManager extends LevelEntityManager {
     @Override
     public void initialize() {
         super.initialize();
-        this.levelRenderer = new RocketGameLevelRenderer(this.gameManager.getRenderScope().createMapRenderer(null, 1));
+        this.levelRenderer = new SVLevelRenderer(this.gameManager.getRenderScope().createMapRenderer(null, 1));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class SVEntityManager extends LevelEntityManager {
 
     @Override
     protected void afterNewLevelEntitiesLoad() {
-        RocketGameLevel level = (RocketGameLevel) this.currentLevel;
+        SVLevel level = (SVLevel) this.currentLevel;
         // Creating player
         this.player = new VasyanEntity(level.getSpawnPoint());
         this.createEntity(this.player);

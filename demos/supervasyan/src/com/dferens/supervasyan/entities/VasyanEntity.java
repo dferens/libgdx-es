@@ -14,7 +14,7 @@ import com.dferens.libgdxes.entities.Updatable;
 import com.dferens.libgdxes.render.Position;
 import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.supervasyan.Priority;
-import com.dferens.supervasyan.RocketGameInputScope;
+import com.dferens.supervasyan.SVInputScope;
 
 public class VasyanEntity implements PhysicsApplied, Updatable, Renderable, Disposable {
     private static final float JUMP_IMPULSE = 10f;
@@ -50,7 +50,7 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable, Disp
 
     @Override
     public void update(float deltaTime, Context context, InputScope input, RenderScope renderScope) {
-        RocketGameInputScope screenInput = (RocketGameInputScope) input;
+        SVInputScope screenInput = (SVInputScope) input;
         PhysicsBody body = context.getBody();
 
         float newVelocityX = (float)(MOVE_SPEED * screenInput.getMovingRate());
