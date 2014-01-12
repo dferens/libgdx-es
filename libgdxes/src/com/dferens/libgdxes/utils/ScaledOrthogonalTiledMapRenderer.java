@@ -27,10 +27,16 @@ public class ScaledOrthogonalTiledMapRenderer extends OrthogonalTiledMapRenderer
             if (layer.isVisible()) {
                 if (layer instanceof TiledMapTileLayer) {
                     renderTileLayer((TiledMapTileLayer)layer);
+                } else if (layer instanceof  TiledMapImageLayer) {
+                    renderImageLayer((TiledMapImageLayer) layer);
                 }
             }
         }
         endRender();
+    }
+
+    protected void renderImageLayer(TiledMapImageLayer layer) {
+        spriteBatch.draw(layer.getImageTexture(), 0, 0);
     }
 
     @Override
