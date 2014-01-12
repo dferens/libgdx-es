@@ -8,6 +8,18 @@ import com.dferens.libgdxes.Settings;
 import com.dferens.libgdxes.levels.LevelParseException;
 
 public class MainActivity extends AndroidActivity {
+
+    @Override
+    public void onGameCreate(Settings gameSettings) {
+        SVGameManager gameManager = new SVGameManager(gameSettings);
+        try {
+            gameManager.load();
+            this.setGameManager(gameManager);
+        } catch (LevelParseException e) {
+            Gdx.app.error("Super Vasyan", "Load map error", e);
+        }
+    }
+
     @Override
     protected Settings createGameConfiguration() {
         Settings settings = new Settings();
@@ -23,16 +35,5 @@ public class MainActivity extends AndroidActivity {
     protected void setupAndroidConfiguration(AndroidApplicationConfiguration cfg) {
         cfg.useCompass = false;
         cfg.useGL20 = true;
-    }
-
-    @Override
-    public void onGameCreate(Settings gameSettings) {
-        SVGameManager gameManager = new SVGameManager(gameSettings);
-        try {
-            gameManager.load();
-            this.setGameManager(gameManager);
-        } catch (LevelParseException e) {
-            Gdx.app.error("Super Vasyan", "Load map error", e);
-        }
     }
 }

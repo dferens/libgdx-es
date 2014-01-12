@@ -10,6 +10,8 @@ import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.utils.StandardPriorities;
 
 public class CameramanEntity implements Updatable {
+    private static final float DEAD_ZONE_WIDTH = 5f;
+    private static final float DEAD_ZONE_HEIGHT = 5f;
 
     protected PhysicsApplied entity;
     protected Rectangle boundingBox;
@@ -26,10 +28,16 @@ public class CameramanEntity implements Updatable {
         }
     }
 
-    public CameramanEntity(PhysicsApplied toTrack) {
-        this.boundingBox = new Rectangle(0, 0, 5, 5).setCenter(0, 0);
+    public CameramanEntity(PhysicsApplied toTrack, float deadZoneWidth, float deadZoneHeight) {
+        this.boundingBox = new Rectangle(0, 0, deadZoneWidth, deadZoneHeight).setCenter(0, 0);
         this.initialized = false;
         setEntity(toTrack);
+    }
+    public CameramanEntity(float deadZoneWidth, float deadZoneHeight) {
+        this(null, deadZoneWidth, deadZoneHeight);
+    }
+    public CameramanEntity(PhysicsApplied toTrack) {
+        this(toTrack, CameramanEntity.DEAD_ZONE_WIDTH, CameramanEntity.DEAD_ZONE_HEIGHT);
     }
     public CameramanEntity() { this(null); }
 
