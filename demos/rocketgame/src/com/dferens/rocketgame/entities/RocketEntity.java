@@ -49,7 +49,7 @@ public class RocketEntity implements PhysicsApplied, Updatable, Renderable, Disp
     }
 
     @Override
-    public void update(float deltaTime, Context context, InputScope input) {
+    public void update(float deltaTime, Context context, InputScope input, RenderScope renderScope) {
         RocketGameInputScope screenInput = (RocketGameInputScope) input;
         PhysicsBody body = context.getBody();
 

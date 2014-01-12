@@ -19,7 +19,7 @@ public class RocketGameLevelRenderer {
         }
 
         @Override
-        public void update(float deltaTime, Context context, InputScope input) {
+        public void update(float deltaTime, Context context, InputScope input, RenderScope renderScope) {
             // TODO: make camera track player
             /*RocketGameEntityManager entities = (RocketGameEntityManager) context.getEntityManager();
             RocketEntity rocket = entities.getRocket();
@@ -52,7 +52,7 @@ public class RocketGameLevelRenderer {
         }
 
         @Override
-        public void update(float deltaTime, Context context, InputScope input) { }
+        public void update(float deltaTime, Context context, InputScope input, RenderScope renderScope) { }
 
         @Override
         public void render(float deltaTime, Context context, RenderScope renderer) {

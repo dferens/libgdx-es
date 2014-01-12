@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.dferens.libgdxes.EntityManager;
 import com.dferens.libgdxes.levels.LevelParseException;
 import com.dferens.libgdxes.levels.TmxLevel;
+import com.dferens.libgdxes.utils.TiledMapImageLayer;
+import com.dferens.libgdxes.utils.loaders.ImageLayerSupportedTmxMapLoader;
 import com.dferens.rocketgame.entities.BlockEntity;
 
 public class RocketGameLevel extends TmxLevel {
@@ -31,7 +33,7 @@ public class RocketGameLevel extends TmxLevel {
     public MapLayers getForegroundLayers() { return foregroundLayers; }
 
     public RocketGameLevel(String levelFilePath) throws LevelParseException {
-        super(levelFilePath);
+        super(levelFilePath, new ImageLayerSupportedTmxMapLoader());
 
         this.backgroundLayers = new MapLayers();
         this.foregroundLayers = new MapLayers();
@@ -91,7 +93,10 @@ public class RocketGameLevel extends TmxLevel {
         // Load background & foreground layers
         MapLayers targetMapList = this.backgroundLayers;
         for (MapLayer layer : this.tiledMap.getLayers()) {
-            if (layer instanceof TiledMapTileLayer) targetMapList.add(layer);
+            if ((layer instanceof TiledMapTileLayer) ||
+                (layer instanceof TiledMapImageLayer)) {
+                targetMapList.add(layer);
+            }
             if (layer == collisionLayer) {
                 targetMapList = this.foregroundLayers;
             }

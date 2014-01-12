@@ -4,16 +4,19 @@ import com.dferens.libgdxes.GameManager;
 import com.dferens.libgdxes.GameWorld;
 import com.dferens.libgdxes.levels.LevelEntityManager;
 import com.dferens.libgdxes.levels.TmxLevel;
+import com.dferens.rocketgame.entities.CameramanEntity;
 import com.dferens.rocketgame.entities.RocketEntity;
 
 public class RocketGameEntityManager extends LevelEntityManager {
     private RocketEntity rocket;
+    private CameramanEntity cameraman;
     private RocketGameLevelRenderer levelRenderer;
 
     public RocketEntity getRocket() { return this.rocket; }
 
     public RocketGameEntityManager(GameManager gameManager, GameWorld world) {
         super(gameManager, world);
+        this.cameraman = new CameramanEntity();
     }
 
     @Override
@@ -38,5 +41,7 @@ public class RocketGameEntityManager extends LevelEntityManager {
         this.levelRenderer.onLevelChanged((TmxLevel) this.currentLevel);
         this.createEntity(levelRenderer.getForegroundRendererEntity());
         this.createEntity(levelRenderer.getBackgroundRendererEntity());
+        this.createEntity(this.cameraman);
+        this.cameraman.setEntityToTrack(this.rocket);
     }
 }

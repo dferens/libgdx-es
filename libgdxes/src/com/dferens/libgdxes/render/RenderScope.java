@@ -48,6 +48,10 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     private State readyState, notReadyState;
     private State drawingState;
 
+    @Override
+    public float unitsToPixels(float units) { return units * this.getPixelsPerUnit(); }
+    @Override
+    public float getPixelsPerUnit() { return (Gdx.graphics.getWidth() / camera.viewportWidth); }
     public Matrix4 getProjectionMatrix() { return this.camera.combined; }
 
     public RenderScope(GameManager gameManager) {
@@ -62,17 +66,21 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     @Override
     public void initialize() {
         this.camera = this.createCamera(gameManager.getSettings().renderVisibleUnits);
-        this.moveCamera(camera.viewportWidth / 2, camera.viewportHeight / 2);
+        this.moveCameraBy(camera.viewportWidth / 2, camera.viewportHeight / 2);
         this.switchTo(readyState);
     }
 
-    public void moveCamera(float dx, float dy) {
+    public void moveCameraBy(float dx, float dy) {
         this.camera.translate(dx, dy);
         this.camera.update();
     }
-    public void moveCamera(Vector2 pos) {
-        this.moveCamera(pos.x, pos.y);
+    public void moveCameraByX(float dx) { this.moveCameraBy(dx, 0); }
+    public void moveCameraByY(float dy) { this.moveCameraBy(0, dy); }
+    public void moveCameraByViewport(float viewportPosX, float viewportPosY) {
+        this.moveCameraBy(viewportPosX * camera.viewportWidth,
+                          viewportPosY * camera.viewportHeight);
     }
+    public void moveCamera(Vector2 pos) { this.moveCameraBy(pos.x, pos.y); }
 
     public DrawChain draw(Texture texture) { return new DrawChain(this, texture); }
     public DrawChain draw(TextureRegion textureRegion) { return new DrawChain(this, textureRegion); }
@@ -94,6 +102,13 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     }
     public void synchronise(MapRenderer renderer) {
         renderer.setView(this.camera);
+    }
+    public Vector2 getViewportCoords(Vector2 positionUnits) {
+        Vector2 position = new Vector2(this.camera.position.x, this.camera.position.y);
+        return position.sub(camera.viewportWidth / 2, camera.viewportHeight / 2)
+                       .sub(positionUnits)
+                       .scl(-1)
+                       .div(camera.viewportWidth, camera.viewportHeight);
     }
     public ScaledOrthogonalTiledMapRenderer createMapRenderer(TiledMap map, float unitScale) {
         return new ScaledOrthogonalTiledMapRenderer(map, unitScale, this.batch);
@@ -124,10 +139,6 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     public void convertCoordinates(Vector3 coords) {
         camera.project(coords);
     }
-    @Override
-    public float unitsToPixels(float units) { return units * this.getPixelsPerUnit(); }
-    @Override
-    public float getPixelsPerUnit() { return (Gdx.graphics.getWidth() / camera.viewportWidth); }
 
     @Override
     public void dispose() { batch.dispose(); }
