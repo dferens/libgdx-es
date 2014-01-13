@@ -6,6 +6,7 @@ import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
 import com.dferens.libgdxes.entities.utils.Box2dOverlayEntity;
 import com.dferens.libgdxes.entities.utils.FPSLoggerEntity;
+import com.dferens.libgdxes.render.AssetStorage;
 
 import java.util.*;
 
@@ -56,6 +57,10 @@ public abstract class EntityManager implements SettingsProvider, Scope {
         setupOwnEntities();
     }
 
+    protected void finishAssetsLoading() {
+        this.gameManager.getAssetStorage().finishLoading();
+    }
+
     protected void setupOwnEntities() {
         this.setupStandardEntities();
 
@@ -83,32 +88,42 @@ public abstract class EntityManager implements SettingsProvider, Scope {
     public void createEntity(Entity entity) {
         PhysicsBody body = null;
         Integer updatePriority = null, renderPriority = null;
+        String[] assets = null;
 
         if (entity instanceof PhysicsApplied)
             body = this.world.createBody((PhysicsApplied) entity);
         if (entity instanceof Updatable)
             updatePriority = ((Updatable)entity).getUpdatePriority();
-        if (entity instanceof Renderable)
+        if (entity instanceof Renderable) {
             renderPriority = ((Renderable) entity).getRenderPriority();
-
-        Context context = new Context(this, body, updatePriority, renderPriority);
+            AssetStorage assetStorage = this.gameManager.getAssetStorage();
+            Collection<String> assetsCollection = assetStorage.loadEntitiesAssets((Renderable) entity);
+            if (assets != null) {
+                assets = new String[assetsCollection.size()];
+                assetsCollection.toArray(assets);
+            }
+        }
+        Context context = new Context(this, body, updatePriority, renderPriority, assets);
         this.contextLookup.put(entity, context);
 
         if (updatePriority != null) this.updateEntities.add((Updatable) entity);
         if (renderPriority != null) this.renderEntities.add((Renderable) entity);
-
     }
     public void createEntities(Entity... entities) {
         for (Entity entity : entities) this.createEntity(entity);
     }
     public void destroyEntity(Entity entity) {
         Context context = this.contextLookup.get(entity);
+        AssetStorage assetStorage = this.gameManager.getAssetStorage();
 
         if (entity instanceof Updatable) this.updateEntities.remove((Updatable)entity);
         if (entity instanceof Renderable) this.renderEntities.remove((Renderable)entity);
 
         PhysicsBody body = context.getBody();
+        String[] assets = context.getAssets();
+
         if (body != null) context.destroyBody();
+        if (assets != null) assetStorage.unloadAssets(assets);
 
         this.contextLookup.remove(entity);
     }

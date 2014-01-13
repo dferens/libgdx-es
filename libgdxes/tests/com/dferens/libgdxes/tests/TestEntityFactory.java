@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.InputScope;
 import com.dferens.libgdxes.PhysicsBody;
+import com.dferens.libgdxes.render.AssetContainer;
 import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.entities.Entity;
 import com.dferens.libgdxes.entities.PhysicsApplied;
@@ -26,6 +27,9 @@ public class TestEntityFactory {
         public void render(float deltaTime, Context context, RenderScope renderer) { renderTimesCalled += 1; }
         @Override
         public int getRenderPriority() { getRenderPriorityTimesCalled += 1; return priority; }
+
+        @Override
+        public void loadAssets(AssetContainer assetContainer) { }
     };
     class UpdatableTestEntity extends TestEntity implements Updatable {
         private int priority;

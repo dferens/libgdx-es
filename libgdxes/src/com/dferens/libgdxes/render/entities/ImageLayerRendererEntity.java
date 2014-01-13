@@ -2,6 +2,7 @@ package com.dferens.libgdxes.render.entities;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.dferens.libgdxes.Context;
+import com.dferens.libgdxes.render.AssetContainer;
 import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.render.TiledMapImageLayer;
 
@@ -27,4 +28,7 @@ public class ImageLayerRendererEntity extends LevelLayerRendererEntity<TiledMapI
                 .scale(this.mapScale, this.mapScale)
                 .commit();
     }
+
+    @Override
+    public void loadAssets(AssetContainer assetContainer) { }
 }

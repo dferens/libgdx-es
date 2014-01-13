@@ -3,6 +3,7 @@ package com.dferens.libgdxes;
 import com.badlogic.gdx.Screen;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
+import com.dferens.libgdxes.render.AssetStorage;
 import com.dferens.libgdxes.render.RenderScope;
 
 public abstract class GameManager<S extends Settings,
@@ -10,7 +11,9 @@ public abstract class GameManager<S extends Settings,
                                   R extends RenderScope,
                                   I extends InputScope> implements SettingsProvider, Screen {
     private final GameWorld world;
+    private final AssetStorage assetStorage;
     protected final S settings;
+    protected float lastTimeStep;
     protected E entities;
     protected R renderScope;
     protected I inputScope;
@@ -18,10 +21,13 @@ public abstract class GameManager<S extends Settings,
     public E getEntities() { return this.entities; }
     public R getRenderScope() { return this.renderScope; }
     public final Settings getSettings() { return this.settings; }
+    public final AssetStorage getAssetStorage() { return this.assetStorage; }
+    public final float getLastTimeStep() { return this.lastTimeStep; }
 
     public GameManager(S settings) {
         this.settings = settings;
         this.world = new GameWorld(this);
+        this.assetStorage = new AssetStorage();
         this.setupComponents(this.world);
     }
 
@@ -60,9 +66,9 @@ public abstract class GameManager<S extends Settings,
     }
 
     public final void process(float deltaTime) {
-        deltaTime = Math.min(deltaTime, settings.maxTimeStep);
-        this.update(deltaTime);
-        this.innerRender(deltaTime);
+        this.lastTimeStep = Math.min(deltaTime, settings.maxTimeStep);
+        this.update(lastTimeStep);
+        this.innerRender(lastTimeStep);
     }
 
     /** Begin of {@link Screen} interface */

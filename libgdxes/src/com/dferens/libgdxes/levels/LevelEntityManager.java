@@ -32,6 +32,7 @@ public abstract class LevelEntityManager extends EntityManager {
         this.currentLevel.loadSettings(gameManager);
         this.currentLevel.loadEntities(this);
         this.afterNewLevelEntitiesLoad();
+        this.finishAssetsLoading();
     }
 
     protected void beforeNewLevelEntitiesLoad(Level newLevel) { }

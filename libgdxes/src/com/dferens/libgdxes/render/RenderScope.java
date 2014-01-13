@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapRenderer;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.dferens.libgdxes.*;
 import com.dferens.libgdxes.utils.StateMachine;
 
@@ -37,8 +39,8 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
             ((RenderScope) machine).batch.end();
         }
     }
-    private GameManager gameManager;
 
+    private GameManager gameManager;
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private State readyState;
@@ -46,6 +48,7 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     private State drawingState;
     private Color backgroundColor;
 
+    public AssetContainer getAssetStorage() { return this.gameManager.getAssetStorage(); }
     public Matrix4 getProjectionMatrix() { return this.camera.combined; }
     public Color getBackgroundColor() { return this.backgroundColor; }
 
@@ -65,6 +68,13 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     public float unitsToPixels(float units) { return units * this.getPixelsPerUnit(); }
     @Override
     public float getPixelsPerUnit() { return (Gdx.graphics.getWidth() / camera.viewportWidth); }
+    public Vector2 getViewportCoords(Vector2 positionUnits) {
+        Vector2 position = new Vector2(this.camera.position.x, this.camera.position.y);
+        return position.sub(camera.viewportWidth / 2, camera.viewportHeight / 2)
+                .sub(positionUnits)
+                .scl(-1)
+                .div(camera.viewportWidth, camera.viewportHeight);
+    }
 
     @Override
     public void initialize() {
@@ -83,17 +93,42 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
         moveCameraBy(pos.x - camera.position.x, pos.y - camera.position.y);
     }
     public void moveCamera(Vector2 pos) { this.moveCameraBy(pos.x, pos.y); }
-
     public DrawChain draw(Texture texture) { return new DrawChain(this, texture); }
     public DrawChain draw(TextureRegion textureRegion) { return new DrawChain(this, textureRegion); }
     public DrawChain draw(BitmapFont font, String text) { return new DrawChain(this, font, text); }
-    public DrawChain draw(GameWorld gameWorld, Box2DDebugRenderer debugRenderer) {
+    public DrawChain drawWorld(GameWorld gameWorld, Box2DDebugRenderer debugRenderer) {
         return new DrawChain(this, gameWorld, debugRenderer);
     }
-    public void render(DrawChain drawChain) { drawChain.execute(this.batch); }
+    public <T extends Object> DrawChain draw(String assetAlias, Class<T> assetType) {
+        T asset = this.getAssetStorage().get(assetAlias, assetType);
+        if (asset == null) {
+            throw new GdxRuntimeException(String.format("Asset not found: %s", assetAlias));
+        } else {
+            if (assetType == Texture.class) {
+                return new DrawChain(this, (Texture) asset);
+            } else if (assetType == TextureRegion.class) {
+                return new DrawChain(this, (TextureRegion) asset);
+            } else if (assetType == ParticleEffect.class) {
+                return new DrawChain(this, (ParticleEffect) asset);
+            } else {
+                throw new UnsupportedOperationException();
+            }
+        }
+    }
+    public DrawChain drawText(String fontAssetAlias, String text) {
+        BitmapFont fontAsset = this.getAssetStorage().get(fontAssetAlias, BitmapFont.class);
+        return new DrawChain(this, fontAsset, text);
+    }
 
+    public void render(DrawChain drawChain) {
+        float lastTimeStep = this.gameManager.getLastTimeStep();
+        drawChain.execute(this.batch, lastTimeStep);
+    }
     public void clearScreen() {
-        Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+        Gdx.gl.glClearColor(backgroundColor.r,
+                            backgroundColor.g,
+                            backgroundColor.b,
+                            backgroundColor.a);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     }
     public void beginDraw() {
@@ -108,13 +143,6 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     }
     public void synchronise(MapRenderer renderer) {
         renderer.setView(this.camera);
-    }
-    public Vector2 getViewportCoords(Vector2 positionUnits) {
-        Vector2 position = new Vector2(this.camera.position.x, this.camera.position.y);
-        return position.sub(camera.viewportWidth / 2, camera.viewportHeight / 2)
-                       .sub(positionUnits)
-                       .scl(-1)
-                       .div(camera.viewportWidth, camera.viewportHeight);
     }
 
     private void setupCamera(Settings settings) {
@@ -140,10 +168,13 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
         return position;
     }
     @Override
-    public void convertCoordinates(Vector3 coords) {
+    public void unitsToPixels(Vector3 coords) {
         camera.project(coords);
     }
-
+    @Override
+    public void pixelsToUnits(Vector3 coords) {
+        camera.unproject(coords);
+    }
     @Override
     public void dispose() { batch.dispose(); }
 }

@@ -17,7 +17,7 @@ public class TextureDrawable extends Drawable {
     }
 
     @Override
-    public void execute(SpriteBatch batch,
+    public void execute(SpriteBatch batch, float deltaTime,
                         float x, float y, Position position,
                         float width, float height,
                         float scaleX, float scaleY, float angle) {

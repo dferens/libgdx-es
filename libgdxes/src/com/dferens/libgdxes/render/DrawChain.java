@@ -2,6 +2,7 @@ package com.dferens.libgdxes.render;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -48,6 +49,9 @@ public class DrawChain {
     public DrawChain(RenderScope renderScope, BitmapFont font, String text) {
         this(renderScope, new BitmapFontDrawable(font, text));
     }
+    public DrawChain(RenderScope renderScope, ParticleEffect particleEffect) {
+        this(renderScope, new ParticleEffectDrawable(particleEffect));
+    }
 
     public DrawChain bodyCoords(PhysicsBody body) {
         return this.worldCoords(body.getX(), body.getY());
@@ -62,7 +66,7 @@ public class DrawChain {
     }
     public DrawChain worldCoords(float x, float y) {
         this.temp.set(x, y, 0);
-        this.renderScope.convertCoordinates(this.temp);
+        this.renderScope.unitsToPixels(this.temp);
         return this.screenCoords(this.temp.x, this.temp.y);
     }
     public DrawChain worldCoords(Vector2 coords) {
@@ -86,6 +90,16 @@ public class DrawChain {
         this.heightScale = scaleY;
         return this;
     }
+    public DrawChain shiftUnits(float shiftX, float shiftY) {
+        this.temp.set(this.posPixelsX, this.posPixelsY, 0);
+        this.renderScope.pixelsToUnits(this.temp);
+        return this.worldCoords(this.temp.x + shiftX, this.temp.y + shiftY);
+    }
+    public DrawChain shiftPixels(float shiftX, float shiftY) {
+        this.posPixelsX += shiftX;
+        this.posPixelsY += shiftY;
+        return this;
+    }
 
     public DrawChain rotateDegrees(float angle) {
         this.rotationAngleDegrees = angle;
@@ -97,10 +111,10 @@ public class DrawChain {
 
     public void commit() { this.renderScope.render(this); }
 
-    void execute(SpriteBatch batch) {
-        drawable.execute(batch,
-                         this.posPixelsX, this.posPixelsY, this.texturePosition,
-                         this.widthPixels, this.heightPixels, this.widthScale, this.heightScale,
-                         this.rotationAngleDegrees);
+    void execute(SpriteBatch batch, float deltaTime) {
+        drawable.execute(batch, deltaTime,
+                         this.posPixelsX, this.posPixelsY,
+                         this.texturePosition, this.widthPixels, this.heightPixels, this.widthScale,
+                         this.heightScale, this.rotationAngleDegrees);
     }
 }

@@ -30,7 +30,6 @@ public class SVEntityManager extends LevelEntityManager {
 
     @Override
     protected void beforeLevelEntitiesClear() {
-        this.player.dispose();
         this.player = null;
     }
 

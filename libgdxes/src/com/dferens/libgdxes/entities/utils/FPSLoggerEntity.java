@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.entities.Renderable;
+import com.dferens.libgdxes.render.AssetContainer;
 import com.dferens.libgdxes.render.Position;
 import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.utils.StandardPriorities;
@@ -42,4 +43,7 @@ public class FPSLoggerEntity implements Renderable {
 
     @Override
     public int getRenderPriority() { return StandardPriorities.FPS_LOGGER; }
+
+    @Override
+    public void loadAssets(AssetContainer assetContainer) { }
 }

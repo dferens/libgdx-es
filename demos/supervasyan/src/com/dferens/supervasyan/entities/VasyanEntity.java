@@ -1,34 +1,33 @@
 package com.dferens.supervasyan.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Disposable;
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.InputScope;
 import com.dferens.libgdxes.PhysicsBody;
 import com.dferens.libgdxes.entities.PhysicsApplied;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.entities.Updatable;
+import com.dferens.libgdxes.render.AssetContainer;
 import com.dferens.libgdxes.render.Position;
 import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.supervasyan.Priority;
 import com.dferens.supervasyan.SVInputScope;
 
-public class VasyanEntity implements PhysicsApplied, Updatable, Renderable, Disposable {
+public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
     private static final float JUMP_IMPULSE = 10f;
     private static final float MOVE_SPEED = 30f;
 
-    private final Texture rocketTexture;
     private final float spawnPositionX;
     private final float spawnPositionY;
+    private boolean jetpackEnabled;
 
     public VasyanEntity(Vector2 spawnPosition) {
         this.spawnPositionX = spawnPosition.x;
         this.spawnPositionY = spawnPosition.y;
-
-        this.rocketTexture = new Texture(Gdx.files.internal("data/character.png"));
+        this.jetpackEnabled = false;
     }
 
     @Override
@@ -58,7 +57,10 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable, Disp
         body.setLinearVelocity(newVelocityX, currentVelocityY);
 
         if (screenInput.isJumping()) {
+            this.jetpackEnabled = true;
             body.applyLinearImpulse(0, JUMP_IMPULSE, body.getX(), body.getY());
+        } else {
+            this.jetpackEnabled = false;
         }
     }
 
@@ -67,7 +69,18 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable, Disp
 
     @Override
     public void render(float deltaTime, Context context, RenderScope renderScope) {
-        renderScope.draw(rocketTexture)
+        if (this.jetpackEnabled) {
+            renderScope.draw("player", ParticleEffect.class)
+                       .bodyCoords(context.getBody())
+                       .shiftUnits(0, 1)
+                       .rotateDegrees(180)
+                       .startAt(Position.CENTER)
+                       .commit();
+        } else {
+            ParticleEffect effect = renderScope.getAssetStorage().get("player", ParticleEffect.class);
+            effect.reset();
+        }
+        renderScope.draw("player", Texture.class)
                    .bodyCoords(context.getBody())
                    .startAt(Position.CENTER)
                    .transformInUnits(2, 2)
@@ -78,5 +91,8 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable, Disp
     public int getRenderPriority() { return Priority.ENTITIES; }
 
     @Override
-    public void dispose() { rocketTexture.dispose(); }
+    public void loadAssets(AssetContainer assetContainer) {
+        assetContainer.load("player", "data/character.png", Texture.class);
+        assetContainer.load("player", "data/particles/character.p", ParticleEffect.class);
+    }
 }

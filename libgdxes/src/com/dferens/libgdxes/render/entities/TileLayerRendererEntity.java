@@ -2,6 +2,7 @@ package com.dferens.libgdxes.render.entities;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.dferens.libgdxes.Context;
+import com.dferens.libgdxes.render.AssetContainer;
 import com.dferens.libgdxes.render.RenderScope;
 import com.dferens.libgdxes.render.SeparateLayerRenderer;
 
@@ -22,4 +23,7 @@ public class TileLayerRendererEntity extends LevelLayerRendererEntity<TiledMapTi
         this.mapRenderer.render(this.layer);
         renderer.beginDraw();
     }
+
+    @Override
+    public void loadAssets(AssetContainer assetContainer) { }
 }
