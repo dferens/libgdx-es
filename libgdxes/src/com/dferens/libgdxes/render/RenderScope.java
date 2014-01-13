@@ -51,6 +51,9 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     public AssetContainer getAssetStorage() { return this.gameManager.getAssetStorage(); }
     public Matrix4 getProjectionMatrix() { return this.camera.combined; }
     public Color getBackgroundColor() { return this.backgroundColor; }
+    public float getViewportWidth() { return this.camera.viewportWidth; }
+    public float getViewportHeight() { return this.camera.viewportHeight; }
+    public Vector3 getCameraPosition() { return this.camera.position.cpy(); }
 
     public void setBackgroundColor(Color value) { this.backgroundColor = value; }
 

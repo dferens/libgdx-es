@@ -72,7 +72,7 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
         if (this.jetpackEnabled) {
             renderScope.draw("player", ParticleEffect.class)
                        .bodyCoords(context.getBody())
-                       .shiftUnits(0, 1)
+                       .shiftUnits(-0.5f, 0.5f)
                        .rotateDegrees(180)
                        .startAt(Position.CENTER)
                        .commit();
@@ -83,7 +83,7 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
         renderScope.draw("player", Texture.class)
                    .bodyCoords(context.getBody())
                    .startAt(Position.CENTER)
-                   .transformInUnits(2, 2)
+                   .transformInUnits(1.7f, 2.2f)
                    .commit();
     }
 

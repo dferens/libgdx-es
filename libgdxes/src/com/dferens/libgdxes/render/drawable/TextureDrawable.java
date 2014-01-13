@@ -9,11 +9,13 @@ public class TextureDrawable extends Drawable {
     private final int textureHeight;
     private final int textureWidth;
     private TextureRegion textureRegion;
+    private Texture texture;
 
     public TextureDrawable(Texture texture) {
         this.textureWidth = texture.getWidth();
         this.textureHeight = texture.getHeight();
         this.textureRegion = new TextureRegion(texture, textureWidth, textureHeight);
+        this.texture = texture;
     }
 
     @Override

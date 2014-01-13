@@ -22,6 +22,11 @@ public class ImageLayerSupportedTmxMapLoader extends ExtendableTmxMapLoader {
                 TextureRegion texture = imageResolver.getImage(image.path());
                 TiledMapImageLayer layer = new TiledMapImageLayer(texture);
                 map.getLayers().add(layer);
+
+                XmlReader.Element properties = element.getChildByName("properties");
+                if (properties != null) {
+                    loadProperties(layer.getProperties(), properties);
+                }
             }
             catch (IOError e) {
                 throw new GdxRuntimeException("Error parsing image layer.");

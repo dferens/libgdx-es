@@ -90,6 +90,9 @@ public class DrawChain {
         this.heightScale = scaleY;
         return this;
     }
+    public DrawChain scale(float scaleXY) {
+        return this.scale(scaleXY, scaleXY);
+    }
     public DrawChain shiftUnits(float shiftX, float shiftY) {
         this.temp.set(this.posPixelsX, this.posPixelsY, 0);
         this.renderScope.pixelsToUnits(this.temp);

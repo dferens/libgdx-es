@@ -48,7 +48,7 @@ public class ScaledOrthogonalTiledMapRenderer extends OrthogonalTiledMapRenderer
 
     protected void renderImageLayer(TiledMapImageLayer layer) {
         // TODO: fix scale
-        spriteBatch.draw(layer.getImageTexture(), 0, 0);
+        spriteBatch.draw(layer.getImageTextureRegion(), 0, 0);
     }
 
     @Override

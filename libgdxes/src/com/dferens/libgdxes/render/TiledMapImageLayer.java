@@ -8,8 +8,9 @@ public class TiledMapImageLayer extends MapLayer {
     private final TextureRegion textureRegion;
     private final Vector2 startPosition;
 
-    public TextureRegion getImageTexture() { return this.textureRegion; }
+    public TextureRegion getImageTextureRegion() { return this.textureRegion; }
     public Vector2 getStartPosition() { return this.startPosition; }
+
     public void setPosition(int startX, int startY) { this.startPosition.set(startX, startY); }
 
     public TiledMapImageLayer(TextureRegion textureRegion, float startX, float startY) {

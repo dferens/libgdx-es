@@ -145,11 +145,27 @@ public class SVLevel extends TmxLevel {
         }
         // Load layer renderers
         SeparateLayerRenderer mapRenderer = ((SVEntityManager) entityManager).getMapRenderer();
-        Entity backgroundRenderer1 = new ImageLayerRendererEntity(
-                this.getBackgroundLayer1(), Priority.BACKGROUND_FAR, this.calculateMapScale());
-        Entity collisionLayerRenderer = new TileLayerRendererEntity(
-                this.getMainLayer(), Priority.BACKGROUND_BLOCKS, mapRenderer);
+
+        Entity backgroundRenderer1 = createBackgroundLayerEntity(this.getBackgroundLayer1(),
+                                                                 Priority.BACKGROUND_FAR);
+
+        Entity collisionLayerRenderer = createMapLayerEntity(this.getCollisionLayer(),
+                                                             Priority.BACKGROUND_BLOCKS,
+                                                             mapRenderer);
         entityManager.createEntities(backgroundRenderer1, collisionLayerRenderer);
+    }
+
+    private Entity createBackgroundLayerEntity(TiledMapImageLayer layer, int priority) {
+        boolean repeatByX = this.layerPropertyIsTrue(layer, "REPEAT_BY_X");
+        boolean repeatByY = this.layerPropertyIsTrue(layer, "REPEAT_BY_Y");
+        float mapScale = this.calculateMapScale();
+        return new ImageLayerRendererEntity(layer, priority, repeatByX, repeatByY, mapScale);
+    }
+    private Entity createMapLayerEntity(TiledMapTileLayer layer, int priority, SeparateLayerRenderer renderer) {
+        return new TileLayerRendererEntity(layer, priority, renderer);
+    }
+    private boolean layerPropertyIsTrue(MapLayer layer, String property) {
+        return layer.getProperties().get(property, String.class).equalsIgnoreCase("true");
     }
 
     @Override
