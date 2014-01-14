@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.dferens.libgdxes.render.Position;
 
-public class TextureDrawable extends Drawable {
+public class TextureDrawable extends RasterDrawable {
     private final int textureHeight;
     private final int textureWidth;
     private TextureRegion textureRegion;
@@ -19,7 +19,7 @@ public class TextureDrawable extends Drawable {
     }
 
     @Override
-    public void execute(SpriteBatch batch, float deltaTime,
+    public void execute(SpriteBatch renderObject, float deltaTime,
                         float x, float y, Position position,
                         float width, float height,
                         float scaleX, float scaleY, float angle) {
@@ -27,6 +27,6 @@ public class TextureDrawable extends Drawable {
         if (height == -1) height = this.textureHeight;
         x -= this.calculateOffsetOfX(position, width);
         y -= this.calculateOffsetOfY(position, width);
-        batch.draw(this.textureRegion, x, y, width/2, height/2, width * scaleX, height * scaleY, 1, 1, angle);
+        renderObject.draw(this.textureRegion, x, y, width/2, height/2, width * scaleX, height * scaleY, 1, 1, angle);
     }
 }

@@ -17,15 +17,15 @@ import com.dferens.supervasyan.Priority;
 import com.dferens.supervasyan.SVInputScope;
 
 public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
-    private static final float JUMP_IMPULSE = 10f;
-    private static final float MOVE_SPEED = 30f;
+    private static final float JUMP_IMPULSE = 5f;
+    private static final float MOVE_SPEED = 25f;
 
     private final float spawnPositionX;
     private final float spawnPositionY;
     private boolean jetpackEnabled;
 
     public VasyanEntity(Vector2 spawnPosition) {
-        this.spawnPositionX = spawnPosition.x;
+        this.spawnPositionX = spawnPosition.x + 2;
         this.spawnPositionY = spawnPosition.y;
         this.jetpackEnabled = false;
     }
@@ -40,9 +40,9 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
         fixtureDef.density = 5f;
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.2f;
-        CircleShape rocketShape = new CircleShape();
-        rocketShape.setRadius(1f);
-        fixtureDef.shape = rocketShape;
+        PolygonShape playerShape = new PolygonShape();
+        playerShape.setAsBox(0.85f, 1.1f, new Vector2(0, 0.30f), 0);
+        fixtureDef.shape = playerShape;
         boxBody.createFixture(fixtureDef);
         return new PhysicsBody(boxBody);
     }

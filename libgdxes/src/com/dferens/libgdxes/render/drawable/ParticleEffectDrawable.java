@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dferens.libgdxes.render.Position;
 
-public class ParticleEffectDrawable extends Drawable {
+public class ParticleEffectDrawable extends RasterDrawable {
     private ParticleEffect particleEffect;
 
     public ParticleEffectDrawable(ParticleEffect particleEffect) {
@@ -16,15 +16,15 @@ public class ParticleEffectDrawable extends Drawable {
     }
 
     @Override
-    public void execute(SpriteBatch batch, float deltaTime,
+    public void execute(SpriteBatch renderObject, float deltaTime,
                         float x, float y, Position position,
                         float width, float height, float scaleX, float scaleY,
                         float angle) {
-        batch.end();
-        batch.begin();
+        renderObject.end();
+        renderObject.begin();
         y = Gdx.graphics.getHeight() - y;
         this.particleEffect.setPosition(x, y);
-        this.particleEffect.draw(batch, deltaTime);
+        this.particleEffect.draw(renderObject, deltaTime);
 
     }
 }

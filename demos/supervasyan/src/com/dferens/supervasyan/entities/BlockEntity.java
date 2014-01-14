@@ -15,19 +15,22 @@ public class BlockEntity implements PhysicsApplied {
     private static final float BLOCK_RESTITUTION = 0f;
     private static final float BLOCK_DENSITY = 1f;
 
-    private final int gridX;
-    private final int gridY;
+    protected final float gridX;
+    protected final float gridY;
 
-    public BlockEntity(int gridX, int gridY) {
+    public BlockEntity(float gridX, float gridY) {
         this.gridX = gridX;
         this.gridY = gridY;
     }
+
     @Override
     public PhysicsBody createBody(World world) {
         // TODO: optimize memory usage
+        float spawnX = gridX + 0.5f;
+        float spawnY = gridY + 0.5f;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(gridX + 0.5f, gridY + 0.5f);
+        bodyDef.position.set(spawnX, spawnY);
         Body boxBody = world.createBody(bodyDef);
 
         PolygonShape blockShape = new PolygonShape();

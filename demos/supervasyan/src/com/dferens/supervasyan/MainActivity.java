@@ -22,7 +22,7 @@ public class MainActivity extends AndroidActivity {
 
     @Override
     protected Settings createGameConfiguration() {
-        Settings settings = new Settings(true);
+        Settings settings = new Settings(false);
         settings.renderVisibleUnits = 30;
         settings.worldGravity.set(0, -10);
         settings.worldPositionIterations = 10;

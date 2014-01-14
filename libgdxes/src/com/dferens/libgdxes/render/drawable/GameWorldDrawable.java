@@ -6,7 +6,7 @@ import com.dferens.libgdxes.GameWorld;
 import com.dferens.libgdxes.render.Position;
 import com.dferens.libgdxes.render.RenderScope;
 
-public class GameWorldDrawable extends Drawable {
+public class GameWorldDrawable extends RasterDrawable {
     private final GameWorld world;
     private final Box2DDebugRenderer debugRenderer;
     private final RenderScope renderScope;
@@ -18,7 +18,7 @@ public class GameWorldDrawable extends Drawable {
     }
 
     @Override
-    public void execute(SpriteBatch batch, float deltaTime,
+    public void execute(SpriteBatch renderObject, float deltaTime,
                         float x, float y, Position position,
                         float width, float height, float scaleX, float scaleY,
                         float angle) {

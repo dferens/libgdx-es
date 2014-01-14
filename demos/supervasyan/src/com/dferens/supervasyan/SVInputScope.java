@@ -8,7 +8,7 @@ public class SVInputScope extends InputScope {
     public void initialize() { }
 
     /**
-     * Returns player moving rate in range [-30; 30]
+     * Returns player moving rate
      * @return negative negative for left side, positive for right side
      */
     public double getMovingRate() {
@@ -17,7 +17,7 @@ public class SVInputScope extends InputScope {
         if (Math.abs(sourceValue) < 1) {
             filteredValue = 0;
         } else {
-            filteredValue = Math.pow(Math.abs(sourceValue), 1.477) * Math.signum(sourceValue);
+            filteredValue = Math.pow(Math.abs(sourceValue), 1.3) * Math.signum(sourceValue);
         }
         return filteredValue / 10;
     }
