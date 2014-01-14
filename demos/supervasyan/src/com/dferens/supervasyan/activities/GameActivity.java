@@ -1,4 +1,4 @@
-package com.dferens.supervasyan;
+package com.dferens.supervasyan.activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.dferens.libgdxes.AndroidActivity;
 import com.dferens.libgdxes.Settings;
 import com.dferens.libgdxes.levels.LevelParseException;
+import com.dferens.supervasyan.SVGameManager;
 
 public class GameActivity extends AndroidActivity{
 

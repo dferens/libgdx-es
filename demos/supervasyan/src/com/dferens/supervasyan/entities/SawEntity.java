@@ -25,7 +25,7 @@ public class SawEntity extends BallEntity {
     public PhysicsBody createBody(World world) {
         float spawnX = gridX + this.radius;
         float spawnY = gridY + this.radius;
-        // TODO: optimize memory usage
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(spawnX, spawnY);
@@ -48,7 +48,7 @@ public class SawEntity extends BallEntity {
         state += deltaTime;
 
         renderer.draw("saw", Texture.class)
-                .bodyCoords(context.getBody())
+                .bodyCoords(this)
                 .startAt(Position.CENTER)
                 .transformInUnits(2 * this.radius)
                 .rotateRadians(this.state * this.rotationSpeed)

@@ -34,7 +34,7 @@ public class BallEntity extends BlockEntity implements Renderable {
     public PhysicsBody createBody(World world) {
         float spawnX = gridX + this.radius;
         float spawnY = gridY + this.radius;
-        // TODO: optimize memory usage
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(spawnX, spawnY);

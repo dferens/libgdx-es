@@ -1,5 +1,8 @@
 package com.dferens.libgdxes.render;
 
+/**
+ * Allows to load & get assets only
+ */
 public interface AssetContainer {
     <T extends Object> void load(String alias, String filePath, Class<T> type);
 

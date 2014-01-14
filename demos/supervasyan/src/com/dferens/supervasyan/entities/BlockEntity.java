@@ -25,9 +25,9 @@ public class BlockEntity implements PhysicsApplied {
 
     @Override
     public PhysicsBody createBody(World world) {
-        // TODO: optimize memory usage
         float spawnX = gridX + 0.5f;
         float spawnY = gridY + 0.5f;
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(spawnX, spawnY);

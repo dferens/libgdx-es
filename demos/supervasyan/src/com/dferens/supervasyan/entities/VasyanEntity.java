@@ -41,13 +41,15 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
         bodyDef.position.set(spawnPositionX, spawnPositionY);
         Body boxBody = world.createBody(bodyDef);
         boxBody.setFixedRotation(true);
+
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 5f;
         fixtureDef.friction = 0f;
         fixtureDef.restitution = 0f;
         PolygonShape playerShape = new PolygonShape();
-        playerShape.setAsBox(0.80f, 1.05f, new Vector2(0, 0), 0);
+        playerShape.setAsBox(0.80f, 1.05f, Vector2.Zero, 0);
         fixtureDef.shape = playerShape;
+
         boxBody.createFixture(fixtureDef);
         return new PhysicsBody(boxBody);
     }
@@ -85,14 +87,13 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
         if (this.jetpackEnabled) {
             float shiftByX = JETPACK_SHIFT_BY_X * (isRightHandled ? 1 : -1);
             renderScope.draw("player", ParticleEffect.class)
-                       .bodyCoords(context.getBody())
+                       .bodyCoords(this)
                        .shiftUnits(shiftByX, -0.5f)
                        .rotateDegrees(180)
                        .startAt(Position.CENTER)
                        .commit();
         } else {
-            ParticleEffect effect = renderScope.getAssetStorage().get("player", ParticleEffect.class);
-            effect.reset();
+            renderScope.getAssetStorage().get("player", ParticleEffect.class).reset();
         }
 
         RasterDrawChain playerDraw = renderScope.draw("player", Texture.class);

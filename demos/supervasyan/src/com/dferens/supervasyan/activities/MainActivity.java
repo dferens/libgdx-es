@@ -1,4 +1,4 @@
-package com.dferens.supervasyan.entities;
+package com.dferens.supervasyan.activities;
 
 import android.app.Activity;
 import android.content.Intent;
