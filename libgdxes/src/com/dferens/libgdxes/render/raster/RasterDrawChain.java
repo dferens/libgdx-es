@@ -1,41 +1,34 @@
-package com.dferens.libgdxes.render.chains;
+package com.dferens.libgdxes.render.raster;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.dferens.libgdxes.GameWorld;
-import com.dferens.libgdxes.PhysicsBody;
 import com.dferens.libgdxes.render.DrawChain;
+import com.dferens.libgdxes.render.Drawable;
 import com.dferens.libgdxes.render.Position;
 import com.dferens.libgdxes.render.RenderScope;
-import com.dferens.libgdxes.render.drawable.*;
+import com.dferens.libgdxes.render.raster.drawable.*;
 
-public class RasterDrawChain extends DrawChain<SpriteBatch> {
-    private float posPixelsX;
-    private float posPixelsY;
+public class RasterDrawChain extends DrawChain<SpriteBatch, RasterDrawChain> {
+    private Drawable drawable;
     private Position texturePosition;
     private float widthPixels;
     private float heightPixels;
     private float widthScale;
     private float heightScale;
-    private float rotationAngleDegrees;
-    private Vector3 temp;
 
     public RasterDrawChain(RenderScope renderScope, Drawable drawable) {
-        super(renderScope, drawable);
-        this.posPixelsY = 0;
-        this.posPixelsX = 0;
+        super(renderScope);
+        this.drawable = drawable;
         this.texturePosition = Position.BOTTOM_LEFT;
         this.widthPixels = -1;
         this.heightPixels = -1;
         this.widthScale = 1;
         this.heightScale = 1;
-        this.temp = new Vector3();
     }
     public RasterDrawChain(RenderScope renderScope, Texture texture) {
         this(renderScope, new TextureDrawable(texture));
@@ -51,30 +44,6 @@ public class RasterDrawChain extends DrawChain<SpriteBatch> {
     }
     public RasterDrawChain(RenderScope renderScope, ParticleEffect particleEffect) {
         this(renderScope, new ParticleEffectDrawable(particleEffect));
-    }
-
-    public RasterDrawChain screenCoords(float x, float y) {
-        this.posPixelsX = x;
-        this.posPixelsY = y;
-        return this;
-    }
-
-    public RasterDrawChain screenCoords(Vector2 coords) {
-        return this.screenCoords(coords.x, coords.y);
-    }
-
-    public RasterDrawChain worldCoords(float x, float y) {
-        this.temp.set(x, y, 0);
-        this.renderScope.unitsToPixels(this.temp);
-        return this.screenCoords(this.temp.x, this.temp.y);
-    }
-
-    public RasterDrawChain worldCoords(Vector2 coords) {
-        return worldCoords(coords.x, coords.y);
-    }
-
-    public RasterDrawChain bodyCoords(PhysicsBody body) {
-        return this.worldCoords(body.getX(), body.getY());
     }
 
     public RasterDrawChain startAt(Position position) {
@@ -103,21 +72,13 @@ public class RasterDrawChain extends DrawChain<SpriteBatch> {
     }
     public RasterDrawChain shiftUnits(float shiftX, float shiftY) {
         this.temp.set(this.posPixelsX, this.posPixelsY, 0);
-        this.renderScope.pixelsToUnits(this.temp);
+        this.renderScope.unprojectCoordinates(this.temp);
         return this.worldCoords(this.temp.x + shiftX, this.temp.y + shiftY);
     }
     public RasterDrawChain shiftPixels(float shiftX, float shiftY) {
         this.posPixelsX += shiftX;
         this.posPixelsY += shiftY;
         return this;
-    }
-
-    public RasterDrawChain rotateDegrees(float angle) {
-        this.rotationAngleDegrees = angle;
-        return this;
-    }
-    public RasterDrawChain rotateRadians(float angle) {
-        return this.rotateDegrees((float)Math.toDegrees(angle));
     }
 
     @Override

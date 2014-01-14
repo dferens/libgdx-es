@@ -1,4 +1,4 @@
-package com.dferens.libgdxes.render.drawable;
+package com.dferens.libgdxes.render.raster.drawable;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
