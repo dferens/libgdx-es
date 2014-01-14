@@ -25,7 +25,7 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
     private boolean jetpackEnabled;
 
     public VasyanEntity(Vector2 spawnPosition) {
-        this.spawnPositionX = spawnPosition.x + 2;
+        this.spawnPositionX = spawnPosition.x;
         this.spawnPositionY = spawnPosition.y;
         this.jetpackEnabled = false;
     }

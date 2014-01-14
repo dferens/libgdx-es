@@ -1,4 +1,4 @@
-package com.dferens.libgdxes.render.drawable;
+package com.dferens.libgdxes.render.raster.drawable;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,13 +9,11 @@ public class TextureDrawable extends RasterDrawable {
     private final int textureHeight;
     private final int textureWidth;
     private TextureRegion textureRegion;
-    private Texture texture;
 
     public TextureDrawable(Texture texture) {
         this.textureWidth = texture.getWidth();
         this.textureHeight = texture.getHeight();
         this.textureRegion = new TextureRegion(texture, textureWidth, textureHeight);
-        this.texture = texture;
     }
 
     @Override

@@ -1,6 +1,4 @@
-package com.dferens.libgdxes.render.drawable;
-
-import com.dferens.libgdxes.render.Position;
+package com.dferens.libgdxes.render;
 
 public abstract class Drawable<T> {
     protected float calculateOffsetOfX(Position position, float widthInPixels) {

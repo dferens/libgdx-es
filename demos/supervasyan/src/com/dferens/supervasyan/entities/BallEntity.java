@@ -8,20 +8,26 @@ import com.dferens.libgdxes.PhysicsBody;
 import com.dferens.libgdxes.entities.Renderable;
 import com.dferens.libgdxes.render.AssetContainer;
 import com.dferens.libgdxes.render.RenderScope;
-import com.dferens.libgdxes.render.chains.ShapeDrawChain;
 import com.dferens.supervasyan.Priority;
 
+import java.util.Random;
+
 public class BallEntity extends BlockEntity implements Renderable {
+    private static final Random colorRandomizer = new Random();
     private static final float BLOCK_FRICTION = 0.8f;
     private static final float BLOCK_RESTITUTION = 0f;
     private static final float BLOCK_DENSITY = 0.5f;
 
     protected final float radius;
+    protected final Color color;
 
     public BallEntity(float gridX, float gridY, float radius) {
         super(gridX, gridY);
 
         this.radius = radius;
+        this.color = new Color(colorRandomizer.nextFloat(),
+                               colorRandomizer.nextFloat(),
+                               colorRandomizer.nextFloat(), 1);
     }
 
     @Override
@@ -48,12 +54,10 @@ public class BallEntity extends BlockEntity implements Renderable {
 
     @Override
     public void render(float deltaTime, Context context, RenderScope renderer) {
-        renderer.drawShape()
-                .shapeFigure(ShapeDrawChain.ShapeFigure.CIRCLE)
-                .shapeType(ShapeRenderer.ShapeType.Filled)
-                .setRadiusUnits(this.radius)
-                .bodyCoords(context.getBody())
-                .setColor(Color.GRAY)
+        renderer.draw(ShapeRenderer.ShapeType.Filled)
+                .bodyCoords(this)
+                .circleInUnits(this.radius)
+                .setColor(this.color)
                 .commit();
     }
 

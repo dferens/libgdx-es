@@ -18,8 +18,9 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.dferens.libgdxes.*;
-import com.dferens.libgdxes.render.chains.RasterDrawChain;
-import com.dferens.libgdxes.render.chains.ShapeDrawChain;
+import com.dferens.libgdxes.entities.Entity;
+import com.dferens.libgdxes.render.raster.RasterDrawChain;
+import com.dferens.libgdxes.render.shape.ShapeDrawChain;
 import com.dferens.libgdxes.utils.StateMachine;
 
 public class RenderScope extends StateMachine implements Disposable, Scope, UnitConverter {
@@ -76,12 +77,31 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     public float unitsToPixels(float units) { return units * this.getPixelsPerUnit(); }
     @Override
     public float getPixelsPerUnit() { return (Gdx.graphics.getWidth() / camera.viewportWidth); }
-    public Vector2 getViewportCoords(Vector2 positionUnits) {
-        Vector2 position = new Vector2(this.camera.position.x, this.camera.position.y);
-        return position.sub(camera.viewportWidth / 2, camera.viewportHeight / 2)
-                .sub(positionUnits)
-                .scl(-1)
-                .div(camera.viewportWidth, camera.viewportHeight);
+    @Override
+    public Vector3 projectCoordinates(float xUnits, float yUnits) {
+        Vector3 position = new Vector3(xUnits, yUnits, 0);
+        camera.project(position);
+        return position;
+    }
+    @Override
+    public void projectCoordinates(Vector3 coords) {
+        camera.project(coords);
+    }
+    @Override
+    public void unprojectCoordinates(Vector3 coords) {
+        camera.unproject(coords);
+    }
+
+    Context getContext(Entity entity) {
+        return this.gameManager.getEntities().getContext(entity);
+    }
+    void render(DrawChain drawChain) {
+        float lastTimeStep = this.gameManager.getLastTimeStep();
+        if (drawChain instanceof RasterDrawChain) {
+            drawChain.execute(this.batch, lastTimeStep);
+        } else {
+            drawChain.execute(this.shapeRenderer, lastTimeStep);
+        }
     }
 
     @Override
@@ -94,7 +114,6 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
     public void moveCameraBy(float dx, float dy) {
         this.camera.translate(dx, dy);
         this.camera.update();
-        //this.shapeRenderer.setProjectionMatrix(this.camera.combined);
     }
     public void moveCameraByX(float dx) { this.moveCameraBy(dx, 0); }
     public void moveCameraByY(float dy) { this.moveCameraBy(0, dy); }
@@ -102,6 +121,9 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
         moveCameraBy(pos.x - camera.position.x, pos.y - camera.position.y);
     }
     public void moveCamera(Vector2 pos) { this.moveCameraBy(pos.x, pos.y); }
+    public ShapeDrawChain draw(ShapeRenderer.ShapeType shapeType) {
+        return new ShapeDrawChain(this, shapeType);
+    }
     public RasterDrawChain draw(Texture texture) { return new RasterDrawChain(this, texture); }
     public RasterDrawChain draw(TextureRegion textureRegion) { return new RasterDrawChain(this, textureRegion); }
     public RasterDrawChain draw(BitmapFont font, String text) { return new RasterDrawChain(this, font, text); }
@@ -128,18 +150,7 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
         BitmapFont fontAsset = this.getAssetStorage().get(fontAssetAlias, BitmapFont.class);
         return new RasterDrawChain(this, fontAsset, text);
     }
-    public ShapeDrawChain drawShape() {
-        return new ShapeDrawChain(this, null);
-    }
 
-    public void render(DrawChain drawChain) {
-        float lastTimeStep = this.gameManager.getLastTimeStep();
-        if (drawChain instanceof RasterDrawChain) {
-            drawChain.execute(this.batch, lastTimeStep);
-        } else {
-            drawChain.execute(this.shapeRenderer, lastTimeStep);
-        }
-    }
     public void clearScreen() {
         Gdx.gl.glClearColor(backgroundColor.r,
                             backgroundColor.g,
@@ -177,20 +188,6 @@ public class RenderScope extends StateMachine implements Disposable, Scope, Unit
         this.camera = new OrthographicCamera(viewportWidth, viewportHeight);
     }
 
-    @Override
-    public Vector3 convertCoordinates(float xUnits, float yUnits) {
-        Vector3 position = new Vector3(xUnits, yUnits, 0);
-        camera.project(position);
-        return position;
-    }
-    @Override
-    public void unitsToPixels(Vector3 coords) {
-        camera.project(coords);
-    }
-    @Override
-    public void pixelsToUnits(Vector3 coords) {
-        camera.unproject(coords);
-    }
     @Override
     public void dispose() { batch.dispose(); }
 }
