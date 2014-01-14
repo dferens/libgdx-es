@@ -35,6 +35,6 @@ public class SVGameManager extends GameManager<Settings,
     }
 
     public void load() throws LevelParseException {
-        this.getEntities().switchLevel(new SVLevel("data/levels/demo/demo.tmx"));
+        this.getEntities().switchLevel(new SVLevel("data/demo/demo.tmx"));
     }
 }

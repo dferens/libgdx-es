@@ -7,7 +7,7 @@ import com.dferens.libgdxes.AndroidActivity;
 import com.dferens.libgdxes.Settings;
 import com.dferens.libgdxes.levels.LevelParseException;
 
-public class MainActivity extends AndroidActivity {
+public class GameActivity extends AndroidActivity{
 
     @Override
     public void onGameCreate(Settings gameSettings) {
