@@ -53,7 +53,7 @@ public abstract class GameManager<S extends Settings,
         }
     }
     protected final void renderUI(float deltaTime) {
-        inputScope.render(deltaTime);
+        inputScope.render(deltaTime, this.renderScope);
     }
     protected void updateWorld(float deltaTime) {
         this.entities.updateWorld(deltaTime);

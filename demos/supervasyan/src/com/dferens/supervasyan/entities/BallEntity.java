@@ -14,9 +14,9 @@ import java.util.Random;
 
 public class BallEntity extends BlockEntity implements Renderable {
     private static final Random colorRandomizer = new Random();
-    private static final float BLOCK_FRICTION = 0.8f;
-    private static final float BLOCK_RESTITUTION = 0f;
-    private static final float BLOCK_DENSITY = 0.5f;
+    private static final float BLOCK_FRICTION = 0.95f;
+    private static final float BLOCK_RESTITUTION = 0.5f;
+    private static final float BLOCK_DENSITY = 0.1f;
 
     protected final float radius;
     protected final Color color;

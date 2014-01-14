@@ -27,6 +27,23 @@ public class PhysicsBody {
     public void applyLinearImpulse(float impulseX, float impulseY, float pointX, float pointY, boolean wake) {
         this.boxBody.applyLinearImpulse(impulseX, impulseY, pointX, pointY, wake);
     }
+    public void setFixedRotation(boolean value) {
+        this.boxBody.setFixedRotation(value);
+    }
+    public void setRotationRadians(float angle) {
+        this.boxBody.setTransform(this.getPosition(), angle);
+    }
+    public void setRotationDegrees(float angle) {
+        this.setRotationRadians((float)Math.toRadians(angle));
+    }
+
+    /**
+     * @return bodies angle clockwise
+     */
+    public float getRotationRadians() {
+        return this.boxBody.getAngle();
+    }
+    public float getRotationDegrees() { return (float) Math.toDegrees(this.getRotationRadians()); }
 
     public void destroy() {
         this.boxBody.getWorld().destroyBody(this.boxBody);

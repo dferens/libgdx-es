@@ -20,6 +20,8 @@ public class RasterDrawChain extends DrawChain<SpriteBatch, RasterDrawChain> {
     private float heightPixels;
     private float widthScale;
     private float heightScale;
+    private boolean flipByX;
+    private boolean flipByY;
 
     public RasterDrawChain(RenderScope renderScope, Drawable drawable) {
         super(renderScope);
@@ -29,6 +31,8 @@ public class RasterDrawChain extends DrawChain<SpriteBatch, RasterDrawChain> {
         this.heightPixels = -1;
         this.widthScale = 1;
         this.heightScale = 1;
+        this.flipByX = false;
+        this.flipByY = false;
     }
     public RasterDrawChain(RenderScope renderScope, Texture texture) {
         this(renderScope, new TextureDrawable(texture));
@@ -71,13 +75,20 @@ public class RasterDrawChain extends DrawChain<SpriteBatch, RasterDrawChain> {
         return this.scale(scaleXY, scaleXY);
     }
     public RasterDrawChain shiftUnits(float shiftX, float shiftY) {
-        this.temp.set(this.posPixelsX, this.posPixelsY, 0);
-        this.renderScope.unprojectCoordinates(this.temp);
-        return this.worldCoords(this.temp.x + shiftX, this.temp.y + shiftY);
+        return this.screenCoords(this.posPixelsX + renderScope.unitsToPixels(shiftX),
+                this.posPixelsY + renderScope.unitsToPixels(shiftY));
     }
     public RasterDrawChain shiftPixels(float shiftX, float shiftY) {
         this.posPixelsX += shiftX;
         this.posPixelsY += shiftY;
+        return this;
+    }
+    public RasterDrawChain flipByX() {
+        this.flipByX = true;
+        return this;
+    }
+    public RasterDrawChain flipByY() {
+        this.flipByY = true;
         return this;
     }
 
@@ -86,6 +97,6 @@ public class RasterDrawChain extends DrawChain<SpriteBatch, RasterDrawChain> {
         drawable.execute(renderObject, deltaTime,
                          this.posPixelsX, this.posPixelsY,
                          this.texturePosition, this.widthPixels, this.heightPixels, this.widthScale,
-                         this.heightScale, this.rotationAngleDegrees);
+                         this.heightScale, this.rotationAngleDegrees, this.flipByX, this.flipByY);
     }
 }

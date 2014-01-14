@@ -17,7 +17,7 @@ public class BitmapFontDrawable extends RasterDrawable {
     public void execute(SpriteBatch renderObject, float deltaTime,
                         float x, float y, Position position,
                         float width, float height, float scaleX, float scaleY,
-                        float angle) {
+                        float angle, boolean flipX, boolean flipY) {
         BitmapFont.TextBounds bounds = this.font.getBounds(this.text);
         x -= this.calculateOffsetOfX(position, bounds.width);
         y -= this.calculateOffsetOfY(position, bounds.height);

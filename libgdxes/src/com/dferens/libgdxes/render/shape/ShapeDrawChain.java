@@ -1,9 +1,13 @@
 package com.dferens.libgdxes.render.shape;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.dferens.libgdxes.render.DrawChain;
 import com.dferens.libgdxes.render.RenderScope;
+
+import javax.microedition.khronos.opengles.GL10;
 
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -65,6 +69,14 @@ public class ShapeDrawChain extends DrawChain<ShapeRenderer, ShapeDrawChain> {
         if (this.shapeFigure != null) {
             renderObject.begin(this.shapeType);
             renderObject.setColor(this.color);
+            boolean blendingEnabled = this.color.a != 1;
+
+            if (blendingEnabled) {
+                Gdx.gl.glEnable(GL10.GL_BLEND);
+                Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+                Gdx.gl.glEnable(GL20.GL_BLEND);
+            }
+
             if (this.shapeFigure == ShapeFigure.CIRCLE) {
                 renderObject.circle(this.posPixelsX, this.posPixelsY, x1);
             } else if (this.shapeFigure == ShapeFigure.ELLIPSE) {
@@ -76,6 +88,8 @@ public class ShapeDrawChain extends DrawChain<ShapeRenderer, ShapeDrawChain> {
             }
             // TODO: implement other shapes
             renderObject.end();
+
+            if (blendingEnabled) Gdx.gl.glDisable(GL10.GL_BLEND);
         }
 
         this.renderScope.beginDraw();

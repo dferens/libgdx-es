@@ -50,6 +50,9 @@ public abstract class DrawChain<T, B extends DrawChain> {
     public B rotateRadians(float angle) {
         return this.rotateDegrees((float)Math.toDegrees(angle));
     }
+    public B rotateAsBody(PhysicsBody body) {
+        return this.rotateRadians(body.getRotationRadians());
+    }
 
     public void commit() { this.renderScope.render(this); }
 

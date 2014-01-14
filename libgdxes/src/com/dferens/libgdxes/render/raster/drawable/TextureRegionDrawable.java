@@ -14,7 +14,7 @@ public class TextureRegionDrawable extends RasterDrawable{
     public void execute(SpriteBatch renderObject, float deltaTime,
                         float x, float y, Position position,
                         float width, float height, float scaleX, float scaleY,
-                        float angle) {
+                        float angle, boolean flipX, boolean flipY) {
         if (width == -1) width = this.textureRegion.getRegionWidth();
         if (height == -1) height = this.textureRegion.getRegionHeight();
         x -= this.calculateOffsetOfX(position, width);

@@ -11,7 +11,7 @@ import com.dferens.libgdxes.PhysicsBody;
  * @see OrthogonalTiledMapRenderer;
  */
 public class BlockEntity implements PhysicsApplied {
-    private static final float BLOCK_FRICTION = 0.2f;
+    private static final float BLOCK_FRICTION = 0f;
     private static final float BLOCK_RESTITUTION = 0f;
     private static final float BLOCK_DENSITY = 1f;
 

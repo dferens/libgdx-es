@@ -19,12 +19,24 @@ public class TextureDrawable extends RasterDrawable {
     @Override
     public void execute(SpriteBatch renderObject, float deltaTime,
                         float x, float y, Position position,
-                        float width, float height,
-                        float scaleX, float scaleY, float angle) {
+                        float width, float height, float scaleX, float scaleY, float angle,
+                        boolean flipX, boolean flipY) {
         if (width == -1) width = this.textureWidth;
         if (height == -1) height = this.textureHeight;
         x -= this.calculateOffsetOfX(position, width);
         y -= this.calculateOffsetOfY(position, width);
-        renderObject.draw(this.textureRegion, x, y, width/2, height/2, width * scaleX, height * scaleY, 1, 1, angle);
+
+
+        if (flipX) {
+            x += width;
+            width *= -1;
+        }
+        if (flipY) {
+            y += height;
+            height *= -1;
+        }
+
+        renderObject.draw(this.textureRegion, x, y, width/2, height/2, width, height, scaleX, scaleY, angle, true);
+
     }
 }

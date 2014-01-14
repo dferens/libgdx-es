@@ -5,7 +5,7 @@ public class Context{
     private final int renderPriority;
     private final EntityManager entityManager;
     private final String[] assets;
-    private PhysicsBody boxBody;
+    private PhysicsBody body;
 
     public int getUpdatePriority() { return this.updatePriority; }
     public int getRenderPriority() { return this.renderPriority; }
@@ -20,14 +20,14 @@ public class Context{
         if (renderPriority == null) renderPriority = -1;
 
         this.entityManager = entityManager;
-        this.boxBody = body;
+        this.body = body;
         this.updatePriority = updatePriority;
         this.renderPriority = renderPriority;
         this.assets = assets;
     }
-    public PhysicsBody getBody() { return this.boxBody; }
+    public PhysicsBody getBody() { return this.body; }
     public void destroyBody() {
-        this.boxBody.destroy();
-        this.boxBody = null;
+        this.body.destroy();
+        this.body = null;
     }
 }

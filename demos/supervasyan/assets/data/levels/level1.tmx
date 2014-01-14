@@ -189,19 +189,19 @@
 </data>
  </layer>
  <objectgroup name="OBJECTS" width="139" height="70">
-  <object name="BALL" x="3401" y="1209" width="96" height="96">
+  <object name="BALL" x="3296" y="1152" width="96" height="96">
    <ellipse/>
   </object>
-  <object name="BALL" x="3615" y="1286" width="96" height="96">
+  <object name="BALL" x="3552" y="1184" width="96" height="96">
    <ellipse/>
   </object>
-  <object name="BALL" x="3318" y="1368" width="96" height="96">
+  <object name="BALL" x="3136" y="1344" width="96" height="96">
    <ellipse/>
   </object>
-  <object name="BALL" x="3527" y="1391" width="96" height="96">
+  <object name="BALL" x="3456" y="1280" width="96" height="96">
    <ellipse/>
   </object>
-  <object name="BALL" x="3273" y="1226" width="96" height="96">
+  <object name="BALL" x="3200" y="1248" width="96" height="96">
    <ellipse/>
   </object>
   <object name="BALL" x="3216" y="800" width="96" height="96">
@@ -219,10 +219,10 @@
   <object name="BALL" x="3491" y="765" width="96" height="96">
    <ellipse/>
   </object>
-  <object name="BALL" x="3762" y="1336" width="96" height="96">
+  <object name="BALL" x="3584" y="1312" width="96" height="96">
    <ellipse/>
   </object>
-  <object name="BALL" x="3560" y="1172" width="96" height="96">
+  <object name="BALL" x="3424" y="1120" width="96" height="96">
    <ellipse/>
   </object>
   <object name="SAW" x="2560" y="1280" width="320" height="320">
@@ -232,6 +232,24 @@
    <ellipse/>
   </object>
   <object name="SAW" x="2656" y="512" width="320" height="320">
+   <ellipse/>
+  </object>
+  <object name="BALL" x="3264" y="1344" width="96" height="96">
+   <ellipse/>
+  </object>
+  <object name="BALL" x="3328" y="1248" width="96" height="96">
+   <ellipse/>
+  </object>
+  <object name="BALL" x="3392" y="1376" width="96" height="96">
+   <ellipse/>
+  </object>
+  <object name="BALL" x="3680" y="1248" width="96" height="96">
+   <ellipse/>
+  </object>
+  <object name="BALL" x="3520" y="1408" width="96" height="96">
+   <ellipse/>
+  </object>
+  <object name="BALL" x="3680" y="1408" width="96" height="96">
    <ellipse/>
   </object>
  </objectgroup>

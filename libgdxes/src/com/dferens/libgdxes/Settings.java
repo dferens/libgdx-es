@@ -16,7 +16,7 @@ public class Settings {
         this.worldGravity = new Vector2(0, -9.8f);
         this.worldVelocityIterations = 6;
         this.worldPositionIterations = 2;
-        this.renderVisibleUnits = 20;
+        this.renderVisibleUnits = 40;
         this.maxTimeStep = 1/30f;
         this.debugModeOn = debugModeOn;
     }

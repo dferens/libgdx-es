@@ -10,5 +10,5 @@ public abstract class Drawable<T> {
     public abstract void execute(T renderObject, float deltaTime,
                                  float x, float y, Position position,
                                  float width, float height, float scaleX, float scaleY,
-                                 float angle);
+                                 float angle, boolean flipX, boolean flipY);
 }
