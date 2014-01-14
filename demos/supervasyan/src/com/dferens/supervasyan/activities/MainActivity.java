@@ -10,9 +10,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import com.dferens.supervasyan.R;
 
-/**
- * Created by USER on 14.01.14.
- */
 public class MainActivity extends Activity implements View.OnClickListener{
 
     ImageButton exit_image_btn, new_game_image_btn, about_image_btn;

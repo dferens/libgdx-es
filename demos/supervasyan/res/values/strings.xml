@@ -3,4 +3,5 @@
     <string name="app_name">Super Vasyan</string>
     <string name="new_game_btn">New game</string>
     <string name="game_title">Super Vasyan</string>
+    <string name="about_description">Authors: Dmytro Ferens, Pogoriliy Yuri.\n Sources available on the <a href="https://github.com/dferens/libgdx-es/demos/supervasyan">Github</a></string>
 </resources>

@@ -8,9 +8,6 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import com.dferens.supervasyan.R;
 
-/**
- * Created by USER on 14.01.14.
- */
 public class SelectLevelActivity extends Activity implements View.OnClickListener{
 
     ImageButton select_demo_btn;
