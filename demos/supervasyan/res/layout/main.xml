@@ -1,7 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@drawable/background_main">
 
-</LinearLayout>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/settings_image_btn"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/button_options_selector"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_game_image_btn"
+            android:background="@drawable/button_play_selector"
+            android:layout_below="@+id/main_title_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="47dp"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/exit_image_btn" android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" android:cropToPadding="false"
+        android:background="@drawable/button_exit_selector" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/main_title_text_size"
+        android:textColor="@android:color/black"
+        android:text="@string/game_title"
+        android:id="@+id/main_title_tv"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/about_image_btn"
+        android:layout_below="@+id/new_game_image_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:background="@drawable/button_about_selector"/>
+</RelativeLayout>

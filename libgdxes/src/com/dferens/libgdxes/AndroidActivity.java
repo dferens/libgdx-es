@@ -6,6 +6,10 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 public abstract class AndroidActivity extends AndroidApplication {
+
+    private GameManager gameManager;
+    public GameManager getGameManager() { return  this.gameManager; }
+
     class LibgdxGame extends Game {
         private final AndroidActivity activity;
         private Settings gameSettings;
@@ -32,6 +36,7 @@ public abstract class AndroidActivity extends AndroidApplication {
 
     public void setGameManager(GameManager gameManager) {
         ((LibgdxGame)this.listener).setScreen(gameManager);
+        this.gameManager = gameManager;
     }
 
     protected abstract void setupAndroidConfiguration(AndroidApplicationConfiguration cfg);
