@@ -3,8 +3,8 @@ package com.dferens.supervasyan.entities;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.dferens.libgdxes.entities.PhysicsApplied;
 import com.dferens.libgdxes.PhysicsBody;
+import com.dferens.libgdxes.entities.PhysicsApplied;
 
 /**
  * As blocks should be rendered with specific map mapRenderer, block has no render method

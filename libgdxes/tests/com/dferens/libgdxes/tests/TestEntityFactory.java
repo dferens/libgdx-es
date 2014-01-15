@@ -35,7 +35,7 @@ public class TestEntityFactory {
         private int priority;
         UpdatableTestEntity(int priority) { this.priority = priority; }
         @Override
-        public void update(float deltaTime, Context context, InputScope input, RenderScope renderScope) { updateTimesCalled += 1; }
+        public void update(float deltaTime, Context context, InputScope input) { updateTimesCalled += 1; }
         @Override
         public int getUpdatePriority() { getUpdatePriorityTimesCalled += 1; return priority; }
     };

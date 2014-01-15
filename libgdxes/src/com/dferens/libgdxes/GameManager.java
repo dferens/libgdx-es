@@ -61,7 +61,7 @@ public abstract class GameManager<S extends Settings,
     protected void updateEntities(float deltaTime) {
         for (Updatable entity : entities.iterateUpdatables()) {
             Context context = entities.getContext(entity);
-            entity.update(deltaTime, context, inputScope, renderScope);
+            entity.update(deltaTime, context, inputScope);
         }
     }
 

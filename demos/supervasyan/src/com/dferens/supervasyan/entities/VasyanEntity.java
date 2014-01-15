@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.dferens.libgdxes.Context;
-import com.dferens.libgdxes.InputScope;
 import com.dferens.libgdxes.PhysicsBody;
 import com.dferens.libgdxes.entities.PhysicsApplied;
 import com.dferens.libgdxes.entities.Renderable;
@@ -17,7 +16,7 @@ import com.dferens.libgdxes.render.raster.RasterDrawChain;
 import com.dferens.supervasyan.Priority;
 import com.dferens.supervasyan.SVInputScope;
 
-public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
+public class VasyanEntity implements PhysicsApplied, Updatable<SVInputScope>, Renderable {
     private static final float JUMP_IMPULSE = 5f;
     private static final float MOVE_SPEED = 50f;
     private static final float MAX_ANGLE_DEGREES = 60;
@@ -55,10 +54,9 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
     }
 
     @Override
-    public void update(float deltaTime, Context context, InputScope input, RenderScope renderScope) {
-        final SVInputScope screenInput = (SVInputScope) input;
+    public void update(float deltaTime, Context context, SVInputScope input) {
         final PhysicsBody body = context.getBody();
-        final float movingRate = screenInput.getMovingRate();
+        final float movingRate = input.getMovingRate();
 
         // Set up horizontal velocity
         final float newVelocityX = MOVE_SPEED * movingRate;
@@ -71,7 +69,7 @@ public class VasyanEntity implements PhysicsApplied, Updatable, Renderable {
         this.isRightHandled = movingRate >= 0;
 
         // Activate jetpack & animation
-        if (screenInput.isJumping()) {
+        if (input.isJumping()) {
             this.jetpackEnabled = true;
             body.applyLinearImpulse(0, JUMP_IMPULSE, body.getX(), body.getY());
         } else {

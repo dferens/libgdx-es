@@ -67,7 +67,8 @@ public class CameramanEntity implements Updatable {
     }
 
     @Override
-    public void update(float deltaTime, Context context, InputScope input, RenderScope renderScope) {
+    public void update(float deltaTime, Context context, InputScope input) {
+        RenderScope renderScope = context.getEntityManager().getGameManager().getRenderScope();
         if (this.entity != null) {
             Vector2 bodyPos = context.getEntityManager()
                                      .getContext(this.entity)
