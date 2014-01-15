@@ -97,11 +97,7 @@ public abstract class EntityManager implements SettingsProvider, Scope {
         if (entity instanceof Renderable) {
             renderPriority = ((Renderable) entity).getRenderPriority();
             AssetStorage assetStorage = this.gameManager.getAssetStorage();
-            Collection<String> assetsCollection = assetStorage.loadEntitiesAssets((Renderable) entity);
-            if (assets != null) {
-                assets = new String[assetsCollection.size()];
-                assetsCollection.toArray(assets);
-            }
+            assets = assetStorage.loadEntitiesAssets((Renderable) entity);
         }
         Context context = new Context(this, updatePriority, renderPriority, bodies, assets);
         this.contextLookup.put(entity, context);

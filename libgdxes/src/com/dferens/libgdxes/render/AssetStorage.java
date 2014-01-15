@@ -87,23 +87,20 @@ public class AssetStorage implements AssetContainer {
 
     private AssetManager assetManager;
     private AliasMap aliasMap;
-    private LinkedList<String> lastEntitiesAssets;
+    private LinkedList<String> lastLoadedAssets;
 
     public AssetStorage() {
         FileHandleResolver fileHandleResolver = new InternalFileHandleResolver();
         this.assetManager = new AssetManager(fileHandleResolver);
         this.aliasMap = new AliasMap();
-        this.lastEntitiesAssets = new LinkedList<String>();
+        this.lastLoadedAssets = new LinkedList<String>();
     }
 
-    public Collection<String> loadEntitiesAssets(Renderable entity) {
-        this.lastEntitiesAssets.clear();
+    public String[] loadEntitiesAssets(Renderable entity) {
+        this.lastLoadedAssets.clear();
         entity.loadAssets(this);
-        if (this.lastEntitiesAssets.size() > 0) {
-            return this.lastEntitiesAssets;
-        } else {
-            return null;
-        }
+        String[] assets = new String[this.lastLoadedAssets.size()];
+        return this.lastLoadedAssets.toArray(assets);
     }
 
     public void unloadAsset(String pathOrAlias) {
@@ -129,7 +126,7 @@ public class AssetStorage implements AssetContainer {
     public <T extends Object> void load(String alias, String filePath, Class<T> type) {
         this.assetManager.load(filePath, type);
         if (alias != null) this.aliasMap.put(alias, filePath, type);
-        this.lastEntitiesAssets.add(filePath);
+        this.lastLoadedAssets.add(filePath);
     }
     @Override
     public <T extends Object> void load(String filePath, Class<T> type) {
