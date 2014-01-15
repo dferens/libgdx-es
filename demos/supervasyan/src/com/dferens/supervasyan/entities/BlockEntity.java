@@ -24,7 +24,7 @@ public class BlockEntity implements PhysicsApplied {
     }
 
     @Override
-    public PhysicsBody createBody(World world) {
+    public void createBodies(World world) {
         float spawnX = gridX + 0.5f;
         float spawnY = gridY + 0.5f;
 
@@ -42,6 +42,6 @@ public class BlockEntity implements PhysicsApplied {
         fixtureDef.density = BLOCK_DENSITY;
 
         boxBody.createFixture(fixtureDef);
-        return new PhysicsBody(boxBody);
+        new PhysicsBody(boxBody);
     }
 }

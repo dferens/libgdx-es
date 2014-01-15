@@ -41,11 +41,11 @@ public class TestEntityFactory {
     };
     class PhysicsAppliedTestEntity extends TestEntity implements PhysicsApplied {
         @Override
-        public PhysicsBody createBody(World world) {
+        public void createBodies(World world) {
             createBodyTimesCalled += 1;
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.StaticBody;
-            return new PhysicsBody(world.createBody(bodyDef));
+            new PhysicsBody(world.createBody(bodyDef));
         }
     };
 

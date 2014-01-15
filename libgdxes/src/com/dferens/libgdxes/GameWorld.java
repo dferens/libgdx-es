@@ -20,8 +20,8 @@ public class GameWorld implements Disposable {
         this.boxWorld.step(deltaTime, config.worldVelocityIterations,
                                       config.worldPositionIterations);
     }
-    public PhysicsBody createBody(PhysicsApplied entity) {
-        return entity.createBody(this.boxWorld);
+    public PhysicsBody[] createBodies(PhysicsApplied entity) {
+        return PhysicsBody.makeEntityCreateBodies(entity, this.boxWorld);
     }
 
     public void draw(Box2DDebugRenderer debugRenderer, Matrix4 projMatrix) {

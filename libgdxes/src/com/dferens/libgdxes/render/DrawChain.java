@@ -42,6 +42,9 @@ public abstract class DrawChain<T, B extends DrawChain> {
     public B bodyCoords(PhysicsApplied entity) {
         return this.bodyCoords(renderScope.getContext(entity).getBody());
     }
+    public B bodyCoords(PhysicsApplied entity, String bodyAlias) {
+        return this.bodyCoords(renderScope.getContext(entity).getBody(bodyAlias));
+    }
 
     public B rotateDegrees(float angle) {
         this.rotationAngleDegrees = angle;

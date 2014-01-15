@@ -22,7 +22,7 @@ public class SawEntity extends BallEntity {
     }
 
     @Override
-    public PhysicsBody createBody(World world) {
+    public void createBodies(World world) {
         float spawnX = gridX + this.radius;
         float spawnY = gridY + this.radius;
 
@@ -40,7 +40,7 @@ public class SawEntity extends BallEntity {
         fixtureDef.density = BLOCK_DENSITY;
 
         boxBody.createFixture(fixtureDef);
-        return new PhysicsBody(boxBody);
+        new PhysicsBody(boxBody);
     }
 
     @Override

@@ -96,10 +96,10 @@ public class EntityManagerTest extends LibgdxTest {
         assertEquals(renderableEntity.getRenderPriorityTimesCalled, 1);
         assertEquals(physicsAppliedEntity.createBodyTimesCalled, 1);
 
-        assertNull(simpleEntityContext.getBody());
-        assertNull(updatableEntityContext.getBody());
-        assertNull(renderableEntityContext.getBody());
-        assertNotNull(physicsAppliedEntityContext.getBody());
+        assertEquals(simpleEntityContext.getBodies().length, 0);
+        assertEquals(updatableEntityContext.getBodies().length, 0);
+        assertEquals(renderableEntityContext.getBodies().length, 0);
+        assertEquals(physicsAppliedEntityContext.getBodies().length, 1);
 
         for (Context c : testEntitiesContexts) {
             assertEquals(c.getEntityManager(), entityManager);
@@ -139,7 +139,7 @@ public class EntityManagerTest extends LibgdxTest {
 
         Context physicsAppliedEntityContext = getContext(physicsAppliedEntity);
         destroyEntity(physicsAppliedEntity);
-        assertNull(physicsAppliedEntityContext.getBody());
+        assertNull(physicsAppliedEntityContext.getBodies());
         assertEquals(getNumberOfEntities(), entitiesNumber - 3);
 
         destroyEntity(simpleEntity);

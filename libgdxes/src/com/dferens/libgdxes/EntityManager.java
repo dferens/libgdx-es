@@ -86,12 +86,12 @@ public abstract class EntityManager implements SettingsProvider, Scope {
     }
 
     public void createEntity(Entity entity) {
-        PhysicsBody body = null;
+        PhysicsBody[] bodies = null;
         Integer updatePriority = null, renderPriority = null;
         String[] assets = null;
 
         if (entity instanceof PhysicsApplied)
-            body = this.world.createBody((PhysicsApplied) entity);
+            bodies = this.world.createBodies((PhysicsApplied) entity);
         if (entity instanceof Updatable)
             updatePriority = ((Updatable)entity).getUpdatePriority();
         if (entity instanceof Renderable) {
@@ -103,7 +103,7 @@ public abstract class EntityManager implements SettingsProvider, Scope {
                 assetsCollection.toArray(assets);
             }
         }
-        Context context = new Context(this, body, updatePriority, renderPriority, assets);
+        Context context = new Context(this, updatePriority, renderPriority, bodies, assets);
         this.contextLookup.put(entity, context);
 
         if (updatePriority != null) this.updateEntities.add((Updatable) entity);
@@ -116,15 +116,11 @@ public abstract class EntityManager implements SettingsProvider, Scope {
         Context context = this.contextLookup.get(entity);
         AssetStorage assetStorage = this.gameManager.getAssetStorage();
 
-        if (entity instanceof Updatable) this.updateEntities.remove((Updatable)entity);
-        if (entity instanceof Renderable) this.renderEntities.remove((Renderable)entity);
+        if (entity instanceof Updatable) this.updateEntities.remove(entity);
+        if (entity instanceof Renderable) this.renderEntities.remove(entity);
 
-        PhysicsBody body = context.getBody();
-        String[] assets = context.getAssets();
-
-        if (body != null) context.destroyBody();
-        if (assets != null) assetStorage.unloadAssets(assets);
-
+        context.destroyBodies();
+        context.unloadAssets(assetStorage);
         this.contextLookup.remove(entity);
     }
     public void destroyEntities(Entity... entities) {
