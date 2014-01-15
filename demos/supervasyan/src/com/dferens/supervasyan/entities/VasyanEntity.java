@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.dferens.libgdxes.Context;
 import com.dferens.libgdxes.PhysicsBody;
 import com.dferens.libgdxes.entities.PhysicsApplied;
@@ -19,8 +20,9 @@ import com.dferens.supervasyan.SVInputScope;
 public class VasyanEntity implements PhysicsApplied, Updatable<SVInputScope>, Renderable {
     private static final float JUMP_IMPULSE = 5f;
     private static final float MOVE_SPEED = 50f;
-    private static final float MAX_ANGLE_DEGREES = 60;
+    private static final float MAX_ANGLE_DEGREES = 40;
     private static final float JETPACK_SHIFT_BY_X = -0.5f;
+    private static final float JOINT_SHIFT_BY_Y = 0.8f;
 
     private final float spawnPositionX;
     private final float spawnPositionY;
@@ -34,12 +36,27 @@ public class VasyanEntity implements PhysicsApplied, Updatable<SVInputScope>, Re
     }
 
     @Override
-    public PhysicsBody createBody(World world) {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(spawnPositionX, spawnPositionY);
-        Body boxBody = world.createBody(bodyDef);
-        boxBody.setFixedRotation(true);
+    public void createBodies(World world) {
+        /**
+         *    Body consists of two parts: collidable part (1) and control part (2), which are connected
+         * by joint. All forces/impulses should be applied to control part so it will affect player's
+         * body automatically.
+         *    +---------+
+         *    | +-----+ |
+         *    | |  o  | |
+         *    | | (2) | |
+         *    | +-----+ |
+         *    |         |
+         *    |     (1) |
+         *    +---------+
+         *
+         */
+        // Player body
+        BodyDef playerBodyDef = new BodyDef();
+        playerBodyDef.type = BodyDef.BodyType.DynamicBody;
+        playerBodyDef.position.set(spawnPositionX, spawnPositionY);
+        Body playerBody = world.createBody(playerBodyDef);
+        playerBody.setAngularDamping(10f);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 5f;
@@ -48,30 +65,51 @@ public class VasyanEntity implements PhysicsApplied, Updatable<SVInputScope>, Re
         PolygonShape playerShape = new PolygonShape();
         playerShape.setAsBox(0.80f, 1.05f, Vector2.Zero, 0);
         fixtureDef.shape = playerShape;
+        playerBody.createFixture(fixtureDef);
 
-        boxBody.createFixture(fixtureDef);
-        return new PhysicsBody(boxBody);
+        // Player's control body
+        BodyDef controlBodyDef = new BodyDef();
+        controlBodyDef.type = BodyDef.BodyType.DynamicBody;
+        controlBodyDef.position.set(spawnPositionX, spawnPositionY + JOINT_SHIFT_BY_Y);
+        Body controlBody = world.createBody(controlBodyDef);
+        controlBody.setFixedRotation(true);
+
+        FixtureDef controlFixtureDef = new FixtureDef();
+        controlFixtureDef.density = 0;
+        controlFixtureDef.friction = 0;
+        controlFixtureDef.restitution = 0;
+        PolygonShape controlShape = new PolygonShape();
+        controlShape.setAsBox(0.25f, 0.25f, Vector2.Zero, 0);
+        controlFixtureDef.shape = controlShape;
+        controlBody.createFixture(controlFixtureDef);
+
+        RevoluteJointDef jointDef = new RevoluteJointDef();
+        jointDef.enableLimit = true;
+        jointDef.lowerAngle = (float) Math.toRadians(-1 * MAX_ANGLE_DEGREES);
+        jointDef.upperAngle = (float) Math.toRadians(+1 * MAX_ANGLE_DEGREES);
+        jointDef.initialize(playerBody, controlBody, controlBody.getWorldCenter());
+        world.createJoint(jointDef);
+
+        new PhysicsBody("player", playerBody);
+        new PhysicsBody("control", controlBody);
     }
 
     @Override
     public void update(float deltaTime, Context context, SVInputScope input) {
-        final PhysicsBody body = context.getBody();
+        final PhysicsBody controlBody = context.getBody("control");
         final float movingRate = input.getMovingRate();
 
         // Set up horizontal velocity
         final float newVelocityX = MOVE_SPEED * movingRate;
-        final float currentVelocityY = body.getLinearVelocity().y;
-        body.setLinearVelocity(newVelocityX, currentVelocityY);
+        final float currentVelocityY = controlBody.getLinearVelocity().y;
+        controlBody.setLinearVelocity(newVelocityX, currentVelocityY);
 
-        // Set up rotation angle
-        final float angle = movingRate * MAX_ANGLE_DEGREES;
-        body.setRotationDegrees(-1 * angle);
         this.isRightHandled = movingRate >= 0;
 
         // Activate jetpack & animation
         if (input.isJumping()) {
             this.jetpackEnabled = true;
-            body.applyLinearImpulse(0, JUMP_IMPULSE, body.getX(), body.getY());
+            controlBody.applyLinearImpulse(0, JUMP_IMPULSE, controlBody.getX(), controlBody.getY());
         } else {
             this.jetpackEnabled = false;
         }
