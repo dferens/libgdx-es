@@ -23,5 +23,10 @@ local.properties
 proguard/
 
 # Project libs
-rocketgame/libs/
-rocketgame-android/libs
+libs/
+
+# IDEA files
+*.iml
+*.ipr
+*.iws
+.idea/
