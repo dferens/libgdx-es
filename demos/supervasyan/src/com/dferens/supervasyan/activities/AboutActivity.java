@@ -18,6 +18,4 @@ public class AboutActivity extends Activity {
         //set full-screen mode
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
-
-
 }
